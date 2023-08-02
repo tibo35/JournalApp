@@ -1,0 +1,7 @@
+{
+  "name": "Journal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
