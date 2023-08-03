@@ -16,7 +16,7 @@ import {
   IonPopover,
 } from "@ionic/react";
 import { add, trash } from "ionicons/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TaskModal from "../components/TaskModal";
 import "./Tab2.css";
 
@@ -25,6 +25,25 @@ const Tab2: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:3001/topics")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) =>
+        setCards(
+          data.map((card: any) => ({
+            id: card._id,
+            title: card.title,
+          }))
+        )
+      )
+      .catch((error) => console.error("Fetch error:", error));
+  }, []);
 
   const deleteCard = (id: number) => {
     setCards((prevCards) => prevCards.filter((card) => card.id !== id));
@@ -79,7 +98,7 @@ const Tab2: React.FC = () => {
           <IonButton onClick={() => setShowModal(false)}>Close Modal</IonButton>
         </IonModal>
       </IonContent>
-      <IonFab vertical="bottom" horizontal="end" slot="fixed">
+      <IonFab vertical="bottom" horizontal="center" slot="fixed">
         <IonFabButton onClick={() => setShowAlert(true)}>
           <IonIcon icon={add}></IonIcon>
         </IonFabButton>
