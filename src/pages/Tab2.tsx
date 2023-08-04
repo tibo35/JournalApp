@@ -13,7 +13,6 @@ import {
   IonAlert,
   IonButton,
   IonModal,
-  IonPopover,
 } from "@ionic/react";
 import { add, trash } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
@@ -57,10 +56,27 @@ const Tab2: React.FC = () => {
   };
 
   const addCard = (title: string) => {
-    setCards((prevCards) => [
-      ...prevCards,
-      { id: prevCards.length + 1, title },
-    ]);
+    const newCard = { title: title };
+    fetch("http://localhost:3001/topics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newCard),
+    })
+      .then((response) => {
+        console.log(newCard);
+        console.log(response);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCards((prevCards) => [
+          ...prevCards,
+          { id: data._id, title: data.title },
+        ]);
+      })
+      .catch((error) => console.error("Fetch error:", error));
   };
 
   return (
