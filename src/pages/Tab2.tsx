@@ -4,49 +4,47 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
   IonFab,
   IonFabButton,
   IonIcon,
-  IonAlert,
   IonButton,
   IonModal,
 } from "@ionic/react";
-import { add, trash } from "ionicons/icons";
+import { add } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
 import TaskModal from "../components/TaskModal";
 import "./Tab2.css";
+import TopicCard from "../components/TopicCard";
+import AddInput from "../components/AddInput";
+import { fetchTopics, deleteTopic, postTopic } from "../Api/ApiTab2";
 
 const Tab2: React.FC = () => {
-  const [cards, setCards] = useState([{ id: 1, title: "Card Title 1" }]);
+  const [cards, setCards] = useState([{ id: "1", title: "Card Title 1" }]);
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3001/topics")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) =>
+    fetchTopics()
+      .then((data) => {
         setCards(
           data.map((card: any) => ({
             id: card._id,
             title: card.title,
           }))
-        )
-      )
+        );
+      })
       .catch((error) => console.error("Fetch error:", error));
   }, []);
 
-  const deleteCard = (id: number) => {
-    setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+  const deleteCard = (id: string) => {
+    deleteTopic(id)
+      .then(() => {
+        setCards((prevCards) => prevCards.filter((card) => card.id !== id));
+      })
+      .catch((error) => console.error("Fetch error:", error));
   };
+
   const openModal = (title: string) => {
     setModalContent(title);
     setShowModal(true);
@@ -56,20 +54,7 @@ const Tab2: React.FC = () => {
   };
 
   const addCard = (title: string) => {
-    const newCard = { title: title };
-    fetch("http://localhost:3001/topics", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newCard),
-    })
-      .then((response) => {
-        console.log(newCard);
-        console.log(response);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
+    postTopic(title)
       .then((data) => {
         setCards((prevCards) => [
           ...prevCards,
@@ -93,21 +78,16 @@ const Tab2: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         {cards.map((card) => (
-          <IonCard key={card.id} onClick={() => openModal(card.title)}>
-            <IonCardHeader>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}>
-                <IonCardTitle>{card.title}</IonCardTitle>
-                <IonButton fill="clear" onClick={() => deleteCard(card.id)}>
-                  <IonIcon icon={trash} color="danger" />
-                </IonButton>
-              </div>
-            </IonCardHeader>
-          </IonCard>
+          <TopicCard
+            key={card.id}
+            title={card.title}
+            id={card.id}
+            onOpen={() => openModal(card.title)}
+            onDelete={(e) => {
+              e.stopPropagation();
+              deleteCard(card.id);
+            }}
+          />
         ))}
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
           <TaskModal title={modalContent} onClose={closeModal} />
@@ -119,26 +99,10 @@ const Tab2: React.FC = () => {
           <IonIcon icon={add}></IonIcon>
         </IonFabButton>
       </IonFab>
-      <IonAlert
-        isOpen={showAlert}
-        onDidDismiss={() => setShowAlert(false)}
-        header={"New Card"}
-        inputs={[
-          {
-            name: "title",
-            type: "text",
-            placeholder: "Card Title",
-          },
-        ]}
-        buttons={[
-          "Cancel",
-          {
-            text: "Ok",
-            handler: (data) => {
-              addCard(data.title);
-            },
-          },
-        ]}
+      <AddInput
+        showAlert={showAlert}
+        setShowAlert={setShowAlert}
+        addCard={addCard}
       />
     </IonPage>
   );
