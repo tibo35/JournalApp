@@ -1,17 +1,13 @@
-import { MongoClient } from "mongodb";
+import mongodb from "mongodb";
+const { MongoClient, ObjectId } = mongodb;
 import express from "express";
 import cors from "cors";
 let db;
 const app = express();
-app.use(cors()); // This enables all CORS requests.
+app.use(cors());
 app.use(express.json());
 
 // GET -------------------
-app.get("/", async (req, res) => {
-  const allTasks = await db.collection("Tasks").find().toArray();
-  res.send("Welcome to the homepage");
-});
-
 app.get("/tab2", (req, res) => {
   res.send("Welcome to tab2");
 });
@@ -27,11 +23,17 @@ app.get("/topics", async (req, res) => {
 
 //POST -------------------
 app.post("/topics", async (req, res) => {
-  console.log("POST /topics");
   const card = req.body;
-  console.log(card);
   await db.collection("Cards").insertOne(card);
   res.json(card);
+});
+
+//DELETE --------------
+app.delete("/topics/:id", async (req, res) => {
+  const id = new mongodb.ObjectId(req.params.id);
+  console.log("DELETE /topics/" + id);
+  await db.collection("Cards").deleteOne({ _id: new mongodb.ObjectId(id) });
+  res.json({ message: "Deleted" });
 });
 
 //Start
