@@ -2,7 +2,7 @@ ion-modal {
   --height: 80%;
   --max-height: 80%;
   --border-radius: 10px;
-  --width: 100%;
+  --width: 90%;
   --min-width: 90%;
   --box-shadow: 0px 28px 38px rgba(0, 0, 0, 0.12),
     0px 1px 6px rgba(0, 0, 0, 0.12);

@@ -27,13 +27,33 @@ app.post("/topics", async (req, res) => {
   await db.collection("Cards").insertOne(card);
   res.json(card);
 });
+app.post("/tasks", async (req, res) => {
+  const task = req.body;
+  await db.collection("Tasks").insertOne(task);
+  res.json(task);
+});
 
 //DELETE --------------
 app.delete("/topics/:id", async (req, res) => {
-  const id = new mongodb.ObjectId(req.params.id);
+  const id = req.params.id;
+  if (!ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
   console.log("DELETE /topics/" + id);
-  await db.collection("Cards").deleteOne({ _id: new mongodb.ObjectId(id) });
+  await db.collection("Cards").deleteOne({ _id: new ObjectId(id) });
   res.json({ message: "Deleted" });
+});
+
+app.delete("/tasks/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  console.log("DELETE /tasks/" + id);
+  await db.collection("Tasks").deleteOne({ _id: new ObjectId(id) });
+  res.json({ message: "Task deleted" });
 });
 
 //Start
