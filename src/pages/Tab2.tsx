@@ -66,17 +66,7 @@ const Tab2: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Topic</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+      <IonContent fullscreen className="tab2-page">
         {cards.map((card) => (
           <TopicCard
             key={card.id}
@@ -91,7 +81,6 @@ const Tab2: React.FC = () => {
         ))}
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
           <TaskModal title={modalContent} onClose={closeModal} />
-          <IonButton onClick={() => setShowModal(false)}>Close Modal</IonButton>
         </IonModal>
       </IonContent>
       <IonFab vertical="bottom" horizontal="center" slot="fixed">

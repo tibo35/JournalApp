@@ -25,9 +25,9 @@ export const deleteTask = (id: string) =>
     res.json()
   );
 
-export const postTask = (content: string) =>
+export const postTask = (content: string, dueDate: string) =>
   fetch("http://localhost:3001/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content, dueDate }),
   }).then((res) => res.json());

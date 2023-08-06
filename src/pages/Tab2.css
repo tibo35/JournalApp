@@ -9,3 +9,16 @@ ion-modal {
   display: flex;
   align-items: center;
 }
+
+.tab2-page {
+  background: url("../resources/blurry-gradient-haikei.svg") no-repeat center
+    center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  --background: transparent; /* Add this line */
+}
+.transparent-background {
+  --ion-background-color: transparent;
+}

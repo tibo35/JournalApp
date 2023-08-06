@@ -38,7 +38,7 @@ import "./App.css";
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
+  <IonApp className="app">
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
