@@ -14,9 +14,17 @@ import {
   IonInput,
   IonDatetime,
   IonFooter,
+  IonFabButton,
+  IonFab,
 } from "@ionic/react";
 import { format } from "date-fns";
-import { close, trash } from "ionicons/icons";
+import {
+  close,
+  trash,
+  calendarNumberOutline,
+  add,
+  closeCircle,
+} from "ionicons/icons";
 import { fetchTasks, deleteTask, postTask } from "../Api/ApiTab2";
 import "./TaskModal.css";
 
@@ -78,6 +86,16 @@ const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
   return (
     <>
       <IonContent>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Tasks</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={onClose}>
+                <IonIcon icon={closeCircle} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
         <IonList>
           {tasks.map((task) => (
             <IonItem key={task.id}>
@@ -89,44 +107,47 @@ const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
           ))}
         </IonList>
       </IonContent>
-
       <IonFooter>
-        <IonInput
-          className="task-input"
-          value={taskInput}
-          placeholder="Enter a task"
-          type="text"
-          onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
-        />
         <div className="container-items">
           <IonInput
-            className="date-input"
-            value={dueDate || ""}
-            placeholder="Due Date"
-            readonly
-            onIonBlur={() => markTouched()}
-            onFocus={() => setShowDatePicker(true)}
+            className="task-input"
+            value={taskInput}
+            placeholder="Add Item"
+            type="text"
+            onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
+          />
+          <IonIcon
+            className="calendar-icon"
+            icon={calendarNumberOutline}
+            onClick={() => setShowDatePicker(!showDatePicker)}
           />
 
-          {showDatePicker && (
-            <IonDatetime
-              class="date-picker-modal"
-              placeholder="Select Date"
-              value={Array.isArray(dueDate) ? dueDate[0] : dueDate || undefined} // If dueDate is array, pass first element. If it's empty, pass undefined.
-              onIonChange={(e) => {
-                const newDate = e.detail.value as string;
-                const formattedDate = format(new Date(newDate), "dd/MM/yyyy");
-                setDueDate(formattedDate);
-                setShowDatePicker(false);
-              }}
-            />
-          )}
+          <IonFab
+            className="add-button"
+            vertical="bottom"
+            horizontal="end"
+            slot="fixed">
+            <IonFabButton onClick={() => addTask()}>
+              <IonIcon icon={add}></IonIcon>
+            </IonFabButton>
+          </IonFab>
         </div>
-
-        <IonButton className="button-center" onClick={addTask}>
-          Add Item
-        </IonButton>
-      </IonFooter>
+      </IonFooter>{" "}
+      {showDatePicker && (
+        <div className="date-picker-wrapper">
+          <IonDatetime
+            class="date-picker-modal"
+            placeholder="Select Date"
+            value={Array.isArray(dueDate) ? dueDate[0] : dueDate || undefined} // If dueDate is array, pass first element. If it's empty, pass undefined.
+            onIonChange={(e) => {
+              const newDate = e.detail.value as string;
+              const formattedDate = format(new Date(newDate), "dd/MM/yyyy");
+              setDueDate(formattedDate);
+              setShowDatePicker(false);
+            }}
+          />
+        </div>
+      )}
     </>
   );
 };
