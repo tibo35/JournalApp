@@ -59,10 +59,27 @@ app.delete("/tasks/:id", async (req, res) => {
 //Start
 async function start() {
   const client = new MongoClient(
-    "mongodb://root:root@localhost:27017/JournalApp?&authSource=admin"
+    "mongodb+srv://tibo:Journalapp@cluster-journal-app.m4f8z2w.mongodb.net/?retryWrites=true&w=majority",
+    {
+      serverApi: {
+        version: "1",
+        strict: true,
+        deprecationErrors: true,
+      },
+    }
   );
-  await client.connect();
-  db = client.db();
-  app.listen(3001);
+
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+    db = client.db();
+    app.listen(3001);
+  } catch (error) {
+    console.error(error);
+  }
 }
+
 start();
