@@ -30,3 +30,6 @@ yarn-error.log*
 
 #Db
 /db
+
+#config
+config.js

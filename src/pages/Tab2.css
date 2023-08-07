@@ -17,6 +17,7 @@ ion-modal {
   -o-background-size: cover;
   background-size: cover;
   --background: transparent; /* Add this line */
+  opacity: 0.6;
 }
 .transparent-background {
   --ion-background-color: transparent;

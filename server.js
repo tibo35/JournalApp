@@ -2,12 +2,73 @@ import mongodb from "mongodb";
 const { MongoClient, ObjectId } = mongodb;
 import express from "express";
 import cors from "cors";
-let db;
+import { secretKey } from "./src/config.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+let db;
 
-// GET -------------------
+// Signup route
+app.post("/signup", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log(req.body);
+    // Check if user already exists
+    const user = await db.collection("users").findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create new user
+    const newUser = { email, password: hashedPassword };
+    await db.collection("users").insertOne(newUser);
+
+    // Generate and return JWT
+    const token = jwt.sign({ _id: newUser._id }, secretKey, {
+      expiresIn: "1h",
+    });
+    res.status(201).json({ token });
+  } catch (error) {
+    console.log(error); // log the error
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+// Login route
+app.post("/login", async (req, res) => {
+  console.log(req.body);
+  try {
+    const { email, password } = req.body;
+
+    // Find user
+    const user = await db.collection("users").findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Check password
+    const passwordMatches = await bcrypt.compare(password, user.password);
+    if (!passwordMatches) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Generate and return JWT
+    const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: "1h" });
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// GET ---------------------------------------------
 app.get("/tab2", (req, res) => {
   res.send("Welcome to tab2");
 });

@@ -1,3 +1,6 @@
+.task-container {
+  opacity: 0.6;
+}
 .date-picker-wrapper {
   height: 50vh;
 }

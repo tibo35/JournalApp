@@ -85,7 +85,7 @@ const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
   };
   return (
     <>
-      <IonContent>
+      <IonContent className="task-container">
         <IonHeader>
           <IonToolbar>
             <IonTitle>Tasks</IonTitle>
