@@ -1,11 +1,24 @@
 ion-modal {
-  --height: 80%;
-  --max-height: 80%;
-  --border-radius: 10px;
+  --height: 100%;
+  --max-height: 100%;
   --width: 100%;
-  --min-width: 90%;
+  --min-width: 100%;
   --box-shadow: 0px 28px 38px rgba(0, 0, 0, 0.12),
     0px 1px 6px rgba(0, 0, 0, 0.12);
   display: flex;
   align-items: center;
+}
+
+.tab2-page {
+  background: url("../resources/blurry-gradient-haikei.svg") no-repeat center
+    center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  --background: transparent; /* Add this line */
+  opacity: 0.6;
+}
+.transparent-background {
+  --ion-background-color: transparent;
 }

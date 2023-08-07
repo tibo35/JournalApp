@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonContent,
   IonHeader,
@@ -12,12 +12,26 @@ import {
   IonLabel,
   IonList,
   IonInput,
+  IonDatetime,
+  IonFooter,
+  IonFabButton,
+  IonFab,
 } from "@ionic/react";
-import { close } from "ionicons/icons";
+import { format } from "date-fns";
+import {
+  close,
+  trash,
+  calendarNumberOutline,
+  add,
+  closeCircle,
+} from "ionicons/icons";
+import { fetchTasks, deleteTask, postTask } from "../Api/ApiTab2";
+import "./TaskModal.css";
 
 interface Task {
-  id: number;
-  name: string;
+  id: string;
+  content: string;
+  date: string;
 }
 
 const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
@@ -26,46 +40,115 @@ const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState("");
+  const [dueDate, setDueDate] = useState<string>("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
+
+  useEffect(() => {
+    fetchTasks()
+      .then((data) => {
+        setTasks(
+          data.map((task: any) => ({
+            id: task._id,
+            content: task.content,
+          }))
+        );
+      })
+      .catch((error) => console.error("Fetch error:", error));
+  }, []);
 
   const addTask = () => {
     if (taskInput.trim().length > 0) {
-      // Check if input is not just white spaces
-      setTasks((prevTasks) => [
-        ...prevTasks,
-        { id: prevTasks.length + 1, name: taskInput },
-      ]);
-      setTaskInput(""); // Reset the task input field
+      postTask(taskInput, dueDate)
+        .then((data) => {
+          setTasks((prevTasks) => [
+            ...prevTasks,
+            { id: data._id, content: data.content, date: data.date },
+          ]);
+          setTaskInput("");
+          setDueDate("");
+        })
+        .catch((error) => console.error("Fetch error:", error));
     }
   };
 
+  const markTouched = () => {
+    setIsTouched(true);
+  };
+  const onDelete = (id: string) => {
+    console.log("Deleting task with id: ", id); // Add this line
+    deleteTask(id)
+      .then(() => {
+        setTasks((prevTasks) => prevTasks.filter((tasks) => tasks.id !== id));
+      })
+      .catch((error) => console.error("Fetch error:", error));
+  };
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{title}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={onClose}>
-              <IonIcon icon={close}></IonIcon>
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
+    <>
+      <IonContent className="task-container">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Tasks</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={onClose}>
+                <IonIcon icon={closeCircle} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
         <IonList>
           {tasks.map((task) => (
             <IonItem key={task.id}>
-              <IonLabel>{task.name}</IonLabel>
+              <IonLabel>{task.content}</IonLabel>
+              <IonButton onClick={() => onDelete(task.id)}>
+                <IonIcon icon={trash} color="danger" />
+              </IonButton>
             </IonItem>
           ))}
-          <IonInput
-            value={taskInput}
-            placeholder="Enter Task"
-            onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
-          />
-          <IonButton onClick={addTask}>Add Task</IonButton>
         </IonList>
       </IonContent>
-    </IonPage>
+      <IonFooter>
+        <div className="container-items">
+          <IonInput
+            className="task-input"
+            value={taskInput}
+            placeholder="Add Item"
+            type="text"
+            onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
+          />
+          <IonIcon
+            className="calendar-icon"
+            icon={calendarNumberOutline}
+            onClick={() => setShowDatePicker(!showDatePicker)}
+          />
+
+          <IonFab
+            className="add-button"
+            vertical="bottom"
+            horizontal="end"
+            slot="fixed">
+            <IonFabButton onClick={() => addTask()}>
+              <IonIcon icon={add}></IonIcon>
+            </IonFabButton>
+          </IonFab>
+        </div>
+      </IonFooter>{" "}
+      {showDatePicker && (
+        <div className="date-picker-wrapper">
+          <IonDatetime
+            class="date-picker-modal"
+            placeholder="Select Date"
+            value={Array.isArray(dueDate) ? dueDate[0] : dueDate || undefined} // If dueDate is array, pass first element. If it's empty, pass undefined.
+            onIonChange={(e) => {
+              const newDate = e.detail.value as string;
+              const formattedDate = format(new Date(newDate), "dd/MM/yyyy");
+              setDueDate(formattedDate);
+              setShowDatePicker(false);
+            }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
