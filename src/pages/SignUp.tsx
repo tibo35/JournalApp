@@ -8,6 +8,7 @@ import {
   lockClosedOutline,
 } from "ionicons/icons";
 import "./Signup.css";
+import { postSignUp } from "../Api/ApiTab2";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -96,23 +97,10 @@ const Signup = () => {
       return;
     }
 
-    const response = await fetch("http://localhost:3001/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        username,
-        password: password.current,
-      }),
-    });
-
-    const data = await response.json();
+    const data = await postSignUp(name, email, username, password.current);
 
     if (data.token) {
-      // Save the token in localStorage (or wherever you want to store it)
+      // Save the token in localStorage
       localStorage.setItem("token", data.token);
       console.log("Signup successful");
     } else {
