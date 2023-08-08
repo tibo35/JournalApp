@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useHistory } from "react-router-dom";
-import { IonButton, IonInput, IonPage } from "@ionic/react";
+import { IonButton, IonInput, IonPage, IonItem, IonIcon } from "@ionic/react";
+import {
+  mailOutline,
+  peopleOutline,
+  personCircleOutline,
+  lockClosedOutline,
+} from "ionicons/icons";
 import { Link } from "react-router-dom";
 
 import "./Login.css";
@@ -8,19 +14,22 @@ import "../theme/variables.css";
 
 const Login = () => {
   const history = useHistory();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useRef("");
+  const password = useRef("");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(username);
-    console.log(password);
+    console.log(username.current);
+    console.log(password.current);
     const response = await fetch("http://localhost:3001/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: username, password: password }),
+      body: JSON.stringify({
+        username: username.current,
+        password: password.current,
+      }),
     });
 
     const data = await response.json();
@@ -37,29 +46,31 @@ const Login = () => {
 
   return (
     <IonPage className="login-page">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <IonInput
-          className="login-input"
-          placeholder="Username"
-          onIonChange={(e) => e.detail.value && setUsername(e.detail.value)}
-          value={username}
-        />
-        <IonInput
-          className="login-input"
-          placeholder="Password"
-          type="password"
-          onIonChange={(e) => e.detail.value && setPassword(e.detail.value)}
-          value={password}
-        />
+      <form onSubmit={handleSubmit} className="login-page">
+        <h1>Login</h1>
+        <IonItem className="login-input">
+          <IonInput
+            placeholder="Username"
+            onIonChange={(e) => (username.current = e.detail.value || "")}
+          />
+          <IonIcon slot="start" icon={personCircleOutline} />
+        </IonItem>
+        <IonItem className="login-input">
+          <IonInput
+            placeholder="Password"
+            type="password"
+            onIonChange={(e) => (password.current = e.detail.value || "")}
+          />
+          <IonIcon slot="start" icon={lockClosedOutline} />
+        </IonItem>
         <IonButton type="submit">Submit </IonButton>
+        <p>
+          Don't have an account?{" "}
+          <Link to="/signup" className="link-no-underline">
+            Sign up
+          </Link>
+        </p>
       </form>
-      <p>
-        Don't have an account?{" "}
-        <Link to="/signup" className="link-no-underline">
-          Sign up
-        </Link>
-      </p>
     </IonPage>
   );
 };
