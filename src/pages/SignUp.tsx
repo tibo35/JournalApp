@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { IonButton, IonInput, IonPage, IonItem, IonIcon } from "@ionic/react";
 import {
   mailOutline,
@@ -20,6 +20,7 @@ const Signup = () => {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [alertMessages, setAlertMessages] = useState<string[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     const errors = [nameError, emailError, usernameError, passwordError].filter(
@@ -96,12 +97,11 @@ const Signup = () => {
     if (alertMessages.length > 0) {
       return;
     }
-
     const data = await postSignUp(name, email, username, password.current);
-
     if (data.token) {
       // Save the token in localStorage
       localStorage.setItem("token", data.token);
+      history.push("/tab2");
       console.log("Signup successful");
     } else {
       console.log("Signup failed");
