@@ -1,12 +1,7 @@
 import React, { useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { IonButton, IonInput, IonPage, IonItem, IonIcon } from "@ionic/react";
-import {
-  mailOutline,
-  peopleOutline,
-  personCircleOutline,
-  lockClosedOutline,
-} from "ionicons/icons";
+import { personCircleOutline, lockClosedOutline } from "ionicons/icons";
 import { Link } from "react-router-dom";
 
 import "./Login.css";

@@ -38,3 +38,23 @@ p {
 .link-no-underline {
   text-decoration: none;
 }
+.alert-list {
+  list-style: none;
+  width: 65%;
+  font-size: 12px;
+  color: red;
+  padding: 0;
+  margin-top: -10px;
+}
+
+.alert {
+  margin-bottom: 10px; /* This adds a 10px gap between each alert message */
+  /* Other styles... */
+}
+.invalid-input {
+  outline: #f52c2c 2px solid;
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+}
