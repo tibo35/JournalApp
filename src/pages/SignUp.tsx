@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { IonButton, IonInput, IonPage } from "@ionic/react";
+import "./Signup.css";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -28,20 +30,28 @@ const Signup = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage className="signup-page">
       <h1>Signup</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <IonInput
+          className="signup-input"
           placeholder="Username"
           onIonChange={(e) => setUsername(e.detail.value!)}
         />
         <IonInput
+          className="signup-input"
           placeholder="Password"
           type="password"
           onIonChange={(e) => setPassword(e.detail.value!)}
         />
-        <IonButton type="submit">Submit</IonButton>
+        <IonButton type="submit">Sign Up</IonButton>
       </form>
+      <p>
+        Already have an account?{" "}
+        <Link to="/login" className="link-no-underline">
+          Sign in
+        </Link>
+      </p>
     </IonPage>
   );
 };
