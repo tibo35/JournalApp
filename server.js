@@ -73,10 +73,19 @@ app.get("/tab2", (req, res) => {
   res.send("Welcome to tab2");
 });
 
-app.get("/tasks", async (req, res) => {
-  const allTasks = await db.collection("Tasks").find().toArray();
-  res.json(allTasks);
+app.get("/tasks/:cardId", async (req, res) => {
+  // Filter tasks by cardId
+  const cardId = req.params.cardId;
+  if (!ObjectId.isValid(cardId)) {
+    return res.status(400).json({ message: "Invalid cardId" });
+  }
+  const tasksForCard = await db
+    .collection("Tasks")
+    .find({ cardId: new ObjectId(cardId) })
+    .toArray();
+  res.json(tasksForCard);
 });
+
 app.get("/topics", async (req, res) => {
   const allCards = await db.collection("Cards").find().toArray();
   res.json(allCards);
@@ -89,7 +98,11 @@ app.post("/topics", async (req, res) => {
   res.json(card);
 });
 app.post("/tasks", async (req, res) => {
-  const task = req.body;
+  const { content, dueDate, cardId } = req.body; // Extract the cardId from the body
+  if (!ObjectId.isValid(cardId)) {
+    return res.status(400).json({ message: "Invalid cardId" });
+  }
+  const task = { content, dueDate, cardId: new ObjectId(cardId) }; // Store the cardId in each task
   await db.collection("Tasks").insertOne(task);
   res.json(task);
 });
