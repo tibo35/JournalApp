@@ -1,5 +1,4 @@
 // Topics ----------
-
 export const fetchTopics = () =>
   fetch("http://localhost:3001/topics").then((res) => res.json());
 

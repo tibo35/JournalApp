@@ -142,7 +142,7 @@ const TaskModal: React.FC<{
           <IonDatetime
             class="date-picker-modal"
             placeholder="Select Date"
-            value={Array.isArray(dueDate) ? dueDate[0] : dueDate || undefined} // If dueDate is array, pass first element. If it's empty, pass undefined.
+            value={Array.isArray(dueDate) ? dueDate[0] : dueDate || undefined}
             onIonChange={(e) => {
               const newDate = e.detail.value as string;
               const formattedDate = format(new Date(newDate), "dd/MM/yyyy");

@@ -14,7 +14,7 @@ let db;
 // Signup route
 app.post("/signup", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, username, password } = req.body; // <-- get name and username from request body
     console.log(req.body);
     // Check if user already exists
     const user = await db.collection("users").findOne({ email });
@@ -25,8 +25,8 @@ app.post("/signup", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user
-    const newUser = { email, password: hashedPassword };
+    // Create new user with name and username fields
+    const newUser = { name, email, username, password: hashedPassword };
     await db.collection("users").insertOne(newUser);
 
     // Generate and return JWT
@@ -46,18 +46,24 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   console.log(req.body);
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    // Find user
-    const user = await db.collection("users").findOne({ email });
+    // Find user by either username or email
+    const user = await db
+      .collection("users")
+      .findOne({ $or: [{ email: username }, { username: username }] });
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ message: "Invalid username/email or password" });
     }
 
     // Check password
     const passwordMatches = await bcrypt.compare(password, user.password);
     if (!passwordMatches) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ message: "Invalid username/email or password" });
     }
 
     // Generate and return JWT
