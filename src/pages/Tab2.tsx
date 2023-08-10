@@ -9,35 +9,64 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
-import { fetchTopics, deleteTopic, postTopic } from "../Api/ApiTab2";
+import {
+  fetchTopics,
+  deleteTopic,
+  postTopic,
+  postProject,
+  fetchProjects,
+} from "../Api/ApiTab2";
 
 import "./Tab2.css";
 import TaskModal from "../components/Tasks/TaskModal";
 import TopicCard from "../components/Topics/TopicCard";
 import AddInput from "../components/AddInput";
+import AddProject from "../components/AddProject";
 import SideMenu from "../components/Side Menu/SideMenu";
 import ContentHeader from "../components/Side Menu/ContentHeader";
 
 const Tab2: React.FC = () => {
   const [cards, setCards] = useState([{ id: "1", title: "Card Title 1" }]);
+  const [projects, setProjects] = useState([
+    { id: "1", title: "Project Title 1" },
+  ]);
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [currentCardId, setCurrentCardId] = useState<string | null>(null); // Added state for cardId
-  const [view, setView] = useState<"topics" | "project">("topics"); // To keep track of the selected view
+  const [currentCardId, setCurrentCardId] = useState<string | null>(null);
+  const [view, setView] = useState<"topics" | "project">("topics");
 
   useEffect(() => {
-    fetchTopics()
+    fetchTopics().then((data) => {
+      setCards(
+        data.map((card: any) => ({
+          id: card._id,
+          title: card.title,
+        }))
+      );
+    });
+    fetchProjects()
       .then((data) => {
-        setCards(
-          data.map((card: any) => ({
-            id: card._id,
-            title: card.title,
+        setProjects(
+          data.map((project: any) => ({
+            id: project._id,
+            title: project.title,
           }))
         );
       })
       .catch((error) => console.error("Fetch error:", error));
   }, []);
+
+  const addProject = (title: string) => {
+    postProject(title)
+      .then((data) => {
+        setProjects((prevProjects) => [
+          ...prevProjects,
+          { id: data._id, title: data.title },
+        ]);
+      })
+      .catch((error) => console.error("Fetch error:", error));
+  };
 
   const deleteCard = (id: string) => {
     deleteTopic(id)
@@ -48,15 +77,14 @@ const Tab2: React.FC = () => {
   };
 
   const openModal = (title: string, id: string) => {
-    // Added id parameter
     setModalContent(title);
-    setCurrentCardId(id); // Store the card ID in the state
+    setCurrentCardId(id);
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setCurrentCardId(null); // Clear the card ID when modal closes
+    setCurrentCardId(null);
   };
 
   const addCard = (title: string) => {
@@ -69,6 +97,7 @@ const Tab2: React.FC = () => {
       })
       .catch((error) => console.error("Fetch error:", error));
   };
+
   const doReorder = (event: any) => {
     const draggedItem = cards.splice(event.detail.from, 1)[0];
     cards.splice(event.detail.to, 0, draggedItem);
@@ -110,7 +139,19 @@ const Tab2: React.FC = () => {
         )}
 
         {view === "project" && (
-          <div>{/* Your Project Related Content Here */}</div>
+          <>
+            {/* TODO: Render logic for projects here. You can use a ProjectCard component if you have one or create a new one. */}
+            <IonFab vertical="bottom" horizontal="center" slot="fixed">
+              <IonFabButton onClick={() => setShowAlert(true)}>
+                <IonIcon icon={add}></IonIcon>
+              </IonFabButton>
+            </IonFab>
+            <AddProject // <-- Using new AddProject component
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
+              addProject={addProject}
+            />
+          </>
         )}
       </IonContent>
 

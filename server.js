@@ -79,6 +79,11 @@ app.get("/tab2", (req, res) => {
   res.send("Welcome to tab2");
 });
 
+app.get("/projects", async (req, res) => {
+  const allProjects = await db.collection("Projects").find().toArray();
+  res.json(allProjects);
+});
+
 app.get("/tasks/:cardId", async (req, res) => {
   // Filter tasks by cardId
   const cardId = req.params.cardId;
@@ -113,6 +118,12 @@ app.post("/tasks", async (req, res) => {
   res.json(task);
 });
 
+app.post("/projects", async (req, res) => {
+  const project = req.body;
+  await db.collection("Projects").insertOne(project);
+  res.json(project);
+});
+
 //DELETE --------------
 app.delete("/topics/:id", async (req, res) => {
   const id = req.params.id;
@@ -134,6 +145,17 @@ app.delete("/tasks/:id", async (req, res) => {
   console.log("DELETE /tasks/" + id);
   await db.collection("Tasks").deleteOne({ _id: new ObjectId(id) });
   res.json({ message: "Task deleted" });
+});
+
+app.delete("/projects/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  console.log("DELETE /projects/" + id);
+  await db.collection("Projects").deleteOne({ _id: new ObjectId(id) });
+  res.json({ message: "Project deleted" });
 });
 
 //Start
