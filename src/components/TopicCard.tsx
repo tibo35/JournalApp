@@ -1,39 +1,41 @@
+import React from "react";
 import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
   IonButton,
   IonIcon,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonItem,
   IonReorder,
 } from "@ionic/react";
 import { trash } from "ionicons/icons";
-import React from "react";
-
+import "./TopicCard.css";
 interface CardProps {
   title: string;
   id: string;
   onDelete: (event: React.MouseEvent) => void;
-  onOpen: (id: string) => void; // Pass the id when opening
+  onOpen: (id: string) => void;
 }
 
 const TopicCard: React.FC<CardProps> = ({ title, id, onDelete, onOpen }) => (
-  <IonCard onClick={() => onOpen(id)}>
-    {" "}
-    {/* Pass the id when the card is clicked */}
-    <IonCardHeader>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}>
-        <IonCardTitle>{title}</IonCardTitle>
-        <IonButton onClick={onDelete}>
-          <IonIcon icon={trash} color="danger" />
-        </IonButton>
-        <IonReorder />
-      </div>
-    </IonCardHeader>
+  <IonCard>
+    <IonItemSliding>
+      <IonItem onClick={() => onOpen(id)}>
+        <IonCardHeader className="card-header">
+          <IonReorder />
+          <IonCardTitle className="reorder-btn">{title}</IonCardTitle>
+        </IonCardHeader>
+      </IonItem>
+
+      <IonItemOptions side="end">
+        <IonItemOption color="danger" onClick={onDelete}>
+          <IonIcon slot="icon-only" icon={trash} />
+        </IonItemOption>
+      </IonItemOptions>
+    </IonItemSliding>
   </IonCard>
 );
 
