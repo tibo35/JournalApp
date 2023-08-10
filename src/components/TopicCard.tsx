@@ -4,6 +4,7 @@ import {
   IonCardTitle,
   IonButton,
   IonIcon,
+  IonReorder,
 } from "@ionic/react";
 import { trash } from "ionicons/icons";
 import React from "react";
@@ -30,6 +31,7 @@ const TopicCard: React.FC<CardProps> = ({ title, id, onDelete, onOpen }) => (
         <IonButton onClick={onDelete}>
           <IonIcon icon={trash} color="danger" />
         </IonButton>
+        <IonReorder />
       </div>
     </IonCardHeader>
   </IonCard>

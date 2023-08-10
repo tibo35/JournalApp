@@ -32,7 +32,7 @@ export const postTask = (
   fetch("http://localhost:3001/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content, dueDate }),
+    body: JSON.stringify({ content, dueDate, cardId }),
   }).then((res) => res.json());
 
 // SignUp ----------

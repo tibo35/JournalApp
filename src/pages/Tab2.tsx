@@ -9,6 +9,7 @@ import {
   IonIcon,
   IonButton,
   IonModal,
+  IonReorderGroup,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
@@ -68,22 +69,30 @@ const Tab2: React.FC = () => {
       })
       .catch((error) => console.error("Fetch error:", error));
   };
+  const doReorder = (event: any) => {
+    const draggedItem = cards.splice(event.detail.from, 1)[0];
+    cards.splice(event.detail.to, 0, draggedItem);
+    setCards([...cards]);
+    event.detail.complete();
+  };
 
   return (
     <IonPage>
       <IonContent fullscreen className="tab2-page">
-        {cards.map((card) => (
-          <TopicCard
-            key={card.id}
-            title={card.title}
-            id={card.id}
-            onOpen={() => openModal(card.title, card.id)} // Passing id to openModal
-            onDelete={(e) => {
-              e.stopPropagation();
-              deleteCard(card.id);
-            }}
-          />
-        ))}
+        <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
+          {cards.map((card) => (
+            <TopicCard
+              key={card.id}
+              title={card.title}
+              id={card.id}
+              onOpen={() => openModal(card.title, card.id)} // Passing id to openModal
+              onDelete={(e) => {
+                e.stopPropagation();
+                deleteCard(card.id);
+              }}
+            />
+          ))}
+        </IonReorderGroup>
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
           <TaskModal
             title={modalContent}
