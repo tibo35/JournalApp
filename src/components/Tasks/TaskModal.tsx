@@ -1,28 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonIcon,
-  IonButtons,
-  IonButton,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonInput,
-  IonDatetime,
-  IonFooter,
-  IonFabButton,
-  IonFab,
-  IonSpinner,
-} from "@ionic/react";
+import { IonDatetime } from "@ionic/react";
 import { format } from "date-fns";
-import { trash, calendarNumberOutline, add, closeCircle } from "ionicons/icons";
 import { fetchTasks, deleteTask, postTask } from "../../Api/ApiTab2";
-import "./TaskModal.css";
-
-import TaskItem from "./TaskItem"; // Importing the new sub-component
+import TaskHeader from "./TaskHeader";
+import TaskList from "./TaskList";
+import TaskFooter from "./TaskFooter";
 
 interface Task {
   id: string;
@@ -87,51 +69,20 @@ const TaskModal: React.FC<{
   };
   return (
     <>
-      <IonContent className="task-container">
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Tasks</IonTitle>
-            <IonButtons slot="end">
-              <IonButton onClick={onClose}>
-                <IonIcon icon={closeCircle} />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        {loading && <IonSpinner />}
-        {error && <p className="error-notification">{error}</p>}
-        <IonList>
-          {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} onDelete={onDelete} />
-          ))}
-        </IonList>
-      </IonContent>
-      <IonFooter>
-        <div className="container-items">
-          <IonInput
-            className="task-input"
-            value={taskInput}
-            placeholder="Add Item"
-            type="text"
-            onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
-          />
-          <IonIcon
-            className="calendar-icon"
-            icon={calendarNumberOutline}
-            onClick={() => setShowDatePicker(!showDatePicker)}
-          />
-
-          <IonFab
-            className="add-button"
-            vertical="bottom"
-            horizontal="end"
-            slot="fixed">
-            <IonFabButton onClick={() => addTask()}>
-              <IonIcon icon={add}></IonIcon>
-            </IonFabButton>
-          </IonFab>
-        </div>
-      </IonFooter>{" "}
+      <TaskHeader onClose={onClose} />
+      <TaskList
+        tasks={tasks}
+        onDelete={onDelete}
+        loading={loading}
+        error={error}
+      />
+      <TaskFooter
+        taskInput={taskInput}
+        setTaskInput={setTaskInput}
+        showDatePicker={showDatePicker}
+        setShowDatePicker={setShowDatePicker}
+        addTask={addTask}
+      />
       {showDatePicker && (
         <div className="date-picker-wrapper">
           <IonDatetime
