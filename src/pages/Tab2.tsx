@@ -9,6 +9,7 @@ import {
   IonIcon,
   IonButton,
   IonModal,
+  IonReorderGroup,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
@@ -23,6 +24,7 @@ const Tab2: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [currentCardId, setCurrentCardId] = useState<string | null>(null); // Added state for cardId
 
   useEffect(() => {
     fetchTopics()
@@ -45,12 +47,16 @@ const Tab2: React.FC = () => {
       .catch((error) => console.error("Fetch error:", error));
   };
 
-  const openModal = (title: string) => {
+  const openModal = (title: string, id: string) => {
+    // Added id parameter
     setModalContent(title);
+    setCurrentCardId(id); // Store the card ID in the state
     setShowModal(true);
   };
+
   const closeModal = () => {
     setShowModal(false);
+    setCurrentCardId(null); // Clear the card ID when modal closes
   };
 
   const addCard = (title: string) => {
@@ -63,24 +69,36 @@ const Tab2: React.FC = () => {
       })
       .catch((error) => console.error("Fetch error:", error));
   };
+  const doReorder = (event: any) => {
+    const draggedItem = cards.splice(event.detail.from, 1)[0];
+    cards.splice(event.detail.to, 0, draggedItem);
+    setCards([...cards]);
+    event.detail.complete();
+  };
 
   return (
     <IonPage>
       <IonContent fullscreen className="tab2-page">
-        {cards.map((card) => (
-          <TopicCard
-            key={card.id}
-            title={card.title}
-            id={card.id}
-            onOpen={() => openModal(card.title)}
-            onDelete={(e) => {
-              e.stopPropagation();
-              deleteCard(card.id);
-            }}
-          />
-        ))}
+        <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
+          {cards.map((card) => (
+            <TopicCard
+              key={card.id}
+              title={card.title}
+              id={card.id}
+              onOpen={() => openModal(card.title, card.id)} // Passing id to openModal
+              onDelete={(e) => {
+                e.stopPropagation();
+                deleteCard(card.id);
+              }}
+            />
+          ))}
+        </IonReorderGroup>
         <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-          <TaskModal title={modalContent} onClose={closeModal} />
+          <TaskModal
+            title={modalContent}
+            cardId={currentCardId || ""}
+            onClose={closeModal}
+          />
         </IonModal>
       </IonContent>
       <IonFab vertical="bottom" horizontal="center" slot="fixed">

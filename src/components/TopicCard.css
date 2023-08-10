@@ -1,0 +1,14 @@
+.card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+ion-reorder {
+  margin-right: 5% !important;
+  margin-left: -20%;
+}
+
+.title-card {
+  margin-left: 10px !important;
+}

@@ -34,10 +34,11 @@ interface Task {
   date: string;
 }
 
-const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
-  title,
-  onClose,
-}) => {
+const TaskModal: React.FC<{
+  title: string;
+  cardId: string;
+  onClose: () => void;
+}> = ({ title, cardId, onClose }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState("");
   const [dueDate, setDueDate] = useState<string>("");
@@ -45,21 +46,23 @@ const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
   const [isTouched, setIsTouched] = useState(false);
 
   useEffect(() => {
-    fetchTasks()
-      .then((data) => {
-        setTasks(
-          data.map((task: any) => ({
-            id: task._id,
-            content: task.content,
-          }))
-        );
-      })
-      .catch((error) => console.error("Fetch error:", error));
-  }, []);
+    if (cardId) {
+      fetchTasks(cardId)
+        .then((data) => {
+          setTasks(
+            data.map((task: any) => ({
+              id: task._id,
+              content: task.content,
+            }))
+          );
+        })
+        .catch((error) => console.error("Fetch error:", error));
+    }
+  }, [cardId]);
 
   const addTask = () => {
     if (taskInput.trim().length > 0) {
-      postTask(taskInput, dueDate)
+      postTask(taskInput, dueDate, cardId)
         .then((data) => {
           setTasks((prevTasks) => [
             ...prevTasks,
@@ -75,8 +78,9 @@ const TaskModal: React.FC<{ title: string; onClose: () => void }> = ({
   const markTouched = () => {
     setIsTouched(true);
   };
+
   const onDelete = (id: string) => {
-    console.log("Deleting task with id: ", id); // Add this line
+    console.log("Deleting task with id: ", id);
     deleteTask(id)
       .then(() => {
         setTasks((prevTasks) => prevTasks.filter((tasks) => tasks.id !== id));

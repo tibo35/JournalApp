@@ -15,19 +15,24 @@ export const postTopic = (title: string) =>
   }).then((res) => res.json());
 
 // Tasks ----------
-export const fetchTasks = () =>
-  fetch("http://localhost:3001/tasks").then((res) => res.json());
+export const fetchTasks = (
+  cardId: string // Fetch tasks by cardId
+) => fetch(`http://localhost:3001/tasks/${cardId}`).then((res) => res.json());
 
 export const deleteTask = (id: string) =>
   fetch(`http://localhost:3001/tasks/${id}`, { method: "DELETE" }).then((res) =>
     res.json()
   );
 
-export const postTask = (content: string, dueDate: string) =>
+export const postTask = (
+  content: string,
+  dueDate: string,
+  cardId: string // Post tasks with cardId
+) =>
   fetch("http://localhost:3001/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content, dueDate }),
+    body: JSON.stringify({ content, dueDate, cardId }),
   }).then((res) => res.json());
 
 // SignUp ----------
