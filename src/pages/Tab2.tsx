@@ -13,9 +13,9 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
-import TaskModal from "../components/TaskModal";
+import TaskModal from "../components/Tasks/TaskModal";
 import "./Tab2.css";
-import TopicCard from "../components/TopicCard";
+import TopicCard from "../components/Topics/TopicCard";
 import AddInput from "../components/AddInput";
 import { fetchTopics, deleteTopic, postTopic } from "../Api/ApiTab2";
 

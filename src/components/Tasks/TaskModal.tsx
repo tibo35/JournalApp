@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   IonContent,
   IonHeader,
-  IonPage,
   IonTitle,
   IonToolbar,
   IonIcon,
@@ -16,17 +15,14 @@ import {
   IonFooter,
   IonFabButton,
   IonFab,
+  IonSpinner,
 } from "@ionic/react";
 import { format } from "date-fns";
-import {
-  close,
-  trash,
-  calendarNumberOutline,
-  add,
-  closeCircle,
-} from "ionicons/icons";
-import { fetchTasks, deleteTask, postTask } from "../Api/ApiTab2";
+import { trash, calendarNumberOutline, add, closeCircle } from "ionicons/icons";
+import { fetchTasks, deleteTask, postTask } from "../../Api/ApiTab2";
 import "./TaskModal.css";
+
+import TaskItem from "./TaskItem"; // Importing the new sub-component
 
 interface Task {
   id: string;
@@ -43,9 +39,11 @@ const TaskModal: React.FC<{
   const [taskInput, setTaskInput] = useState("");
   const [dueDate, setDueDate] = useState<string>("");
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setLoading(true);
     if (cardId) {
       fetchTasks(cardId)
         .then((data) => {
@@ -56,7 +54,11 @@ const TaskModal: React.FC<{
             }))
           );
         })
-        .catch((error) => console.error("Fetch error:", error));
+        .catch((error) => {
+          console.error("Fetch error:", error);
+          setError("Failed to fetch tasks!");
+        })
+        .finally(() => setLoading(false));
     }
   }, [cardId]);
 
@@ -73,10 +75,6 @@ const TaskModal: React.FC<{
         })
         .catch((error) => console.error("Fetch error:", error));
     }
-  };
-
-  const markTouched = () => {
-    setIsTouched(true);
   };
 
   const onDelete = (id: string) => {
@@ -100,14 +98,11 @@ const TaskModal: React.FC<{
             </IonButtons>
           </IonToolbar>
         </IonHeader>
+        {loading && <IonSpinner />}
+        {error && <p className="error-notification">{error}</p>}
         <IonList>
           {tasks.map((task) => (
-            <IonItem key={task.id}>
-              <IonLabel>{task.content}</IonLabel>
-              <IonButton onClick={() => onDelete(task.id)}>
-                <IonIcon icon={trash} color="danger" />
-              </IonButton>
-            </IonItem>
+            <TaskItem key={task.id} task={task} onDelete={onDelete} />
           ))}
         </IonList>
       </IonContent>
