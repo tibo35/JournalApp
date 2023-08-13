@@ -21,8 +21,8 @@ import {
 import "./Tab2.css";
 import TaskModal from "../components/Tasks/TaskModal";
 import TopicCard from "../components/Topics/TopicCard";
-import AddInput from "../components/AddInput";
-import AddProject from "../components/AddProject";
+import AddInput from "../components/Topics/AddInput";
+import AddProject from "../components/Projects/AddProject";
 import SideMenu from "../components/Side Menu/SideMenu";
 import ContentHeader from "../components/Side Menu/ContentHeader";
 import ProjectCard from "../components/Projects/ProjectCard";
@@ -130,20 +130,32 @@ const Tab2: React.FC = () => {
         <ContentHeader view={view} />
 
         {view === "topics" && (
-          <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
-            {cards.map((card) => (
-              <TopicCard
-                key={card.id}
-                title={card.title}
-                id={card.id}
-                onOpen={() => openModal(card.title, card.id)}
-                onDelete={(e) => {
-                  e.stopPropagation();
-                  deleteCard(card.id);
-                }}
-              />
-            ))}
-          </IonReorderGroup>
+          <>
+            <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
+              {cards.map((card) => (
+                <TopicCard
+                  key={card.id}
+                  title={card.title}
+                  id={card.id}
+                  onOpen={() => openModal(card.title, card.id)}
+                  onDelete={(e) => {
+                    e.stopPropagation();
+                    deleteCard(card.id);
+                  }}
+                />
+              ))}
+            </IonReorderGroup>
+            <IonFab vertical="bottom" horizontal="center" slot="fixed">
+              <IonFabButton onClick={() => setShowAlert(true)}>
+                <IonIcon icon={add}></IonIcon>
+              </IonFabButton>
+            </IonFab>
+            <AddInput
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
+              addCard={addCard}
+            />
+          </>
         )}
 
         {view === "project" && (
@@ -179,21 +191,6 @@ const Tab2: React.FC = () => {
           onClose={closeModal}
         />
       </IonModal>
-
-      {view === "topics" && (
-        <>
-          <IonFab vertical="bottom" horizontal="center" slot="fixed">
-            <IonFabButton onClick={() => setShowAlert(true)}>
-              <IonIcon icon={add}></IonIcon>
-            </IonFabButton>
-          </IonFab>
-          <AddInput
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
-            addCard={addCard}
-          />
-        </>
-      )}
     </IonPage>
   );
 };
