@@ -80,6 +80,10 @@ app.get("/projects", async (req, res) => {
   const allProjects = await db.collection("Projects").find().toArray();
   res.json(allProjects);
 });
+app.get("/PhotoOfTheDay", async (req, res) => {
+  const allPhotos = await db.collection("PhotoOfTheDay").find().toArray();
+  res.json(allPhotos);
+});
 
 app.get("/tasks/:cardId", async (req, res) => {
   // Filter tasks by cardId
@@ -120,6 +124,11 @@ app.post("/projects", async (req, res) => {
   await db.collection("Projects").insertOne(project);
   res.json(project);
 });
+app.post("/PhotoOfTheDay", async (req, res) => {
+  const PhotoOfTheDay = req.body;
+  await db.collection("PhotoOfTheDay").insertOne(PhotoOfTheDay);
+  res.json(PhotoOfTheDay);
+});
 
 // ---------------------------------------------DELETE-------------------
 app.delete("/topics/:id", async (req, res) => {
@@ -153,6 +162,16 @@ app.delete("/projects/:id", async (req, res) => {
   console.log("DELETE /projects/" + id);
   await db.collection("Projects").deleteOne({ _id: new ObjectId(id) });
   res.json({ message: "Project deleted" });
+});
+app.delete("/PhotoOfTheDay/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+  console.log("DELETE /PhotoOfTheDay/" + id);
+  await db.collection("PhotoOfTheDay").deleteOne({ _id: new ObjectId(id) });
+  res.json({ message: "photo deleted" });
 });
 
 //==============================================================    Start    =================================

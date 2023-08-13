@@ -9,17 +9,33 @@ import {
 } from "@ionic/react";
 
 type ContentHeaderProps = {
-  view: "topics" | "project";
+  view: "topics" | "project" | "PhotoOfTheDay";
 };
 
 const ContentHeader: React.FC<ContentHeaderProps> = ({ view }) => {
+  let title;
+  switch (view) {
+    case "topics":
+      title = "Topics";
+      break;
+    case "project":
+      title = "Project";
+      break;
+    case "PhotoOfTheDay":
+      title = "Photo Of The Day";
+      break;
+    default:
+      title = "";
+      break;
+  }
+
   return (
     <IonHeader>
       <IonToolbar>
         <IonButtons slot="start">
           <IonMenuButton></IonMenuButton>
         </IonButtons>
-        <IonTitle>{view === "topics" ? "Topics" : "Project"}</IonTitle>
+        <IonTitle>{title}</IonTitle>
       </IonToolbar>
     </IonHeader>
   );

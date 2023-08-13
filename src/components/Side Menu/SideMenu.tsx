@@ -8,13 +8,13 @@ import {
 } from "@ionic/react";
 
 type SideMenuProps = {
-  setView: (view: "topics" | "project") => void;
+  setView: (view: "topics" | "project" | "PhotoOfTheDay") => void;
 };
 
 const SideMenu: React.FC<SideMenuProps> = ({ setView }) => {
   const menuRef = useRef<HTMLIonMenuElement>(null);
 
-  const handleMenuClick = (view: "topics" | "project") => {
+  const handleMenuClick = (view: "topics" | "project" | "PhotoOfTheDay") => {
     setView(view);
     menuRef.current?.close(); // Close the menu
   };
@@ -29,6 +29,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ setView }) => {
       <IonContent class="ion-padding">
         <div onClick={() => handleMenuClick("topics")}>Topics</div>
         <div onClick={() => handleMenuClick("project")}>Project</div>
+        <div onClick={() => handleMenuClick("PhotoOfTheDay")}>
+          Photo Of The Day
+        </div>
       </IonContent>
     </IonMenu>
   );
