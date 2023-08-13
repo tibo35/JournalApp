@@ -15,6 +15,7 @@ interface Task {
 const TaskModal: React.FC<{
   title: string;
   cardId: string;
+
   onClose: () => void;
 }> = ({ title, cardId, onClose }) => {
   const [tasks, setTasks] = useState<Task[]>([]);

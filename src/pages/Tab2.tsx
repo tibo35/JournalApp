@@ -15,6 +15,7 @@ import {
   postTopic,
   postProject,
   fetchProjects,
+  deleteProject,
 } from "../Api/ApiTab2";
 
 import "./Tab2.css";
@@ -24,6 +25,7 @@ import AddInput from "../components/AddInput";
 import AddProject from "../components/AddProject";
 import SideMenu from "../components/Side Menu/SideMenu";
 import ContentHeader from "../components/Side Menu/ContentHeader";
+import ProjectCard from "../components/Projects/ProjectCard";
 
 const Tab2: React.FC = () => {
   const [cards, setCards] = useState([{ id: "1", title: "Card Title 1" }]);
@@ -74,6 +76,19 @@ const Tab2: React.FC = () => {
         setCards((prevCards) => prevCards.filter((card) => card.id !== id));
       })
       .catch((error) => console.error("Fetch error:", error));
+  };
+
+  const deleteProjectFromBackend = (id: string): Promise<void> => {
+    return deleteProject(id)
+      .then(() => {
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project.id !== id)
+        );
+      })
+      .catch((error: any) => {
+        console.error("Delete error:", error);
+        throw error; // Re-throw the error so it can be handled by any component that might be using this function.
+      });
   };
 
   const openModal = (title: string, id: string) => {
@@ -140,13 +155,19 @@ const Tab2: React.FC = () => {
 
         {view === "project" && (
           <>
-            {/* TODO: Render logic for projects here. You can use a ProjectCard component if you have one or create a new one. */}
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                deleteProject={deleteProjectFromBackend}
+              />
+            ))}
             <IonFab vertical="bottom" horizontal="center" slot="fixed">
               <IonFabButton onClick={() => setShowAlert(true)}>
                 <IonIcon icon={add}></IonIcon>
               </IonFabButton>
             </IonFab>
-            <AddProject // <-- Using new AddProject component
+            <AddProject
               showAlert={showAlert}
               setShowAlert={setShowAlert}
               addProject={addProject}
@@ -169,8 +190,6 @@ const Tab2: React.FC = () => {
           />
         </>
       )}
-
-      {/* You can add a similar fab button for 'project' view if needed */}
     </IonPage>
   );
 };
