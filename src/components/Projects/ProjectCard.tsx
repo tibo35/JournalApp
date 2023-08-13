@@ -11,6 +11,8 @@ import {
   IonReorder,
   IonModal,
 } from "@ionic/react";
+import "../Topics/TopicCard.css";
+
 import { trash } from "ionicons/icons";
 import TaskModal from "../Tasks/TaskModal";
 
@@ -48,9 +50,11 @@ const ProjectCard: React.FC<ProjectProps> = ({
       <IonCard>
         <IonItemSliding>
           <IonItem onClick={() => onOpen(project.title, project.id)}>
-            <IonCardHeader>
+            <IonCardHeader className="card-header">
               <IonReorder />
-              <IonCardTitle>{project.title}</IonCardTitle>
+              <IonCardTitle className="reorder-btn">
+                {project.title}
+              </IonCardTitle>
             </IonCardHeader>
           </IonItem>
 
