@@ -1,7 +1,7 @@
 import React from "react";
 import { IonItem, IonLabel, IonButton, IonIcon } from "@ionic/react";
 import { trash } from "ionicons/icons";
-import { Task } from "../taskTypes"; // Import Task from the new types file
+import { Task } from "../Tasks/taskTypes"; // Import Task from the new types file
 
 interface TaskItemProps {
   task: Task;

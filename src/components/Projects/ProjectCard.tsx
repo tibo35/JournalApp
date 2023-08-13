@@ -12,7 +12,7 @@ import {
   IonModal,
 } from "@ionic/react";
 import { trash } from "ionicons/icons";
-import TaskModal from "../Tasks/TaskModal"; // Ensure this path is correct
+import TaskModal from "../Tasks/TaskModal";
 
 interface ProjectProps {
   project: {
@@ -20,9 +20,14 @@ interface ProjectProps {
     title: string;
   };
   deleteProject: (id: string) => Promise<void>;
+  onOpen: (title: string, id: string) => void;
 }
 
-const ProjectCard: React.FC<ProjectProps> = ({ project, deleteProject }) => {
+const ProjectCard: React.FC<ProjectProps> = ({
+  project,
+  deleteProject,
+  onOpen,
+}) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleDelete = () => {
@@ -31,6 +36,7 @@ const ProjectCard: React.FC<ProjectProps> = ({ project, deleteProject }) => {
 
   const openModal = () => {
     setShowModal(true);
+    onOpen(project.title, project.id);
   };
 
   const closeModal = () => {
@@ -41,7 +47,7 @@ const ProjectCard: React.FC<ProjectProps> = ({ project, deleteProject }) => {
     <>
       <IonCard>
         <IonItemSliding>
-          <IonItem onClick={openModal}>
+          <IonItem onClick={() => onOpen(project.title, project.id)}>
             <IonCardHeader>
               <IonReorder />
               <IonCardTitle>{project.title}</IonCardTitle>

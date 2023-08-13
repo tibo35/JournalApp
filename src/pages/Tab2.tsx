@@ -92,12 +92,14 @@ const Tab2: React.FC = () => {
   };
 
   const openModal = (title: string, id: string) => {
+    console.log("Opening modal with title:", title);
     setModalContent(title);
     setCurrentCardId(id);
     setShowModal(true);
   };
 
   const closeModal = () => {
+    console.log("Closing modal");
     setShowModal(false);
     setCurrentCardId(null);
   };
@@ -123,45 +125,39 @@ const Tab2: React.FC = () => {
   return (
     <IonPage>
       <SideMenu setView={setView} />
+
       <IonContent fullscreen className="tab2-page" id="main-content">
         <ContentHeader view={view} />
+
         {view === "topics" && (
-          <>
-            <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
-              {cards.map((card) => (
-                <TopicCard
-                  key={card.id}
-                  title={card.title}
-                  id={card.id}
-                  onOpen={() => openModal(card.title, card.id)}
-                  onDelete={(e) => {
-                    e.stopPropagation();
-                    deleteCard(card.id);
-                  }}
-                />
-              ))}
-            </IonReorderGroup>
-            <IonModal
-              isOpen={showModal}
-              onDidDismiss={() => setShowModal(false)}>
-              <TaskModal
-                title={modalContent}
-                cardId={currentCardId || ""}
-                onClose={closeModal}
+          <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
+            {cards.map((card) => (
+              <TopicCard
+                key={card.id}
+                title={card.title}
+                id={card.id}
+                onOpen={() => openModal(card.title, card.id)}
+                onDelete={(e) => {
+                  e.stopPropagation();
+                  deleteCard(card.id);
+                }}
               />
-            </IonModal>
-          </>
+            ))}
+          </IonReorderGroup>
         )}
 
         {view === "project" && (
           <>
-            {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                deleteProject={deleteProjectFromBackend}
-              />
-            ))}
+            <IonReorderGroup onIonItemReorder={doReorder} disabled={false}>
+              {projects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  deleteProject={deleteProjectFromBackend}
+                  onOpen={() => openModal(project.title, project.id)}
+                />
+              ))}
+            </IonReorderGroup>
             <IonFab vertical="bottom" horizontal="center" slot="fixed">
               <IonFabButton onClick={() => setShowAlert(true)}>
                 <IonIcon icon={add}></IonIcon>
@@ -175,6 +171,14 @@ const Tab2: React.FC = () => {
           </>
         )}
       </IonContent>
+
+      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+        <TaskModal
+          title={modalContent}
+          cardId={currentCardId || ""}
+          onClose={closeModal}
+        />
+      </IonModal>
 
       {view === "topics" && (
         <>

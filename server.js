@@ -11,10 +11,10 @@ app.use(cors());
 app.use(express.json());
 let db;
 
-// Signup route
+// --------------------------------------------------Signup route
 app.post("/signup", async (req, res) => {
   try {
-    const { name, email, username, password } = req.body; // <-- get name and username from request body
+    const { name, email, username, password } = req.body;
     console.log(req.body);
     // Check if user already exists
     const user = await db.collection("users").findOne({ email });
@@ -42,12 +42,11 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// Login route
+// -----------------------------------------------------Login route
 app.post("/login", async (req, res) => {
   console.log(req.body);
   try {
     const { username, password } = req.body;
-
     // Find user by either username or email
     const user = await db
       .collection("users")
@@ -57,7 +56,6 @@ app.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Invalid username/email or password" });
     }
-
     // Check password
     const passwordMatches = await bcrypt.compare(password, user.password);
     if (!passwordMatches) {
@@ -65,7 +63,6 @@ app.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Invalid username/email or password" });
     }
-
     // Generate and return JWT
     const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: "1h" });
     res.status(200).json({ token });
@@ -74,7 +71,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// GET ---------------------------------------------
+// ---------------------------------------------GET ------------
 app.get("/tab2", (req, res) => {
   res.send("Welcome to tab2");
 });
@@ -102,7 +99,7 @@ app.get("/topics", async (req, res) => {
   res.json(allCards);
 });
 
-//POST -------------------
+// --------------------------------------------POST--------------
 app.post("/topics", async (req, res) => {
   const card = req.body;
   await db.collection("Cards").insertOne(card);
@@ -124,7 +121,7 @@ app.post("/projects", async (req, res) => {
   res.json(project);
 });
 
-//DELETE --------------
+// ---------------------------------------------DELETE-------------------
 app.delete("/topics/:id", async (req, res) => {
   const id = req.params.id;
   if (!ObjectId.isValid(id)) {
@@ -158,7 +155,7 @@ app.delete("/projects/:id", async (req, res) => {
   res.json({ message: "Project deleted" });
 });
 
-//Start
+//==============================================================    Start    =================================
 async function start() {
   const client = new MongoClient(
     "mongodb+srv://tibo:Journalapp@cluster-journal-app.m4f8z2w.mongodb.net/?retryWrites=true&w=majority",
