@@ -9,12 +9,10 @@ import {
   IonItem,
   IonIcon,
   IonReorder,
-  IonModal,
 } from "@ionic/react";
 import "../Topics/TopicCard.css";
 
 import { trash } from "ionicons/icons";
-import TaskModal from "../Tasks/TaskModal";
 
 interface ProjectProps {
   project: {
@@ -34,15 +32,6 @@ const ProjectCard: React.FC<ProjectProps> = ({
 
   const handleDelete = () => {
     deleteProject(project.id);
-  };
-
-  const openModal = () => {
-    setShowModal(true);
-    onOpen(project.title, project.id);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
   };
 
   return (
