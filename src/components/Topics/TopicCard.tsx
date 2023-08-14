@@ -3,7 +3,6 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonButton,
   IonIcon,
   IonItemSliding,
   IonItemOptions,
