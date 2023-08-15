@@ -1,8 +1,8 @@
 import React from "react";
 import { IonList, IonSpinner } from "@ionic/react";
 import TaskItem from "./TaskItem";
-import { Task } from "./taskTypes"; // Assuming you've extracted the Task interface to taskTypes.ts
-
+import { Task } from "./taskTypes";
+import "./TaskList.css";
 interface TaskListProps {
   tasks: Task[];
   onDelete: (id: string) => void;
@@ -19,7 +19,7 @@ const TaskList: React.FC<TaskListProps> = ({
   <>
     {loading && <IonSpinner />}
     {error && <p className="error-notification">{error}</p>}
-    <IonList>
+    <IonList className="task-list">
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} onDelete={onDelete} />
       ))}

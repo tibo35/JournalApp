@@ -1,22 +1,6 @@
 .task-container {
   opacity: 0.6;
 }
-.date-picker-wrapper {
-  height: 50vh;
-}
-.date-picker-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  /* Ensure the date picker appears on top of all other elements */
-  width: 100%;
-  height: 20%;
-  background-color: rgba(142, 155, 216, 0.43);
-  margin-left: 8%;
-  margin-top: 110%;
-  border-radius: 15px;
-}
 
 .container-items {
   display: flex;
@@ -36,10 +20,12 @@
   --placeholder-opacity: 1;
   --placeholder-font-size: 12px;
 }
+
 .calendar-icon {
   font-size: 50px;
   margin: 2%;
 }
+
 .add-button {
   margin-right: 5%;
 }

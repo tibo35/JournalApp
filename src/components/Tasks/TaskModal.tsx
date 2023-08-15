@@ -5,6 +5,7 @@ import { fetchTasks, deleteTask, postTask } from "../../Api/ApiTab2";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import TaskFooter from "./TaskFooter";
+import "./TaskModal.css";
 
 interface Task {
   id: string;
@@ -15,7 +16,6 @@ interface Task {
 const TaskModal: React.FC<{
   title: string;
   cardId: string;
-
   onClose: () => void;
 }> = ({ title, cardId, onClose }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -64,41 +64,49 @@ const TaskModal: React.FC<{
     console.log("Deleting task with id: ", id);
     deleteTask(id)
       .then(() => {
-        setTasks((prevTasks) => prevTasks.filter((tasks) => tasks.id !== id));
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
       })
       .catch((error) => console.error("Fetch error:", error));
   };
+
   return (
     <>
       <TaskHeader onClose={onClose} />
+
+      {/* Position TaskList here, outside of the task-modal-content */}
       <TaskList
         tasks={tasks}
         onDelete={onDelete}
         loading={loading}
         error={error}
       />
-      <TaskFooter
-        taskInput={taskInput}
-        setTaskInput={setTaskInput}
-        showDatePicker={showDatePicker}
-        setShowDatePicker={setShowDatePicker}
-        addTask={addTask}
-      />
-      {showDatePicker && (
-        <div className="date-picker-wrapper">
-          <IonDatetime
-            class="date-picker-modal"
-            placeholder="Select Date"
-            value={Array.isArray(dueDate) ? dueDate[0] : dueDate || undefined}
-            onIonChange={(e) => {
-              const newDate = e.detail.value as string;
-              const formattedDate = format(new Date(newDate), "dd/MM/yyyy");
-              setDueDate(formattedDate);
-              setShowDatePicker(false);
-            }}
+
+      <div className="task-modal-content">
+        <div className="task-footer">
+          <TaskFooter
+            taskInput={taskInput}
+            setTaskInput={setTaskInput}
+            showDatePicker={showDatePicker}
+            setShowDatePicker={setShowDatePicker}
+            addTask={addTask}
           />
+          {showDatePicker && (
+            <div className="date-picker-wrapper">
+              <IonDatetime
+                className="date-picker-modal"
+                placeholder="Select Date"
+                value={dueDate || undefined}
+                onIonChange={(e) => {
+                  const newDate = e.detail.value as string;
+                  const formattedDate = format(new Date(newDate), "dd/MM/yyyy");
+                  setDueDate(formattedDate);
+                  setShowDatePicker(false);
+                }}
+              />
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 };

@@ -29,7 +29,7 @@ const TaskFooter: React.FC<TaskFooterProps> = ({
       <IonInput
         className="task-input"
         value={taskInput}
-        placeholder="Add Item"
+        placeholder="Type here"
         type="text"
         onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
       />

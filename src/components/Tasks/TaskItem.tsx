@@ -1,7 +1,13 @@
 import React from "react";
-import { IonItem, IonLabel, IonButton, IonIcon } from "@ionic/react";
+import {
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonItem,
+  IonIcon,
+} from "@ionic/react";
 import { trash } from "ionicons/icons";
-import { Task } from "../Tasks/taskTypes"; // Import Task from the new types file
+import { Task } from "../Tasks/taskTypes";
 
 interface TaskItemProps {
   task: Task;
@@ -9,12 +15,15 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task, onDelete }) => (
-  <IonItem key={task.id}>
-    <IonLabel>{task.content}</IonLabel>
-    <IonButton onClick={() => onDelete(task.id)}>
-      <IonIcon icon={trash} color="danger" />
-    </IonButton>
-  </IonItem>
+  <IonItemSliding>
+    <IonItem className="task-content">{task.content}</IonItem>
+
+    <IonItemOptions side="end">
+      <IonItemOption color="danger" onClick={() => onDelete(task.id)}>
+        <IonIcon slot="icon-only" icon={trash} />
+      </IonItemOption>
+    </IonItemOptions>
+  </IonItemSliding>
 );
 
 export default TaskItem;
