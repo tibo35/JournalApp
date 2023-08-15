@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { IonReorderGroup, IonFab, IonFabButton, IonIcon } from "@ionic/react";
+import React, { useState } from "react";
+import {
+  IonFabButton,
+  IonIcon,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonImg,
+  IonActionSheet,
+} from "@ionic/react";
 import { add } from "ionicons/icons";
-import PhotoCard from "../../components/Photo/PhotoCard";
-import AddPhoto from "../../components/Photo/AddPhoto";
-import { fetchPhoto, postPhoto, deletePhoto } from "../../Api/ApiTab2";
+import { PhotoGallery } from "../../components/Hooks/PhotoGallery.js";
+
 interface FetchedPhoto {
   _id: string;
   title: string;
@@ -13,75 +20,62 @@ interface PhotoViewProps {
   openModal: (title: string, id: string) => void;
 }
 
-const PhotoView: React.FC<PhotoViewProps> = ({ openModal }) => {
-  const [photos, setPhotos] = useState<{ id: string; title: string }[]>([]);
-  const [showAlert, setShowAlert] = useState(false);
+const PhotoView: React.FC = () => {
+  const { photos, takePhoto } = PhotoGallery();
+  const [showActionSheet, setShowActionSheet] = useState(false);
 
-  useEffect(() => {
-    fetchPhoto().then((data) => {
-      setPhotos(
-        data.map((photo: FetchedPhoto) => ({
-          id: photo._id,
-          title: photo.title,
-        }))
-      );
-    });
-  }, []);
-
-  const addPhotoToState = (title: string) => {
-    postPhoto(title).then((data) => {
-      setPhotos((prevPhotos) => [
-        ...prevPhotos,
-        { id: data._id, title: data.title },
-      ]);
-    });
+  const openActionSheet = () => {
+    setShowActionSheet(true);
   };
 
-  const deletePhotoFromState = (id: string) => {
-    deletePhoto(id).then(() => {
-      setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.id !== id));
-    });
-  };
-  const reorderPhotos = (from: number, to: number) => {
-    const reorderedPhotos = [...photos];
-    const [movedPhoto] = reorderedPhotos.splice(from, 1);
-    reorderedPhotos.splice(to, 0, movedPhoto);
-    setPhotos(reorderedPhotos);
+  const closeActionSheet = () => {
+    setShowActionSheet(false);
   };
 
-  const handleReorder = (event: CustomEvent) => {
-    const from = event.detail.from;
-    const to = event.detail.to;
-    reorderPhotos(from, to);
-    event.detail.complete();
+  const handleTakePhoto = async () => {
+    closeActionSheet();
+    await takePhoto();
+  };
+
+  const handleSelectPhoto = () => {
+    // Implement the logic to select a photo from the device's gallery here
+    closeActionSheet();
   };
 
   return (
-    <>
-      <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
-        {photos.map((photo) => (
-          <PhotoCard
-            key={photo.id}
-            title={photo.title}
-            id={photo.id}
-            onDelete={() => deletePhotoFromState(photo.id)}
-            onOpen={() => openModal(photo.title, photo.id)}
-          />
-        ))}
-      </IonReorderGroup>
+    <div>
+      <IonGrid>
+        <IonRow>
+          {photos.map((photo) => (
+            <IonCol size="6" key={photo.filepath}>
+              <IonImg src={photo.webviewPath} />
+            </IonCol>
+          ))}
+        </IonRow>
+      </IonGrid>
 
-      <IonFab vertical="bottom" horizontal="center" slot="fixed">
-        <IonFabButton onClick={() => setShowAlert(true)}>
-          <IonIcon icon={add}></IonIcon>
-        </IonFabButton>
-      </IonFab>
+      <IonFabButton onClick={openActionSheet}>
+        <IonIcon icon={add}></IonIcon>
+      </IonFabButton>
 
-      <AddPhoto
-        showAlert={showAlert}
-        setShowAlert={setShowAlert}
-        addPhoto={addPhotoToState}
-      />
-    </>
+      <IonActionSheet
+        isOpen={showActionSheet}
+        onDidDismiss={closeActionSheet}
+        buttons={[
+          {
+            text: "Take Photo",
+            handler: handleTakePhoto,
+          },
+          {
+            text: "Select Photo",
+            handler: handleSelectPhoto,
+          },
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}></IonActionSheet>
+    </div>
   );
 };
 

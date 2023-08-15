@@ -1,0 +1,43 @@
+.menu-container {
+  opacity: 0.95;
+}
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px; /* Adjust this value according to your preference for spacing around the divs */
+  gap: 10px;
+}
+.menu-items div {
+  padding: 10px; /* Adjust for inner spacing inside each div */
+  cursor: pointer; /* Change the cursor to a hand when hovering over the clickable divs */
+  border-radius: 4px; /* Optional: add some roundness to the borders */
+
+  /* Optional: Add some hover effect to make it interactive */
+  transition: background-color 0.3s;
+}
+
+.menu-items div:hover {
+  background-color: white;
+}
+.menu-icon {
+  margin-right: 5%;
+  font-size: 25px;
+}
+.menu-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5%;
+  font-size: 20px;
+}
+.menu-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 25px;
+  margin: 5%;
+}
+.no-scroll {
+  --overflow: hidden;
+}
