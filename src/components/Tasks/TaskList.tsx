@@ -6,13 +6,17 @@ import "./TaskList.css";
 interface TaskListProps {
   tasks: Task[];
   onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
   loading: boolean;
   error: string | null;
+  updateTask: (updatedTask: Task) => void;
 }
 
 const TaskList: React.FC<TaskListProps> = ({
   tasks,
   onDelete,
+  updateTask,
+  onEdit,
   loading,
   error,
 }) => (
@@ -21,7 +25,13 @@ const TaskList: React.FC<TaskListProps> = ({
     {error && <p className="error-notification">{error}</p>}
     <IonList className="task-list">
       {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} onDelete={onDelete} />
+        <TaskItem
+          key={task.id}
+          task={task}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          updateTask={updateTask}
+        />
       ))}
     </IonList>
   </>

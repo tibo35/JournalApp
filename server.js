@@ -180,6 +180,34 @@ app.delete("/PhotoOfTheDay/:id", async (req, res) => {
   res.json({ message: "photo deleted" });
 });
 
+// ---------------------------------------------PUT-------------------
+
+app.put("/tasks/:id", async (req, res) => {
+  const id = req.params.id;
+  const updatedTask = req.body;
+
+  if (!ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid id" });
+    return;
+  }
+
+  try {
+    const result = await db
+      .collection("Tasks")
+      .updateOne({ _id: new ObjectId(id) }, { $set: updatedTask });
+
+    if (result.matchedCount === 0) {
+      res.status(404).json({ message: "Task not found" });
+    } else {
+      res.json({ message: "Task updated successfully" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
 //==============================================================    Start    =================================
 async function start() {
   const client = new MongoClient(

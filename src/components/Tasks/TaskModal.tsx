@@ -24,6 +24,7 @@ const TaskModal: React.FC<{
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [editingTask, setEditingTask] = useState<null | Task>(null);
 
   const addTask = () => {
     if (taskInput.trim().length > 0) {
@@ -48,6 +49,7 @@ const TaskModal: React.FC<{
             data.map((task: any) => ({
               id: task._id,
               content: task.content,
+              date: task.date,
             }))
           );
         })
@@ -59,6 +61,10 @@ const TaskModal: React.FC<{
     }
   }, [cardId]);
 
+  const startEditing = (task: Task) => {
+    setEditingTask(task);
+  };
+
   const onDelete = (id: string) => {
     console.log("Deleting task with id: ", id);
     deleteTask(id)
@@ -66,6 +72,34 @@ const TaskModal: React.FC<{
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
       })
       .catch((error) => console.error("Fetch error:", error));
+  };
+
+  const onEdit = (id: string) => {
+    const task = tasks.find((task) => task.id === id);
+    if (task) {
+      startEditing(task);
+    }
+  };
+  const updateTask = (updatedTask: Task) => {
+    // send a request to the back end to update the task in the database
+    fetch(`/tasks/${updatedTask.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTask),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Task updated successfully") {
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task
+            )
+          );
+          setEditingTask(null);
+        }
+      });
   };
 
   return (
@@ -78,6 +112,8 @@ const TaskModal: React.FC<{
         onDelete={onDelete}
         loading={loading}
         error={error}
+        onEdit={onEdit}
+        updateTask={updateTask}
       />
 
       <div className="task-modal-content">
