@@ -31,9 +31,16 @@ export const postTopic = (title: string) =>
   }).then((res) => res.json());
 
 // Tasks ----------
-export const fetchTasks = (
-  cardId: string // Fetch tasks by cardId
-) => fetch(`http://localhost:3001/tasks/${cardId}`).then((res) => res.json());
+export const fetchTasks = async (cardId: string) => {
+  try {
+    const res = await fetch(`http://localhost:3001/tasks/${cardId}`);
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};
 
 export const deleteTask = (id: string) =>
   fetch(`http://localhost:3001/tasks/${id}`, { method: "DELETE" }).then((res) =>

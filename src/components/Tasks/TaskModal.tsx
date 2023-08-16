@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IonDatetime } from "@ionic/react";
 import { format } from "date-fns";
-import { fetchTasks, deleteTask, postTask } from "../../Api/ApiTab2";
+import { postTask, fetchTasks, deleteTask } from "../../Api/ApiTab2";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import TaskFooter from "./TaskFooter";
@@ -25,11 +25,29 @@ const TaskModal: React.FC<{
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const addTask = () => {
+    if (taskInput.trim().length > 0) {
+      postTask(taskInput, dueDate, cardId)
+        .then((data) => {
+          console.log("addTask");
+          setTasks((prevTasks) => [
+            ...prevTasks,
+            { id: data._id, content: data.content, date: data.date },
+          ]);
+          setTaskInput("");
+          setDueDate("");
+        })
+        .catch((error) => console.error("Fetch error:", error));
+    }
+  };
   useEffect(() => {
     setLoading(true);
     if (cardId) {
+      console.log("useeffect");
+
       fetchTasks(cardId)
         .then((data) => {
+          console.log("then");
           setTasks(
             data.map((task: any) => ({
               id: task._id,
@@ -44,21 +62,6 @@ const TaskModal: React.FC<{
         .finally(() => setLoading(false));
     }
   }, [cardId]);
-
-  const addTask = () => {
-    if (taskInput.trim().length > 0) {
-      postTask(taskInput, dueDate, cardId)
-        .then((data) => {
-          setTasks((prevTasks) => [
-            ...prevTasks,
-            { id: data._id, content: data.content, date: data.date },
-          ]);
-          setTaskInput("");
-          setDueDate("");
-        })
-        .catch((error) => console.error("Fetch error:", error));
-    }
-  };
 
   const onDelete = (id: string) => {
     console.log("Deleting task with id: ", id);

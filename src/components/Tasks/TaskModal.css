@@ -12,13 +12,10 @@
   width: 100%;
 }
 .task-list {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   overflow: auto;
   z-index: 1;
   max-height: calc(100% - (height_of_your_footer + any_desired_padding));
+  height: 100%;
 }
 .date-picker-wrapper {
   z-index: 2;
