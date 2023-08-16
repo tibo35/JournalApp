@@ -29,7 +29,6 @@ const TaskModal: React.FC<{
     if (taskInput.trim().length > 0) {
       postTask(taskInput, dueDate, cardId)
         .then((data) => {
-          console.log("addTask");
           setTasks((prevTasks) => [
             ...prevTasks,
             { id: data._id, content: data.content, date: data.date },
@@ -43,11 +42,8 @@ const TaskModal: React.FC<{
   useEffect(() => {
     setLoading(true);
     if (cardId) {
-      console.log("useeffect");
-
       fetchTasks(cardId)
         .then((data) => {
-          console.log("then");
           setTasks(
             data.map((task: any) => ({
               id: task._id,

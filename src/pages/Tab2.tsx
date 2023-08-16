@@ -19,14 +19,12 @@ const Tab2: React.FC = () => {
   );
 
   const openModal = (title: string, id: string) => {
-    console.log("Opening modal with title:", title);
     setModalContent(title);
     setCurrentCardId(id);
     setShowModal(true);
   };
 
   const closeModal = () => {
-    console.log("Closing modal");
     setShowModal(false);
     setCurrentCardId(null);
   };

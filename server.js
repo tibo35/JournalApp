@@ -138,6 +138,9 @@ app.delete("/topics/:id", async (req, res) => {
     return;
   }
   console.log("DELETE /topics/" + id);
+  // Delete associated tasks
+  await db.collection("Tasks").deleteMany({ cardId: new ObjectId(id) });
+  // Delete the card
   await db.collection("Cards").deleteOne({ _id: new ObjectId(id) });
   res.json({ message: "Deleted" });
 });
@@ -160,6 +163,9 @@ app.delete("/projects/:id", async (req, res) => {
     return;
   }
   console.log("DELETE /projects/" + id);
+  // Delete associated tasks
+  await db.collection("Tasks").deleteMany({ cardId: new ObjectId(id) });
+  // Delete the project
   await db.collection("Projects").deleteOne({ _id: new ObjectId(id) });
   res.json({ message: "Project deleted" });
 });
