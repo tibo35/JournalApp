@@ -1,54 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonFooter,
-  IonInput,
-  IonIcon,
   IonFab,
   IonFabButton,
+  IonModal,
+  IonButton,
+  IonIcon,
 } from "@ionic/react";
-import { calendarNumberOutline, add } from "ionicons/icons";
+import { add } from "ionicons/icons";
+import NewTask from "./NewTask"; // Import the NewTask component
 import "./TaskFooter.css";
 
 interface TaskFooterProps {
-  taskInput: string;
-  setTaskInput: (value: string) => void;
   showDatePicker: boolean;
   setShowDatePicker: (value: boolean) => void;
-  addTask: () => void;
+  addTask: (title: string, description: string) => void;
 }
 
 const TaskFooter: React.FC<TaskFooterProps> = ({
-  taskInput,
-  setTaskInput,
   showDatePicker,
   setShowDatePicker,
   addTask,
-}) => (
-  <IonFooter>
-    <div className="container-items">
-      <IonInput
-        className="task-input"
-        value={taskInput}
-        placeholder="Type here"
-        type="text"
-        onInput={(e) => setTaskInput((e.target as HTMLInputElement).value)}
-      />
-      <IonIcon
-        className="calendar-icon"
-        icon={calendarNumberOutline}
-        onClick={() => setShowDatePicker(!showDatePicker)}
-      />
-      {/*<IonFab
-        className="add-button"
-        vertical="bottom"
-        horizontal="end"
-        slot="fixed">
-        <IonFabButton onClick={addTask}>
-          <IonIcon icon={add}></IonIcon>
-        </IonFabButton>
-</IonFab>*/}
-    </div>
-  </IonFooter>
-);
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAddButtonClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalDismiss = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <IonFooter>
+      <div className="container-items">
+        <IonFab
+          className="add-button"
+          vertical="bottom"
+          horizontal="end"
+          slot="fixed">
+          <IonFabButton onClick={handleAddButtonClick}>
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
+      </div>
+
+      {/* NewTask Modal */}
+      <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
+        <NewTask closeModal={handleModalDismiss} addTask={addTask} />
+      </IonModal>
+    </IonFooter>
+  );
+};
 
 export default TaskFooter;

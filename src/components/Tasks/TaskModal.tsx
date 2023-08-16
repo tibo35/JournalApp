@@ -26,20 +26,19 @@ const TaskModal: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<null | Task>(null);
 
-  const addTask = () => {
-    if (taskInput.trim().length > 0) {
-      postTask(taskInput, dueDate, cardId)
-        .then((data) => {
-          setTasks((prevTasks) => [
-            ...prevTasks,
-            { id: data._id, content: data.content, date: data.date },
-          ]);
-          setTaskInput("");
-          setDueDate("");
-        })
-        .catch((error) => console.error("Fetch error:", error));
-    }
+  const addTask = (title: string, description: string) => {
+    // Perform API call to add the task
+    postTask(title, dueDate, cardId, description) // Pass all required parameters
+      .then((data) => {
+        // Update the tasks state with the new task
+        setTasks((prevTasks) => [
+          ...prevTasks,
+          { id: data._id, content: data.content, date: data.date },
+        ]);
+      })
+      .catch((error) => console.error("Fetch error:", error));
   };
+
   useEffect(() => {
     setLoading(true);
     if (cardId) {
@@ -106,7 +105,6 @@ const TaskModal: React.FC<{
     <>
       <TaskHeader onClose={onClose} />
 
-      {/* Position TaskList here, outside of the task-modal-content */}
       <TaskList
         tasks={tasks}
         onDelete={onDelete}
@@ -119,8 +117,6 @@ const TaskModal: React.FC<{
       <div className="task-modal-content">
         <div className="task-footer">
           <TaskFooter
-            taskInput={taskInput}
-            setTaskInput={setTaskInput}
             showDatePicker={showDatePicker}
             setShowDatePicker={setShowDatePicker}
             addTask={addTask}

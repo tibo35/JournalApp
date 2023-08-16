@@ -110,11 +110,12 @@ app.post("/topics", async (req, res) => {
   res.json(card);
 });
 app.post("/tasks", async (req, res) => {
-  const { content, dueDate, cardId } = req.body; // Extract the cardId from the body
+  const { content, taskDescription, cardId } = req.body;
   if (!ObjectId.isValid(cardId)) {
     return res.status(400).json({ message: "Invalid cardId" });
   }
-  const task = { content, dueDate, cardId: new ObjectId(cardId) }; // Store the cardId in each task
+
+  const task = { content, taskDescription, cardId: new ObjectId(cardId) };
   await db.collection("Tasks").insertOne(task);
   res.json(task);
 });
