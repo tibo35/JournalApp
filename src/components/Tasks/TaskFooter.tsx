@@ -38,7 +38,7 @@ const TaskFooter: React.FC<TaskFooterProps> = ({
         icon={calendarNumberOutline}
         onClick={() => setShowDatePicker(!showDatePicker)}
       />
-      <IonFab
+      {/*<IonFab
         className="add-button"
         vertical="bottom"
         horizontal="end"
@@ -46,7 +46,7 @@ const TaskFooter: React.FC<TaskFooterProps> = ({
         <IonFabButton onClick={addTask}>
           <IonIcon icon={add}></IonIcon>
         </IonFabButton>
-      </IonFab>
+</IonFab>*/}
     </div>
   </IonFooter>
 );
