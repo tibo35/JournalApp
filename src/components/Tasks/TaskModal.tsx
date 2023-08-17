@@ -5,7 +5,7 @@ import { postTask, fetchTasks, deleteTask } from "../../Api/ApiTab2";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import TaskFooter from "./TaskFooter";
-import "./TaskModal.css";
+import "./styles/TaskModal.css";
 
 interface Task {
   id: string;

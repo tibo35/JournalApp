@@ -2,7 +2,7 @@ import React from "react";
 import { IonList, IonSpinner } from "@ionic/react";
 import TaskItem from "./TaskItem";
 import { Task } from "./taskTypes";
-import "./TaskList.css";
+import "./styles/TaskList.css";
 interface TaskListProps {
   tasks: Task[];
   onDelete: (id: string) => void;

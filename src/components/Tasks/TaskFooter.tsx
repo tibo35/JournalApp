@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import NewTask from "./NewTask"; // Import the NewTask component
-import "./TaskFooter.css";
+import "./styles/TaskFooter.css";
 
 interface TaskFooterProps {
   showDatePicker: boolean;
