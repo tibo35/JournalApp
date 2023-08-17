@@ -4,11 +4,12 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonModal,
   IonButton,
   IonInput,
   IonTextarea,
+  IonFooter,
 } from "@ionic/react";
+import "./styles/NewTask.css";
 
 interface NewTaskProps {
   closeModal: () => void;
@@ -37,17 +38,29 @@ const NewTask: React.FC<NewTaskProps> = ({ closeModal, addTask }) => {
           value={taskTitle}
           onIonChange={(e) => setTaskTitle(e.detail.value!)}
         />
-        <IonTextarea
-          placeholder="Task Description"
-          value={taskDescription}
-          onIonChange={(e) => setTaskDescription(e.detail.value!)}
-        />
-        <IonButton expand="block" onClick={handleAddTaskClick}>
-          Add Task
-        </IonButton>
-        <IonButton expand="block" color="danger" onClick={closeModal}>
-          Cancel
-        </IonButton>
+        <div className="description-container">
+          <IonTextarea
+            className="description-item"
+            placeholder="Task Description"
+            value={taskDescription}
+            onIonChange={(e) => setTaskDescription(e.detail.value!)}
+          />
+        </div>
+        <div className="btn-container">
+          <IonButton
+            expand="block"
+            className="add-task-button"
+            onClick={handleAddTaskClick}>
+            Add Task
+          </IonButton>
+          <IonButton
+            expand="block"
+            className="cancel-button"
+            color="danger"
+            onClick={closeModal}>
+            Cancel
+          </IonButton>
+        </div>
       </IonContent>
     </IonContent>
   );
