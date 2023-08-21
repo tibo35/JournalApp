@@ -51,12 +51,12 @@ export const postTask = (
   content: string,
   dueDate: string,
   cardId: string,
-  taskDescription: string
+  description: string
 ) =>
   fetch("http://localhost:3001/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content, dueDate, cardId, taskDescription }),
+    body: JSON.stringify({ content, dueDate, cardId, description }),
   }).then((res) => res.json());
 
 // SignUp ----------

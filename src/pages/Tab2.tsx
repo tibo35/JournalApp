@@ -13,6 +13,8 @@ import ContentHeader from "../components/Side Menu/ContentHeader";
 const Tab2: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
+
   const [currentCardId, setCurrentCardId] = useState<string | null>(null);
   const [view, setView] = useState<"topics" | "project" | "PhotoOfTheDay">(
     "topics"

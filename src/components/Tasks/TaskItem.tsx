@@ -60,9 +60,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
       )}
 
       <IonItemOptions side="end">
-        <IonItemOption color="primary" onClick={() => setIsEditing(true)}>
-          <IonIcon slot="icon-only" icon={create} />
-        </IonItemOption>
         <IonItemOption color="danger" onClick={() => onDelete(task.id)}>
           <IonIcon slot="icon-only" icon={trash} />
         </IonItemOption>

@@ -11,6 +11,7 @@ interface Task {
   id: string;
   content: string;
   date: string;
+  description: string;
 }
 
 const TaskModal: React.FC<{
@@ -28,12 +29,18 @@ const TaskModal: React.FC<{
 
   const addTask = (title: string, description: string) => {
     // Perform API call to add the task
+    console.log(description);
     postTask(title, dueDate, cardId, description) // Pass all required parameters
       .then((data) => {
         // Update the tasks state with the new task
         setTasks((prevTasks) => [
           ...prevTasks,
-          { id: data._id, content: data.content, date: data.date },
+          {
+            id: data._id,
+            content: data.content,
+            date: data.date,
+            description: data.description,
+          },
         ]);
       })
       .catch((error) => console.error("Fetch error:", error));
@@ -49,6 +56,7 @@ const TaskModal: React.FC<{
               id: task._id,
               content: task.content,
               date: task.date,
+              description: task.description,
             }))
           );
         })

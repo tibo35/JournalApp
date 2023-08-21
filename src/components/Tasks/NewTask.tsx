@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   IonContent,
   IonHeader,
@@ -18,10 +18,14 @@ interface NewTaskProps {
 
 const NewTask: React.FC<NewTaskProps> = ({ closeModal, addTask }) => {
   const [taskTitle, setTaskTitle] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
+  const textareaRef = useRef<HTMLIonTextareaElement>(null);
 
   const handleAddTaskClick = () => {
-    addTask(taskTitle, taskDescription);
+    const currentDescription = textareaRef.current?.value || "";
+    console.log("Task Description before adding task:", currentDescription);
+    console.log("NewTaskTitle: " + taskTitle);
+    console.log("NewTask Description: " + currentDescription);
+    addTask(taskTitle, currentDescription);
     closeModal();
   };
 
@@ -42,8 +46,10 @@ const NewTask: React.FC<NewTaskProps> = ({ closeModal, addTask }) => {
           <IonTextarea
             className="description-item"
             placeholder="Task Description"
-            value={taskDescription}
-            onIonChange={(e) => setTaskDescription(e.detail.value!)}
+            ref={textareaRef}
+            onIonChange={(e) => {
+              console.log("Textarea value:", e.detail.value);
+            }}
           />
         </div>
         <div className="btn-container">
