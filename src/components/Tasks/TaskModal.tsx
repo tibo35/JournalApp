@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { IonDatetime } from "@ionic/react";
+import {
+  IonDatetime,
+  IonFooter,
+  IonFabButton,
+  IonFab,
+  IonIcon,
+  IonModal,
+} from "@ionic/react";
 import { format } from "date-fns";
+import { add } from "ionicons/icons";
+
 import { postTask, fetchTasks, deleteTask } from "../../Api/ApiTab2";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
-import TaskFooter from "./TaskFooter";
+import NewTask from "./NewTask";
 import "./styles/TaskModal.css";
 
 interface Task {
@@ -25,7 +34,15 @@ const TaskModal: React.FC<{
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<null | Task>(null);
+  const [showModal, setShowModal] = useState(false);
 
+  const handleAddButtonClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalDismiss = () => {
+    setShowModal(false);
+  };
   const addTask = (title: string, description: string) => {
     console.log(description);
     postTask(title, dueDate, cardId, description)
@@ -135,15 +152,26 @@ const TaskModal: React.FC<{
         addTask={addTask}
         updateTask={updateTask}
       />
-
       <div className="task-modal-content">
         <div className="task-footer">
-          <TaskFooter
-            showDatePicker={showDatePicker}
-            setShowDatePicker={setShowDatePicker}
-            addTask={addTask}
-          />
-          {showDatePicker && (
+          <IonFooter>
+            <div className="container-items">
+              <IonFab
+                className="add-button"
+                vertical="bottom"
+                horizontal="center"
+                slot="fixed">
+                <IonFabButton onClick={handleAddButtonClick}>
+                  <IonIcon icon={add}></IonIcon>
+                </IonFabButton>
+              </IonFab>
+            </div>
+
+            <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
+              <NewTask closeModal={handleModalDismiss} addTask={addTask} />
+            </IonModal>
+          </IonFooter>
+          {/*{showDatePicker && (
             <div className="date-picker-wrapper">
               <IonDatetime
                 className="date-picker-modal"
@@ -157,7 +185,7 @@ const TaskModal: React.FC<{
                 }}
               />
             </div>
-          )}
+              )}*/}
         </div>
       </div>
     </>

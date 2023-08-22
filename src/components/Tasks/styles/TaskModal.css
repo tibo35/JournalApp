@@ -8,7 +8,6 @@
 .task-footer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
 }
 .task-list {
@@ -25,4 +24,7 @@
   height: 100%;
   background-color: white;
   z-index: 1;
+}
+.add-button {
+  position: fixed;
 }
