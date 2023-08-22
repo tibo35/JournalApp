@@ -13,7 +13,6 @@ import ContentHeader from "../components/Side Menu/ContentHeader";
 const Tab2: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [modalDescription, setModalDescription] = useState("");
 
   const [currentCardId, setCurrentCardId] = useState<string | null>(null);
   const [view, setView] = useState<"topics" | "project" | "PhotoOfTheDay">(
@@ -43,13 +42,17 @@ const Tab2: React.FC = () => {
 
         {view === "PhotoOfTheDay" && <PhotoView openModal={openModal} />}
       </IonContent>
-      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-        <TaskModal
-          title={modalContent}
-          cardId={currentCardId || ""}
-          onClose={closeModal}
-        />
-      </IonModal>
+      {showModal && (
+        <div className="overlay">
+          <div className="custom-modal">
+            <TaskModal
+              title={modalContent}
+              cardId={currentCardId || ""}
+              onClose={closeModal}
+            />
+          </div>
+        </div>
+      )}
     </IonPage>
   );
 };

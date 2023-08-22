@@ -10,6 +10,7 @@ interface TaskListProps {
   loading: boolean;
   error: string | null;
   updateTask: (updatedTask: Task) => void;
+  addTask: (title: string, description: string) => void;
 }
 
 const TaskList: React.FC<TaskListProps> = ({
@@ -19,6 +20,7 @@ const TaskList: React.FC<TaskListProps> = ({
   onEdit,
   loading,
   error,
+  addTask,
 }) => (
   <>
     {loading && <IonSpinner />}
@@ -28,6 +30,7 @@ const TaskList: React.FC<TaskListProps> = ({
         <TaskItem
           key={task.id}
           task={task}
+          addTask={addTask}
           onDelete={onDelete}
           onEdit={onEdit}
           updateTask={updateTask}

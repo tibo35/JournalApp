@@ -4,17 +4,19 @@ import {
   IonFab,
   IonFabButton,
   IonModal,
-  IonButton,
   IonIcon,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import NewTask from "./NewTask"; // Import the NewTask component
+import NewTask from "./NewTask";
 import "./styles/TaskFooter.css";
+import { Task } from "./taskTypes";
 
 interface TaskFooterProps {
   showDatePicker: boolean;
   setShowDatePicker: (value: boolean) => void;
   addTask: (title: string, description: string) => void;
+  editTask?: Task | null;
+  updateTask?: (updatedTask: Task) => void;
 }
 
 const TaskFooter: React.FC<TaskFooterProps> = ({
@@ -46,7 +48,6 @@ const TaskFooter: React.FC<TaskFooterProps> = ({
         </IonFab>
       </div>
 
-      {/* NewTask Modal */}
       <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
         <NewTask closeModal={handleModalDismiss} addTask={addTask} />
       </IonModal>

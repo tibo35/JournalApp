@@ -20,7 +20,6 @@ const TaskModal: React.FC<{
   onClose: () => void;
 }> = ({ title, cardId, onClose }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [taskInput, setTaskInput] = useState("");
   const [dueDate, setDueDate] = useState<string>("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,11 +27,9 @@ const TaskModal: React.FC<{
   const [editingTask, setEditingTask] = useState<null | Task>(null);
 
   const addTask = (title: string, description: string) => {
-    // Perform API call to add the task
     console.log(description);
-    postTask(title, dueDate, cardId, description) // Pass all required parameters
+    postTask(title, dueDate, cardId, description)
       .then((data) => {
-        // Update the tasks state with the new task
         setTasks((prevTasks) => [
           ...prevTasks,
           {
@@ -88,17 +85,30 @@ const TaskModal: React.FC<{
     }
   };
   const updateTask = (updatedTask: Task) => {
-    // send a request to the back end to update the task in the database
-    fetch(`/tasks/${updatedTask.id}`, {
+    if (!updatedTask.id) {
+      console.error("updatedTask does not have an 'id' property");
+      return;
+    }
+
+    fetch(`http://localhost:3001/tasks/${updatedTask.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(updatedTask),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          console.error(
+            "Failed to update task. Response status:",
+            response.status
+          );
+          return;
+        }
+        return response.json();
+      })
       .then((data) => {
-        if (data.message === "Task updated successfully") {
+        if (data && data.message === "Task updated successfully") {
           setTasks((prevTasks) =>
             prevTasks.map((task) =>
               task.id === updatedTask.id ? updatedTask : task
@@ -106,6 +116,9 @@ const TaskModal: React.FC<{
           );
           setEditingTask(null);
         }
+      })
+      .catch((error) => {
+        console.error("Failed to update task:", error);
       });
   };
 
@@ -119,6 +132,7 @@ const TaskModal: React.FC<{
         loading={loading}
         error={error}
         onEdit={onEdit}
+        addTask={addTask}
         updateTask={updateTask}
       />
 

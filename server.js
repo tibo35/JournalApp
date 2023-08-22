@@ -181,16 +181,14 @@ app.delete("/PhotoOfTheDay/:id", async (req, res) => {
   res.json({ message: "photo deleted" });
 });
 
-// ---------------------------------------------PUT-------------------
-
+// --------------------------------------------PUT--------------
 app.put("/tasks/:id", async (req, res) => {
   const id = req.params.id;
-  const updatedTask = req.body;
-
   if (!ObjectId.isValid(id)) {
     res.status(400).json({ message: "Invalid id" });
     return;
   }
+  const updatedTask = req.body;
 
   try {
     const result = await db
@@ -199,13 +197,12 @@ app.put("/tasks/:id", async (req, res) => {
 
     if (result.matchedCount === 0) {
       res.status(404).json({ message: "Task not found" });
-    } else {
-      res.json({ message: "Task updated successfully" });
+      return;
     }
+    res.json({ message: "Task updated successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Failed to update task" });
   }
 });
 
