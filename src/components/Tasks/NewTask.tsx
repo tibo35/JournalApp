@@ -1,5 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import { IonButton, IonInput, IonTextarea } from "@ionic/react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  IonButton,
+  IonInput,
+  IonTextarea,
+  IonDatetime,
+  IonLabel,
+} from "@ionic/react";
 import "./styles/NewTask.css";
 import { Task } from "./taskTypes";
 import TaskHeader from "./TaskHeader";
@@ -19,7 +25,19 @@ const NewTask: React.FC<NewTaskProps> = ({
 }) => {
   const titleRef = useRef<HTMLIonInputElement>(null);
   const descriptionRef = useRef<HTMLIonTextareaElement>(null);
+  const [showDatePickerModal, setShowDatePickerModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString()
+  );
+  const [dueDate, setDueDate] = useState(false);
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+    const year = date.getFullYear();
 
+    return `${day}/${month}/${year}`;
+  };
   useEffect(() => {
     if (task) {
       titleRef.current!.value = task.content;
@@ -46,16 +64,48 @@ const NewTask: React.FC<NewTaskProps> = ({
     }
     closeModal();
   };
-
+  const toggleDatePicker = () => {
+    setShowDatePickerModal((prevState) => !prevState);
+  };
   return (
     <>
       <TaskHeader onClose={closeModal} />
+
       <div className="task-container">
+        <IonLabel>
+          Due Date: &nbsp;
+          {dueDate ? formatDate(selectedDate) : ""}
+        </IonLabel>
+
         <IonInput placeholder="Title" ref={titleRef} />
+
         <IonTextarea placeholder="Description" ref={descriptionRef} />
-        <IonButton onClick={handleSave}>
-          {task ? "Update Task" : "Add Task"}
-        </IonButton>
+
+        <div className="date-picker-container">
+          {showDatePickerModal && (
+            <IonDatetime
+              display-format="MM DD YY"
+              placeholder="Select Date"
+              value={selectedDate}
+              onIonChange={(e) => {
+                if (typeof e.detail.value === "string") {
+                  setSelectedDate(e.detail.value);
+                  setDueDate(true);
+                  setShowDatePickerModal(false);
+                }
+              }}
+            />
+          )}
+        </div>
+
+        <div className="button-container">
+          <IonButton expand="block" onClick={toggleDatePicker}>
+            Pick a Date
+          </IonButton>
+          <IonButton onClick={handleSave}>
+            {task ? "Update Task" : "Add Task"}
+          </IonButton>
+        </div>
       </div>
     </>
   );

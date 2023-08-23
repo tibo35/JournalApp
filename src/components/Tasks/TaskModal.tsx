@@ -171,21 +171,6 @@ const TaskModal: React.FC<{
               <NewTask closeModal={handleModalDismiss} addTask={addTask} />
             </IonModal>
           </IonFooter>
-          {/*{showDatePicker && (
-            <div className="date-picker-wrapper">
-              <IonDatetime
-                className="date-picker-modal"
-                placeholder="Select Date"
-                value={dueDate || undefined}
-                onIonChange={(e) => {
-                  const newDate = e.detail.value as string;
-                  const formattedDate = format(new Date(newDate), "dd/MM/yyyy");
-                  setDueDate(formattedDate);
-                  setShowDatePicker(false);
-                }}
-              />
-            </div>
-              )}*/}
         </div>
       </div>
     </>
