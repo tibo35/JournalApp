@@ -2,11 +2,12 @@ import React, { useEffect, useRef } from "react";
 import { IonButton, IonInput, IonTextarea } from "@ionic/react";
 import "./styles/NewTask.css";
 import { Task } from "./taskTypes";
+import TaskHeader from "./TaskHeader";
 
 interface NewTaskProps {
   closeModal: () => void;
   addTask: (title: string, description: string) => void;
-  task?: Task; // accept task as optional prop
+  task?: Task;
   updateTask?: (updatedTask: Task) => void;
 }
 
@@ -32,7 +33,7 @@ const NewTask: React.FC<NewTaskProps> = ({
     const currentDescription =
       typeof descriptionRef.current?.value === "string"
         ? descriptionRef.current.value
-        : ""; // Check type before assignment
+        : "";
 
     if (task && updateTask) {
       updateTask({
@@ -48,11 +49,14 @@ const NewTask: React.FC<NewTaskProps> = ({
 
   return (
     <>
-      <IonInput placeholder="Title" ref={titleRef} />
-      <IonTextarea placeholder="Description" ref={descriptionRef} />
-      <IonButton onClick={handleSave}>
-        {task ? "Update Task" : "Add Task"}
-      </IonButton>
+      <TaskHeader onClose={closeModal} />
+      <div className="task-container">
+        <IonInput placeholder="Title" ref={titleRef} />
+        <IonTextarea placeholder="Description" ref={descriptionRef} />
+        <IonButton onClick={handleSave}>
+          {task ? "Update Task" : "Add Task"}
+        </IonButton>
+      </div>
     </>
   );
 };

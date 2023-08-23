@@ -1,45 +1,18 @@
-/* NewTask.css */
-
-/* Apply styling to the IonInput and IonTextarea */
-ion-input,
-ion-textarea {
-  margin: 10px;
-}
-
-/* Style the Add Task button */
-.ion-button.add-task-button {
-  background-color: var(--ion-color-primary);
-}
-
-/* Style the Cancel button */
-.ion-button.cancel-button {
-  background-color: var(--ion-color-danger);
-}
-
-/* Style the description container */
-.description-container {
-  padding: 0 10px;
-  box-sizing: border-box;
-  overflow-y: hidden; /* Hide the scrollbar initially */
-}
-
-/* Style the description textarea */
-.description-item {
-  margin-bottom: 10px;
-  height: calc(95vh - 220px); /* Subtract space for buttons and margin */
-  resize: vertical; /* Allow vertical resizing */
-}
-
-/* Style the buttons container */
-.btn-container {
-  background-color: white;
-  border-top: 1px solid var(--ion-color-light);
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+.task-container {
   display: flex;
+  flex-direction: column;
+  height: calc(100vh - 50px);
   justify-content: space-between;
-  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+ion-input {
+  flex: 0;
+}
+
+ion-textarea {
+  flex-grow: 1;
+  resize: none;
+  height: 100%;
 }
