@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { IonButton, IonInput, IonTextarea } from "@ionic/react";
 import "./styles/NewTask.css";
 import { Task } from "./taskTypes";
@@ -16,35 +16,40 @@ const NewTask: React.FC<NewTaskProps> = ({
   task,
   updateTask,
 }) => {
-  const [title, setTitle] = useState(task ? task.content : "");
-  const textareaRef = useRef<HTMLIonTextareaElement>(null);
+  const titleRef = useRef<HTMLIonInputElement>(null);
+  const descriptionRef = useRef<HTMLIonTextareaElement>(null);
 
   useEffect(() => {
-    if (task && task.description && textareaRef.current) {
-      textareaRef.current.value = task.description;
+    if (task) {
+      titleRef.current!.value = task.content;
+      descriptionRef.current!.value = task.description;
     }
   }, [task]);
 
   const handleSave = () => {
-    const description = textareaRef.current?.value || "";
+    const currentTitle =
+      typeof titleRef.current?.value === "string" ? titleRef.current.value : ""; // Check type before assignment
+    const currentDescription =
+      typeof descriptionRef.current?.value === "string"
+        ? descriptionRef.current.value
+        : ""; // Check type before assignment
 
     if (task && updateTask) {
-      console.log(task);
-      updateTask({ ...task, content: title, description: description });
+      updateTask({
+        ...task,
+        content: currentTitle,
+        description: currentDescription,
+      });
     } else {
-      addTask(title, description);
+      addTask(currentTitle, currentDescription);
     }
     closeModal();
   };
 
   return (
     <>
-      <IonInput
-        placeholder="Title"
-        value={title}
-        onIonChange={(e) => setTitle(e.detail.value!)}
-      />
-      <IonTextarea placeholder="Description" ref={textareaRef} />
+      <IonInput placeholder="Title" ref={titleRef} />
+      <IonTextarea placeholder="Description" ref={descriptionRef} />
       <IonButton onClick={handleSave}>
         {task ? "Update Task" : "Add Task"}
       </IonButton>
