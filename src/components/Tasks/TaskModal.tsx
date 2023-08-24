@@ -43,10 +43,11 @@ const TaskModal: React.FC<{
   const handleModalDismiss = () => {
     setShowModal(false);
   };
-  const addTask = (title: string, description: string) => {
-    console.log(description);
-    postTask(title, dueDate, cardId, description)
+  const addTask = (title: string, description: string, date: string) => {
+    postTask(title, date, cardId, description)
       .then((data) => {
+        console.log("Received task from server:", data);
+
         setTasks((prevTasks) => [
           ...prevTasks,
           {
@@ -57,6 +58,7 @@ const TaskModal: React.FC<{
           },
         ]);
       })
+
       .catch((error) => console.error("Fetch error:", error));
   };
 

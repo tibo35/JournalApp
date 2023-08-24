@@ -10,7 +10,7 @@ interface TaskListProps {
   loading: boolean;
   error: string | null;
   updateTask: (updatedTask: Task) => void;
-  addTask: (title: string, description: string) => void;
+  addTask: (title: string, description: string, date: string) => void;
 }
 
 const TaskList: React.FC<TaskListProps> = ({

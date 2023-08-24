@@ -49,14 +49,14 @@ export const deleteTask = (id: string) =>
 
 export const postTask = (
   content: string,
-  dueDate: string,
+  date: string,
   cardId: string,
   description: string
 ) =>
   fetch("http://localhost:3001/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content, dueDate, cardId, description }),
+    body: JSON.stringify({ content, date, cardId, description }),
   }).then((res) => res.json());
 
 // SignUp ----------

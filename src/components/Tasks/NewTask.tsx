@@ -12,7 +12,7 @@ import TaskHeader from "./TaskHeader";
 
 interface NewTaskProps {
   closeModal: () => void;
-  addTask: (title: string, description: string) => void;
+  addTask: (title: string, description: string, date: string) => void;
   task?: Task;
   updateTask?: (updatedTask: Task) => void;
 }
@@ -33,7 +33,7 @@ const NewTask: React.FC<NewTaskProps> = ({
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
@@ -42,12 +42,16 @@ const NewTask: React.FC<NewTaskProps> = ({
     if (task) {
       titleRef.current!.value = task.content;
       descriptionRef.current!.value = task.description;
+      setSelectedDate(task.date);
+      if (task.date) {
+        setDueDate(true);
+      }
     }
   }, [task]);
 
   const handleSave = () => {
     const currentTitle =
-      typeof titleRef.current?.value === "string" ? titleRef.current.value : ""; // Check type before assignment
+      typeof titleRef.current?.value === "string" ? titleRef.current.value : "";
     const currentDescription =
       typeof descriptionRef.current?.value === "string"
         ? descriptionRef.current.value
@@ -58,9 +62,11 @@ const NewTask: React.FC<NewTaskProps> = ({
         ...task,
         content: currentTitle,
         description: currentDescription,
+        date: selectedDate,
       });
     } else {
-      addTask(currentTitle, currentDescription);
+      addTask(currentTitle, currentDescription, selectedDate);
+      console.log("Selected Date:", selectedDate);
     }
     closeModal();
   };

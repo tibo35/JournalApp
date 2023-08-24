@@ -17,7 +17,7 @@ interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
-  addTask: (title: string, description: string) => void;
+  addTask: (title: string, description: string, date: string) => void;
 
   updateTask: (updatedTask: Task) => void;
 }
