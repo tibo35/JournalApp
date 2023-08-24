@@ -106,7 +106,7 @@ const NewTask: React.FC<NewTaskProps> = ({
 
         <div className="button-container">
           <IonButton expand="block" onClick={toggleDatePicker}>
-            Pick a Date
+            {task ? "Update Due Date" : "Add Due Date"}
           </IonButton>
           <IonButton onClick={handleSave}>
             {task ? "Update Task" : "Add Task"}
