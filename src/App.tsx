@@ -57,7 +57,7 @@ const App: React.FC = () => (
             <Settings />
           </Route>
           <Route exact path="/">
-            <Redirect to="/dashboards" />
+            <Redirect to="/" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
