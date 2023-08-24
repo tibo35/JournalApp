@@ -10,7 +10,7 @@ import {
 import { format } from "date-fns";
 import { add } from "ionicons/icons";
 
-import { postTask, fetchTasks, deleteTask } from "../../Api/ApiTab2";
+import { postTask, fetchTasks, deleteTask } from "../../Api/Api";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
@@ -46,8 +46,6 @@ const TaskModal: React.FC<{
   const addTask = (title: string, description: string, date: string) => {
     postTask(title, date, cardId, description)
       .then((data) => {
-        console.log("Received task from server:", data);
-
         setTasks((prevTasks) => [
           ...prevTasks,
           {

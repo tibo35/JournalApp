@@ -72,8 +72,8 @@ app.post("/login", async (req, res) => {
 });
 
 // ---------------------------------------------GET ------------
-app.get("/tab2", (req, res) => {
-  res.send("Welcome to tab2");
+app.get("/home", (req, res) => {
+  res.send("Welcome home");
 });
 
 app.get("/projects", async (req, res) => {

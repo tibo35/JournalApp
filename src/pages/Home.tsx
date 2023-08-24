@@ -1,7 +1,7 @@
 import { IonContent, IonPage, IonModal } from "@ionic/react";
 import React, { useState } from "react";
 
-import "./Tab2.css";
+import "./Home.css";
 import TaskModal from "../components/Tasks/TaskModal";
 import TopicsView from "./View/TopicsView";
 import PhotoView from "./View/PhotoView";
@@ -10,7 +10,7 @@ import ProjectsView from "./View/ProjectsView";
 import SideMenu from "../components/Side Menu/SideMenu";
 import ContentHeader from "../components/Side Menu/ContentHeader";
 
-const Tab2: React.FC = () => {
+const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
@@ -33,7 +33,7 @@ const Tab2: React.FC = () => {
   return (
     <IonPage>
       <SideMenu setView={setView} />
-      <IonContent fullscreen className="tab2-page" id="main-content">
+      <IonContent fullscreen className="home-page" id="main-content">
         <ContentHeader view={view} />
 
         {view === "topics" && <TopicsView openModal={openModal} />}
@@ -57,4 +57,4 @@ const Tab2: React.FC = () => {
   );
 };
 
-export default Tab2;
+export default Home;
