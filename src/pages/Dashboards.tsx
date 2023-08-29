@@ -10,7 +10,7 @@ import {
 import ExploreContainer from "../components/ExploreContainer";
 import "./Dashboards.css";
 import React, { useState, useEffect } from "react";
-import { fetchTasksDueToday } from "../Api/Api";
+import { fetchTasksDueToday } from "../Api/TasksDueTodayAPI";
 
 const Dashboards: React.FC = () => {
   const [tasksDueToday, setTasksDueToday] = useState<any[]>([]);

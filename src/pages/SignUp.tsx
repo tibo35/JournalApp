@@ -8,7 +8,7 @@ import {
   lockClosedOutline,
 } from "ionicons/icons";
 import "./Signup.css";
-import { postSignUp } from "../Api/Api";
+import { postSignUp } from "../Api/SignUpAPI";
 
 const Signup = () => {
   const [name, setName] = useState("");

@@ -3,7 +3,11 @@ import { IonReorderGroup, IonFab, IonFabButton, IonIcon } from "@ionic/react";
 import { add } from "ionicons/icons";
 import ProjectCard from "../../components/Projects/ProjectCard";
 import AddProject from "../../components/Projects/AddProject";
-import { fetchProjects, postProject, deleteProject } from "../../Api/Api";
+import {
+  fetchProjects,
+  postProject,
+  deleteProject,
+} from "../../Api/ProjectsAPI";
 
 interface ProjectsViewProps {
   openModal: (title: string, id: string) => void;

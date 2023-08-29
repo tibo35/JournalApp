@@ -10,7 +10,7 @@ import {
 import { format } from "date-fns";
 import { add } from "ionicons/icons";
 
-import { postTask, fetchTasks, deleteTask } from "../../Api/Api";
+import { postTask, fetchTasks, deleteTask } from "../../Api/TasksAPI";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
