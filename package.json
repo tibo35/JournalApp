@@ -11,7 +11,7 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "start": "node server.js"
+    "start": "node Server/server.js"
   },
   "dependencies": {
     "@capacitor/app": "5.0.6",

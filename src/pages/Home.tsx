@@ -1,4 +1,4 @@
-import { IonContent, IonPage, IonModal } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 
 import "./Home.css";
