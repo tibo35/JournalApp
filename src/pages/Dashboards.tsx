@@ -9,8 +9,18 @@ import {
 } from "@ionic/react";
 import ExploreContainer from "../components/ExploreContainer";
 import "./Dashboards.css";
+import React, { useState, useEffect } from "react";
+import { fetchTasksDueToday } from "../Api/Api";
 
 const Dashboards: React.FC = () => {
+  const [tasksDueToday, setTasksDueToday] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchTasksDueToday()
+      .then((data) => setTasksDueToday(data))
+      .catch((error) => console.error("Failed to fetch tasks:", error));
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -21,7 +31,9 @@ const Dashboards: React.FC = () => {
       <IonContent>
         <div className="content-today">
           <IonTitle color="primary">Today</IonTitle>
-          <IonText color="secondary">You have {} tasks due today </IonText>
+          <IonText color="secondary">
+            You have {tasksDueToday.length} tasks due today
+          </IonText>
 
           <div className="wrapper">
             <div className="container-dashboard">

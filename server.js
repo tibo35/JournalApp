@@ -102,6 +102,25 @@ app.get("/topics", async (req, res) => {
   const allCards = await db.collection("Cards").find().toArray();
   res.json(allCards);
 });
+app.get("/tasks-due-today", async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // set to start of day
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1); // set to start of next day
+
+  const tasksForToday = await db
+    .collection("Tasks")
+    .find({
+      date: {
+        // <-- Changed from "dueDate" to "date"
+        $gte: today,
+        $lt: tomorrow,
+      },
+    })
+    .toArray();
+
+  res.json(tasksForToday);
+});
 
 // --------------------------------------------POST--------------
 app.post("/topics", async (req, res) => {
@@ -115,7 +134,12 @@ app.post("/tasks", async (req, res) => {
     return res.status(400).json({ message: "Invalid cardId" });
   }
 
-  const task = { content, description, date, cardId: new ObjectId(cardId) };
+  const task = {
+    content,
+    description,
+    date: new Date(date),
+    cardId: new ObjectId(cardId),
+  };
   await db.collection("Tasks").insertOne(task);
   res.json(task);
 });
@@ -188,7 +212,10 @@ app.put("/tasks/:id", async (req, res) => {
     res.status(400).json({ message: "Invalid id" });
     return;
   }
-  const updatedTask = req.body;
+  const updatedTask = {
+    ...req.body,
+    date: new Date(req.body.date), // Convert the date to a MongoDB Date type
+  };
 
   try {
     const result = await db

@@ -50,6 +50,8 @@ const NewTask: React.FC<NewTaskProps> = ({
   }, [task]);
 
   const handleSave = () => {
+    const dateObj = new Date(selectedDate);
+
     const currentTitle =
       typeof titleRef.current?.value === "string" ? titleRef.current.value : "";
     const currentDescription =
