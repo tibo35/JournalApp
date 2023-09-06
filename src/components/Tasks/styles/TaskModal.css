@@ -4,7 +4,12 @@
   align-items: flex-start;
   padding: 20px;
 }
-
+ion-modal {
+  border: #3880ff 2px solid;
+  height: 80%;
+  margin-top: 20%;
+  border-radius: 35px;
+}
 .task-footer {
   display: flex;
   flex-direction: column;
