@@ -15,7 +15,7 @@ import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
 import "./styles/TaskModal.css";
-
+import TaskTitleContext from "./TaskTitleContext";
 interface Task {
   id: string;
   content: string;
@@ -140,40 +140,42 @@ const TaskModal: React.FC<{
   };
 
   return (
-    <>
-      <TaskHeader onClose={onClose} />
+    <TaskTitleContext.Provider value="Task">
+      <>
+        <TaskHeader onClose={onClose} />
 
-      <TaskList
-        tasks={tasks}
-        onDelete={onDelete}
-        loading={loading}
-        error={error}
-        onEdit={onEdit}
-        addTask={addTask}
-        updateTask={updateTask}
-      />
-      <div className="task-modal-content">
-        <div className="task-footer">
-          <IonFooter>
-            <div className="container-items">
-              <IonFab
-                className="add-button"
-                vertical="bottom"
-                horizontal="center"
-                slot="fixed">
-                <IonFabButton onClick={handleAddButtonClick}>
-                  <IonIcon icon={add}></IonIcon>
-                </IonFabButton>
-              </IonFab>
-            </div>
+        <TaskList
+          tasks={tasks}
+          onDelete={onDelete}
+          loading={loading}
+          error={error}
+          onEdit={onEdit}
+          addTask={addTask}
+          updateTask={updateTask}
+        />
+        <div className="task-modal-content">
+          <div className="task-footer">
+            <IonFooter>
+              <div className="container-items">
+                <IonFab
+                  className="add-button"
+                  vertical="bottom"
+                  horizontal="center"
+                  slot="fixed">
+                  <IonFabButton onClick={handleAddButtonClick}>
+                    <IonIcon icon={add}></IonIcon>
+                  </IonFabButton>
+                </IonFab>
+              </div>
 
-            <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
-              <NewTask closeModal={handleModalDismiss} addTask={addTask} />
-            </IonModal>
-          </IonFooter>
+              <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
+                <NewTask closeModal={handleModalDismiss} addTask={addTask} />
+              </IonModal>
+            </IonFooter>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    </TaskTitleContext.Provider>
   );
 };
 
