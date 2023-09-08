@@ -1,0 +1,39 @@
+.task-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+}
+ion-modal {
+  width: 85vw;
+  height: 85vh;
+  margin: auto;
+  position: fixed;
+  top: 83%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 30px 30px 0 0;
+}
+.task-footer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.task-list {
+  overflow: auto;
+  z-index: 1;
+  max-height: calc(100% - (height_of_your_footer + any_desired_padding));
+  height: 100%;
+}
+.date-picker-wrapper {
+  z-index: 2;
+  position: relative;
+}
+.overlay {
+  height: 100%;
+  background-color: white;
+  z-index: 1;
+}
+.add-button {
+  position: fixed;
+}

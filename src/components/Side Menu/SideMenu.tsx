@@ -46,7 +46,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ setView }) => {
         </div>
         <div onClick={() => handleMenuClick("project")} className="menu-option">
           <IonIcon icon={gitPullRequestOutline} className="menu-icon" />
-          Project
+          Projects
         </div>
         <div
           onClick={() => handleMenuClick("PhotoOfTheDay")}

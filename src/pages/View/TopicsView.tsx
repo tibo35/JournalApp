@@ -4,7 +4,7 @@ import { add } from "ionicons/icons";
 import TopicCard from "../../components/Topics/TopicCard";
 import AddInput from "../../components/Topics/AddInput";
 import useItem from "../../components/Hooks/UseItem";
-import { fetchTopics, postTopic, deleteTopic } from "../../Api/ApiTab2";
+import { fetchTopics, postTopic, deleteTopic } from "../../Api/TopicsAPI";
 
 interface TopicsViewProps {
   openModal: (title: string, id: string) => void;
