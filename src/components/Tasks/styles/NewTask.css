@@ -4,6 +4,7 @@
   height: calc(100vh - 50px);
   padding: 10px;
   box-sizing: border-box;
+  background-color: rgb(193, 116, 116);
 }
 
 ion-input {

@@ -80,9 +80,9 @@ const NewTask: React.FC<NewTaskProps> = ({
   return (
     <TaskTitleContext.Provider value={title}>
       <>
-        <TaskHeader onClose={closeModal} />
-
         <div className="task-container">
+          <TaskHeader onClose={closeModal} />
+
           <IonLabel>
             Due Date: &nbsp;
             {dueDate ? formatDate(selectedDate) : ""}
