@@ -6,9 +6,10 @@
   box-sizing: border-box;
   background-color: rgb(193, 116, 116);
 }
-
-ion-input {
-  flex: 0;
+.header {
+  display: flex;
+  flex-direction: row;
+  border: red 1px solid;
 }
 
 ion-textarea {
