@@ -6,6 +6,7 @@
   box-sizing: border-box;
   background-color: white;
   color: black;
+  gap: 20px;
 }
 .header-container {
   display: flex;
@@ -42,6 +43,7 @@
   text-align: left;
   margin-bottom: 5px;
   font-weight: bold;
+  color: grey;
 }
 .button-container {
   display: flex;
