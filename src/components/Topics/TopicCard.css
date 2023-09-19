@@ -12,3 +12,6 @@ ion-reorder {
 .title-card {
   margin-left: 10px !important;
 }
+ion-card {
+  border-radius: 25px;
+}

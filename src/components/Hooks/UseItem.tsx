@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+type ServerResponse = any[] | { message: string };
 
 type Item = {
   id: string;
@@ -13,14 +14,23 @@ function useItems(
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    fetchItems().then((data) => {
-      setItems(
-        data.map((item: any) => ({
-          id: item._id,
-          title: item.title,
-        }))
-      );
-    });
+    fetchItems()
+      .then((data) => {
+        if ("message" in data) {
+          console.error(data.message);
+          // Optionally, handle error state or notify user
+        } else {
+          setItems(
+            data.map((item: any) => ({
+              id: item._id,
+              title: item.title,
+            }))
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+      });
   }, [fetchItems]);
 
   const reorderItems = (from: number, to: number) => {

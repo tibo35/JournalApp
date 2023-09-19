@@ -1,7 +1,7 @@
-import { IonContent, IonPage, IonModal } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 
-import "./Tab2.css";
+import "./Home.css";
 import TaskModal from "../components/Tasks/TaskModal";
 import TopicsView from "./View/TopicsView";
 import PhotoView from "./View/PhotoView";
@@ -10,23 +10,22 @@ import ProjectsView from "./View/ProjectsView";
 import SideMenu from "../components/Side Menu/SideMenu";
 import ContentHeader from "../components/Side Menu/ContentHeader";
 
-const Tab2: React.FC = () => {
+const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
+
   const [currentCardId, setCurrentCardId] = useState<string | null>(null);
   const [view, setView] = useState<"topics" | "project" | "PhotoOfTheDay">(
     "topics"
   );
 
   const openModal = (title: string, id: string) => {
-    console.log("Opening modal with title:", title);
     setModalContent(title);
     setCurrentCardId(id);
     setShowModal(true);
   };
 
   const closeModal = () => {
-    console.log("Closing modal");
     setShowModal(false);
     setCurrentCardId(null);
   };
@@ -34,7 +33,7 @@ const Tab2: React.FC = () => {
   return (
     <IonPage>
       <SideMenu setView={setView} />
-      <IonContent fullscreen className="tab2-page" id="main-content">
+      <IonContent fullscreen className="home-page" id="main-content">
         <ContentHeader view={view} />
 
         {view === "topics" && <TopicsView openModal={openModal} />}
@@ -43,15 +42,19 @@ const Tab2: React.FC = () => {
 
         {view === "PhotoOfTheDay" && <PhotoView openModal={openModal} />}
       </IonContent>
-      <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
-        <TaskModal
-          title={modalContent}
-          cardId={currentCardId || ""}
-          onClose={closeModal}
-        />
-      </IonModal>
+      {showModal && (
+        <div className="overlay">
+          <div className="custom-modal">
+            <TaskModal
+              title={modalContent}
+              cardId={currentCardId || ""}
+              onClose={closeModal}
+            />
+          </div>
+        </div>
+      )}
     </IonPage>
   );
 };
 
-export default Tab2;
+export default Home;

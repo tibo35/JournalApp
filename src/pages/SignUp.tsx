@@ -8,7 +8,7 @@ import {
   lockClosedOutline,
 } from "ionicons/icons";
 import "./Signup.css";
-import { postSignUp } from "../Api/ApiTab2";
+import { postSignUp } from "../Api/SignUpAPI";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -101,7 +101,7 @@ const Signup = () => {
     if (data.token) {
       // Save the token in localStorage
       localStorage.setItem("token", data.token);
-      history.push("/tab2");
+      history.push("/home");
       console.log("Signup successful");
     } else {
       console.log("Signup failed");
