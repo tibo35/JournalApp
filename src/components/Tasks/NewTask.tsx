@@ -28,6 +28,8 @@ const NewTask: React.FC<NewTaskProps> = ({
   const titleRef = useRef<HTMLIonInputElement>(null);
   const descriptionRef = useRef<HTMLIonTextareaElement>(null);
   const [showDatePickerModal, setShowDatePickerModal] = useState(false);
+  const datePickerRef = useRef<HTMLIonDatetimeElement>(null);
+  const title = task ? task.content : "New Task";
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString()
   );
@@ -40,6 +42,7 @@ const NewTask: React.FC<NewTaskProps> = ({
 
     return `${day}/${month}/${year}`;
   };
+
   useEffect(() => {
     if (task) {
       titleRef.current!.value = task.content;
@@ -53,7 +56,6 @@ const NewTask: React.FC<NewTaskProps> = ({
 
   const handleSave = () => {
     const dateObj = new Date(selectedDate);
-
     const currentTitle =
       typeof titleRef.current?.value === "string" ? titleRef.current.value : "";
     const currentDescription =
@@ -75,10 +77,30 @@ const NewTask: React.FC<NewTaskProps> = ({
     closeModal();
   };
   const toggleDatePicker = () => {
-    // setShowDatePickerModal((prevState) => !prevState);
     setShowDatePickerModal(true);
   };
-  const title = task ? task.content : "New Task";
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (
+      datePickerRef.current &&
+      !datePickerRef.current.contains(event.target as Node)
+    ) {
+      setShowDatePickerModal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showDatePickerModal) {
+      const timeoutId = setTimeout(() => {
+        document.addEventListener("click", handleOutsideClick);
+      }, 0); // Timeout ensures event listener is added after current call stack clears
+
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener("click", handleOutsideClick);
+      };
+    }
+  }, [showDatePickerModal]);
 
   return (
     <TaskTitleContext.Provider value={title}>
@@ -109,6 +131,7 @@ const NewTask: React.FC<NewTaskProps> = ({
             </div>
             {showDatePickerModal && (
               <IonDatetime
+                ref={datePickerRef}
                 className="ionic-datetime-modal"
                 value={selectedDate}
                 onIonChange={(e) => {
