@@ -167,11 +167,10 @@ const TaskModal: React.FC<{
                   </IonFabButton>
                 </IonFab>
               </div>
-
-              <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
-                <NewTask closeModal={handleModalDismiss} addTask={addTask} />
-              </IonModal>
             </IonFooter>
+            <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
+              <NewTask closeModal={handleModalDismiss} addTask={addTask} />
+            </IonModal>
           </div>
         </div>
       </>

@@ -52,6 +52,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   };
   const handleeditButtonClick = () => {
     console.log("Task:", task);
+
     setShowModal(true);
   };
 
@@ -73,6 +74,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           {task.content}
         </IonItem>
       )}
+
       <IonFooter>
         <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
           <NewTask

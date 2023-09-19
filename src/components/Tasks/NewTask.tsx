@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  IonButton,
-  IonInput,
-  IonTextarea,
-  IonDatetime,
-  IonLabel,
-} from "@ionic/react";
+import { IonButton, IonInput, IonTextarea, IonLabel } from "@ionic/react";
 import "./styles/NewTask.css";
 import { Task } from "./taskTypes";
 import { IonIcon } from "@ionic/react";
@@ -82,31 +76,33 @@ const NewTask: React.FC<NewTaskProps> = ({
   return (
     <TaskTitleContext.Provider value={title}>
       <>
-        <div className="task-container">
-          <div className="header">
-            <IonInput placeholder="Title" ref={titleRef} />
-            <div className="close-button-container">
-              <IonButton onClick={closeModal} fill="clear">
-                <IonIcon icon={closeCircle} />
-              </IonButton>
-            </div>
-          </div>
-          <IonInput
-            type="date"
-            label="Due Date:"
-            labelPlacement="floating"
-            value={dueDate ? selectedDate.split("T")[0] : ""}
-            onIonChange={(e) => {
-              if (typeof e.detail.value === "string") {
-                setSelectedDate(e.detail.value + "T00:00:00Z");
-                setDueDate(true);
-              }
-            }}></IonInput>
-          <IonTextarea placeholder="Description" ref={descriptionRef} />
-          <IonButton onClick={handleSave}>
-            {task ? "Update Task" : "Add Task"}
+        <div className="header">
+          <IonInput placeholder="Title" ref={titleRef} />
+          <IonButton onClick={closeModal} fill="clear">
+            <IonIcon icon={closeCircle} />
           </IonButton>
-          \{" "}
+        </div>
+        <div className="task-container">
+          <div>
+            <IonLabel className="custom-label">DATE</IonLabel>
+            <IonInput
+              type="date"
+              className="ionic-date-input"
+              value={dueDate ? selectedDate.split("T")[0] : ""}
+              onIonChange={(e) => {
+                if (typeof e.detail.value === "string") {
+                  setSelectedDate(e.detail.value + "T00:00:00Z");
+                  setDueDate(true);
+                }
+              }}></IonInput>
+          </div>
+          <IonLabel className="custom-label">DESCRIPTION</IonLabel>
+          <IonTextarea ref={descriptionRef} />
+          <div className="task-btn">
+            <IonButton onClick={handleSave}>
+              {task ? "Update Task" : "Add Task"}
+            </IonButton>
+          </div>
         </div>
       </>
     </TaskTitleContext.Provider>
