@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IonButton, IonInput, IonTextarea, IonLabel } from "@ionic/react";
+import {
+  IonButton,
+  IonInput,
+  IonTextarea,
+  IonLabel,
+  IonDatetime,
+} from "@ionic/react";
 import "./styles/NewTask.css";
 import { Task } from "./taskTypes";
 import { IonIcon } from "@ionic/react";
-import { closeCircle } from "ionicons/icons";
+import { closeCircle, calendarNumberOutline } from "ionicons/icons";
 import TaskHeader from "./TaskHeader";
 import TaskTitleContext from "./TaskTitleContext";
 interface NewTaskProps {
@@ -69,35 +75,61 @@ const NewTask: React.FC<NewTaskProps> = ({
     closeModal();
   };
   const toggleDatePicker = () => {
-    setShowDatePickerModal((prevState) => !prevState);
+    // setShowDatePickerModal((prevState) => !prevState);
+    setShowDatePickerModal(true);
   };
   const title = task ? task.content : "New Task";
 
   return (
     <TaskTitleContext.Provider value={title}>
       <>
-        <div className="header">
-          <IonInput placeholder="Title" ref={titleRef} />
+        <div className="header-container">
+          <IonInput
+            className="header-title"
+            placeholder="Title"
+            ref={titleRef}
+          />
           <IonButton onClick={closeModal} fill="clear">
-            <IonIcon icon={closeCircle} />
+            <IonIcon className="close-icon" icon={closeCircle} />
           </IonButton>
         </div>
         <div className="task-container">
-          <div>
+          <div className="date-container">
             <IonLabel className="custom-label">DATE</IonLabel>
-            <IonInput
-              type="date"
-              className="ionic-date-input"
-              value={dueDate ? selectedDate.split("T")[0] : ""}
-              onIonChange={(e) => {
-                if (typeof e.detail.value === "string") {
-                  setSelectedDate(e.detail.value + "T00:00:00Z");
+            <div className="date-input">
+              <IonInput
+                placeholder="DD-MM-YYYY"
+                type="text"
+                className="ionic-date-input"
+                value={dueDate ? formatDate(selectedDate) : ""}
+                readonly
+                onClick={toggleDatePicker}
+              />
+              <IonIcon className="calendar-icon" icon={calendarNumberOutline} />
+            </div>
+            {showDatePickerModal && (
+              <IonDatetime
+                className="ionic-datetime-modal"
+                value={selectedDate}
+                onIonChange={(e) => {
+                  if (typeof e.detail.value === "string") {
+                    setSelectedDate(e.detail.value);
+                  }
+                  setShowDatePickerModal(false);
                   setDueDate(true);
-                }
-              }}></IonInput>
+                }}
+              />
+            )}
           </div>
-          <IonLabel className="custom-label">DESCRIPTION</IonLabel>
-          <IonTextarea ref={descriptionRef} />
+
+          <div>
+            <IonLabel className="custom-label">DESCRIPTION</IonLabel>
+            <IonTextarea className="description" ref={descriptionRef} />
+          </div>
+          <div>
+            <IonLabel className="custom-label">CATEGORY</IonLabel>
+            <IonTextarea />
+          </div>
           <div className="task-btn">
             <IonButton onClick={handleSave}>
               {task ? "Update Task" : "Add Task"}

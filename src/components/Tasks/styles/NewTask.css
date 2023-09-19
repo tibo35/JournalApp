@@ -3,26 +3,35 @@
   flex-direction: column;
   height: calc(100vh - 50px);
   padding: 10px;
-
   box-sizing: border-box;
-  background-color: rgba(136, 145, 206, 0.669);
+  background-color: white;
 }
-.header {
+.header-container {
   display: flex;
   flex-direction: row;
   background-color: rgba(136, 145, 206, 0.669);
   padding: 15px;
+  align-items: center;
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
-  width: 55px;
-  padding: 0px;
-  height: 20px;
-  margin: 0px;
+.header-title {
+  font-weight: bold;
+  font-size: 25px;
 }
-input[type="date"]::-webkit-calendar-picker {
-  width: 150px;
+.calendar-icon,
+.close-icon {
+  height: 25px;
+  width: 25px;
 }
-
+.date-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.ionic-datetime-modal {
+  position: fixed;
+  z-index: 100;
+  border-radius: 30px;
+}
 ion-textarea {
   flex-grow: 1;
   resize: none;
@@ -31,8 +40,8 @@ ion-textarea {
 .custom-label {
   display: block;
   text-align: left;
-  margin-bottom: 5px; /* Adjust this value according to your desired spacing */
-  font-weight: bold; /* Optional: Makes the label bold for better visibility */
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 .button-container {
   display: flex;
@@ -40,12 +49,16 @@ ion-textarea {
   align-items: center;
   margin-bottom: 70px;
 }
-
+.description {
+  height: 200px;
+  border-bottom: 1px grey solid;
+}
+.date-container {
+  border-bottom: 1px grey solid;
+}
 .task-btn {
   display: flex;
-  justify-content: center; /* This will center the button horizontally */
-  align-items: center; /* This will center the button vertically */
-  flex-grow: 1; /* This will make it occupy all available vertical space */
+  justify-content: center;
 }
 
 .validate-btn {
