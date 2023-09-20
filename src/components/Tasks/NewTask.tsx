@@ -10,7 +10,7 @@ import "./styles/NewTask.css";
 import { Task } from "./taskTypes";
 import { IonIcon } from "@ionic/react";
 import { closeCircle, calendarNumberOutline } from "ionicons/icons";
-import TaskHeader from "./TaskHeader";
+import Category from "../Category/CategoryButton";
 import TaskTitleContext from "./TaskTitleContext";
 interface NewTaskProps {
   closeModal: () => void;
@@ -151,6 +151,7 @@ const NewTask: React.FC<NewTaskProps> = ({
           </div>
           <div>
             <IonLabel className="custom-label">CATEGORY</IonLabel>
+            <Category />
             <IonTextarea />
           </div>
           <div className="task-btn">
