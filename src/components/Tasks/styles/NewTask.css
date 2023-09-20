@@ -6,6 +6,7 @@
   box-sizing: border-box;
   background-color: white;
   color: black;
+  gap: 20px;
 }
 .header-container {
   display: flex;
@@ -30,19 +31,19 @@
 }
 .ionic-datetime-modal {
   position: fixed;
+  top: 20%;
+  left: 0%;
   z-index: 100;
   border-radius: 30px;
+  border: rgba(128, 128, 128, 0.511) 1px solid;
 }
-ion-textarea {
-  flex-grow: 1;
-  resize: none;
-  height: 80%;
-}
+
 .custom-label {
   display: block;
   text-align: left;
   margin-bottom: 5px;
   font-weight: bold;
+  color: grey;
 }
 .button-container {
   display: flex;

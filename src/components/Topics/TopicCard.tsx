@@ -23,8 +23,8 @@ const TopicCard: React.FC<CardProps> = ({ title, id, onDelete, onOpen }) => (
   <IonCard>
     <IonItemSliding>
       <IonItem onClick={() => onOpen(id)}>
+        <IonReorder />
         <IonCardHeader className="card-header">
-          <IonReorder />
           <IonCardTitle className="reorder-btn">{title}</IonCardTitle>
         </IonCardHeader>
       </IonItem>

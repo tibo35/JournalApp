@@ -42,7 +42,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ setView }) => {
       <IonContent className="menu-items no-scroll">
         <div onClick={() => handleMenuClick("topics")} className="menu-option">
           <IonIcon icon={pricetagsOutline} className="menu-icon" />
-          Topics
+          Category
         </div>
         <div onClick={() => handleMenuClick("project")} className="menu-option">
           <IonIcon icon={gitPullRequestOutline} className="menu-icon" />

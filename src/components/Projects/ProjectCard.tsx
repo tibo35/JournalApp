@@ -39,8 +39,8 @@ const ProjectCard: React.FC<ProjectProps> = ({
       <IonCard>
         <IonItemSliding>
           <IonItem onClick={() => onOpen(project.title, project.id)}>
+            <IonReorder />
             <IonCardHeader className="card-header">
-              <IonReorder />
               <IonCardTitle className="reorder-btn">
                 {project.title}
               </IonCardTitle>
