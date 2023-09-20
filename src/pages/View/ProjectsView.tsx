@@ -14,8 +14,10 @@ interface ProjectsViewProps {
 }
 
 const ProjectsView: React.FC<ProjectsViewProps> = ({ openModal }) => {
-  const [projects, setProjects] = useState<{ id: string; title: string }[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const [projects, setProjects] = useState<
+    { id: string; title: string; taskCount: number }[]
+  >([]);
 
   useEffect(() => {
     fetchProjects().then((data) => {
@@ -23,6 +25,7 @@ const ProjectsView: React.FC<ProjectsViewProps> = ({ openModal }) => {
         data.map((project: any) => ({
           id: project._id,
           title: project.title,
+          taskCount: project.taskCount,
         }))
       );
     });
@@ -32,7 +35,7 @@ const ProjectsView: React.FC<ProjectsViewProps> = ({ openModal }) => {
     postProject(title).then((data) => {
       setProjects((prevProjects) => [
         ...prevProjects,
-        { id: data._id, title: data.title },
+        { id: data._id, title: data.title, taskCount: data.taskCount },
       ]);
     });
   };
