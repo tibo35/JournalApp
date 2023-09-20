@@ -15,11 +15,18 @@ import "./TopicCard.css";
 interface CardProps {
   title: string;
   id: string;
+  taskCount: number;
   onDelete: (event: React.MouseEvent) => void;
   onOpen: (id: string) => void;
 }
 
-const TopicCard: React.FC<CardProps> = ({ title, id, onDelete, onOpen }) => (
+const TopicCard: React.FC<CardProps> = ({
+  title,
+  taskCount,
+  id,
+  onDelete,
+  onOpen,
+}) => (
   <IonCard>
     <IonItemSliding>
       <IonItem onClick={() => onOpen(id)}>
@@ -27,6 +34,7 @@ const TopicCard: React.FC<CardProps> = ({ title, id, onDelete, onOpen }) => (
         <IonCardHeader className="card-header">
           <IonCardTitle className="reorder-btn">{title}</IonCardTitle>
         </IonCardHeader>
+        <div>{taskCount} tasks</div>
       </IonItem>
 
       <IonItemOptions side="end">
