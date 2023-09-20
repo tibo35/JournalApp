@@ -34,8 +34,8 @@ const TopicCard: React.FC<CardProps> = ({
         <IonCardHeader className="card-header">
           <IonCardTitle className="reorder-btn">{title}</IonCardTitle>
         </IonCardHeader>
-        <div>{taskCount} tasks</div>
       </IonItem>
+      <IonItem>{taskCount} Tasks</IonItem>
 
       <IonItemOptions side="end">
         <IonItemOption color="danger" onClick={onDelete}>
