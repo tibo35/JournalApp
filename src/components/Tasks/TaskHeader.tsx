@@ -12,10 +12,10 @@ import "./styles/TaskHeader.css";
 import TaskTitleContext from "./TaskTitleContext";
 interface TaskHeaderProps {
   onClose: () => void;
+  title: string;
 }
 
-const TaskHeader: React.FC<TaskHeaderProps> = ({ onClose }) => {
-  const title = React.useContext(TaskTitleContext);
+const TaskHeader: React.FC<TaskHeaderProps> = ({ onClose, title }) => {
   return (
     <IonHeader>
       <IonToolbar>
