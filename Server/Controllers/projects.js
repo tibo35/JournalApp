@@ -5,8 +5,32 @@ export async function getProjects(req, res) {
   const db = req.db;
 
   try {
-    const allProjects = await db.collection("Projects").find().toArray();
-    console.log("All projects:", allProjects);
+    const pipeline = [
+      {
+        $lookup: {
+          from: "Tasks",
+          localField: "_id",
+          foreignField: "cardId",
+          as: "tasksForProject",
+        },
+      },
+      {
+        $addFields: {
+          taskCount: { $size: "$tasksForProject" },
+        },
+      },
+      {
+        $project: {
+          tasksForProject: 0, // Exclude tasksForProject from the final projection
+        },
+      },
+    ];
+
+    const allProjects = await db
+      .collection("Projects")
+      .aggregate(pipeline)
+      .toArray();
+    console.log("All projects with task count:", allProjects);
 
     res.json(allProjects);
   } catch (error) {

@@ -5,11 +5,34 @@ export async function getTopics(req, res) {
   const db = req.db;
 
   try {
-    const allCards = await db.collection("Cards").find().toArray();
-    res.json(allCards);
+    const pipeline = [
+      {
+        $lookup: {
+          from: "Tasks",
+          localField: "_id",
+          foreignField: "cardId",
+          as: "tasksForCard",
+        },
+      },
+      {
+        $addFields: {
+          taskCount: { $size: "$tasksForCard" },
+        },
+      },
+      {
+        $project: {
+          tasksForCard: 0, // Exclude tasksForCard from the final projection
+        },
+      },
+    ];
+
+    const allCardsWithTaskCount = await db
+      .collection("Cards")
+      .aggregate(pipeline)
+      .toArray();
+    res.json(allCardsWithTaskCount);
   } catch (error) {
     console.error("Error fetching topics:", error);
-
     res.status(500).json({ message: "Failed to fetch topics" });
   }
 }
