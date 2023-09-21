@@ -16,7 +16,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ view }) => {
   let title;
   switch (view) {
     case "topics":
-      title = "Topics";
+      title = "Category";
       break;
     case "project":
       title = "Project";
