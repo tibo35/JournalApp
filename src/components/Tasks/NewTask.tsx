@@ -152,7 +152,6 @@ const NewTask: React.FC<NewTaskProps> = ({
           <div>
             <IonLabel className="custom-label">CATEGORY</IonLabel>
             <Category />
-            <IonTextarea />
           </div>
           <div className="task-btn">
             <IonButton onClick={handleSave}>

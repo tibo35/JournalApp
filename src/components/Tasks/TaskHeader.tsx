@@ -9,7 +9,6 @@ import {
 } from "@ionic/react";
 import { chevronBackOutline } from "ionicons/icons";
 import "./styles/TaskHeader.css";
-import TaskTitleContext from "./TaskTitleContext";
 interface TaskHeaderProps {
   onClose: () => void;
   title: string;

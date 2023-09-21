@@ -13,7 +13,6 @@ import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
 import "./styles/TaskModal.css";
-import TaskTitleContext from "./TaskTitleContext";
 interface Task {
   id: string;
   content: string;
