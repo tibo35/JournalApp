@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
-  IonDatetime,
   IonFooter,
   IonFabButton,
   IonFab,
   IonIcon,
   IonModal,
 } from "@ionic/react";
-import { format } from "date-fns";
 import { add } from "ionicons/icons";
 
 import { postTask, fetchTasks, deleteTask } from "../../Api/TasksAPI";
@@ -15,7 +13,6 @@ import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
 import "./styles/TaskModal.css";
-import TaskTitleContext from "./TaskTitleContext";
 interface Task {
   id: string;
   content: string;
@@ -29,8 +26,6 @@ const TaskModal: React.FC<{
   onClose: () => void;
 }> = ({ title, cardId, onClose }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [dueDate, setDueDate] = useState<string>("");
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<null | Task>(null);
@@ -140,41 +135,39 @@ const TaskModal: React.FC<{
   };
 
   return (
-    <TaskTitleContext.Provider value="Task">
-      <>
-        <TaskHeader onClose={onClose} />
+    <>
+      <TaskHeader onClose={onClose} title={title} />
 
-        <TaskList
-          tasks={tasks}
-          onDelete={onDelete}
-          loading={loading}
-          error={error}
-          onEdit={onEdit}
-          addTask={addTask}
-          updateTask={updateTask}
-        />
-        <div className="task-modal-content">
-          <div className="task-footer">
-            <IonFooter>
-              <div className="container-items">
-                <IonFab
-                  className="add-button"
-                  vertical="bottom"
-                  horizontal="center"
-                  slot="fixed">
-                  <IonFabButton onClick={handleAddButtonClick}>
-                    <IonIcon icon={add}></IonIcon>
-                  </IonFabButton>
-                </IonFab>
-              </div>
-            </IonFooter>
-            <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
-              <NewTask closeModal={handleModalDismiss} addTask={addTask} />
-            </IonModal>
-          </div>
+      <TaskList
+        tasks={tasks}
+        onDelete={onDelete}
+        loading={loading}
+        error={error}
+        onEdit={onEdit}
+        addTask={addTask}
+        updateTask={updateTask}
+      />
+      <div className="task-modal-content">
+        <div className="task-footer">
+          <IonFooter>
+            <div className="container-items">
+              <IonFab
+                className="add-button"
+                vertical="bottom"
+                horizontal="center"
+                slot="fixed">
+                <IonFabButton onClick={handleAddButtonClick}>
+                  <IonIcon icon={add}></IonIcon>
+                </IonFabButton>
+              </IonFab>
+            </div>
+          </IonFooter>
+          <IonModal isOpen={showModal} onDidDismiss={handleModalDismiss}>
+            <NewTask closeModal={handleModalDismiss} addTask={addTask} />
+          </IonModal>
         </div>
-      </>
-    </TaskTitleContext.Provider>
+      </div>
+    </>
   );
 };
 
