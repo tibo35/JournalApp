@@ -1,6 +1,6 @@
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-// Topics ----------
+// Topics -----------
 export const fetchTopics = () =>
   fetch(`${BASE_URL}/topics`).then((res) => res.json());
 
