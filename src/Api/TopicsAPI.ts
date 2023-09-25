@@ -3,7 +3,16 @@ console.log(BASE_URL);
 
 // Topics -----------
 export const fetchTopics = () =>
-  fetch(`${BASE_URL}/topics`).then((res) => res.json());
+  fetch(`${BASE_URL}/topics`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+      return res.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching topics:", error);
+    });
 
 export const deleteTopic = (id: string) =>
   fetch(`${BASE_URL}/topics/${id}`, { method: "DELETE" }).then((res) =>
