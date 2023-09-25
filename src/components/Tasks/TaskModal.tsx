@@ -101,8 +101,9 @@ const TaskModal: React.FC<{
       console.error("updatedTask does not have an 'id' property");
       return;
     }
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-    fetch(`http://localhost:3001/tasks/${updatedTask.id}`, {
+    fetch(`${BASE_URL}/tasks/${updatedTask.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

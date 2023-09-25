@@ -1,3 +1,5 @@
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 // SignUp ----------
 export const postSignUp = (
   name: string,
@@ -5,7 +7,7 @@ export const postSignUp = (
   username: string,
   password: string
 ) =>
-  fetch("http://localhost:3001/signup", {
+  fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

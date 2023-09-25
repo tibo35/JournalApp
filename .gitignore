@@ -32,6 +32,6 @@ yarn-error.log*
 
 #Db
 /db
-
+.env
 #config
 config.js

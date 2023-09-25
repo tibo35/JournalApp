@@ -1,4 +1,4 @@
-const BASE_URL = "https://journal-backend-5pfe.onrender.com";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // Projects ----------
 export const fetchProjects = () =>

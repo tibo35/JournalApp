@@ -1,7 +1,9 @@
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 // Tasks ----------
 export const fetchTasks = async (cardId: string) => {
   try {
-    const res = await fetch(`http://localhost:3001/tasks/${cardId}`);
+    const res = await fetch(`${BASE_URL}/tasks/${cardId}`);
     const data = await res.json();
     return data;
   } catch (error) {
@@ -11,7 +13,7 @@ export const fetchTasks = async (cardId: string) => {
 };
 
 export const deleteTask = (id: string) =>
-  fetch(`http://localhost:3001/tasks/${id}`, { method: "DELETE" }).then((res) =>
+  fetch(`${BASE_URL}/tasks/${id}`, { method: "DELETE" }).then((res) =>
     res.json()
   );
 
@@ -21,7 +23,7 @@ export const postTask = (
   cardId: string,
   description: string
 ) =>
-  fetch("http://localhost:3001/tasks", {
+  fetch(`${BASE_URL}/tasks`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content, date, cardId, description }),
