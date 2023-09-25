@@ -10,6 +10,8 @@
 
 # production
 /build
+/ios/
+/dist/
 
 # misc
 .DS_Store
@@ -27,9 +29,8 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
-
+.env
 #Db
 /db
-
 #config
 config.js

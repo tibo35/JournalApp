@@ -3,15 +3,21 @@ import { IonReorderGroup, IonFab, IonFabButton, IonIcon } from "@ionic/react";
 import { add } from "ionicons/icons";
 import ProjectCard from "../../components/Projects/ProjectCard";
 import AddProject from "../../components/Projects/AddProject";
-import { fetchProjects, postProject, deleteProject } from "../../Api/ApiTab2";
+import {
+  fetchProjects,
+  postProject,
+  deleteProject,
+} from "../../Api/ProjectsAPI";
 
 interface ProjectsViewProps {
   openModal: (title: string, id: string) => void;
 }
 
 const ProjectsView: React.FC<ProjectsViewProps> = ({ openModal }) => {
-  const [projects, setProjects] = useState<{ id: string; title: string }[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const [projects, setProjects] = useState<
+    { id: string; title: string; taskCount: number }[]
+  >([]);
 
   useEffect(() => {
     fetchProjects().then((data) => {
@@ -19,6 +25,7 @@ const ProjectsView: React.FC<ProjectsViewProps> = ({ openModal }) => {
         data.map((project: any) => ({
           id: project._id,
           title: project.title,
+          taskCount: project.taskCount,
         }))
       );
     });
@@ -28,7 +35,7 @@ const ProjectsView: React.FC<ProjectsViewProps> = ({ openModal }) => {
     postProject(title).then((data) => {
       setProjects((prevProjects) => [
         ...prevProjects,
-        { id: data._id, title: data.title },
+        { id: data._id, title: data.title, taskCount: data.taskCount },
       ]);
     });
   };

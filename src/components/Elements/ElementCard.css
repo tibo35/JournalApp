@@ -1,0 +1,40 @@
+.card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}
+.left-content,
+.right-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.left-content {
+  justify-content: flex-start;
+}
+
+.right-content {
+  justify-content: flex-end;
+}
+
+.title-card {
+  margin-left: 10px !important;
+}
+
+.card-container {
+  border-radius: 25px;
+}
+
+.custom-ion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+}
+.category-button {
+}

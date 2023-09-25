@@ -1,0 +1,68 @@
+.task-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 50px);
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: white;
+  color: black;
+  gap: 20px;
+}
+.header-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(136, 145, 206, 0.669);
+  padding: 15px;
+  align-items: center;
+}
+.header-title {
+  font-weight: bold;
+  font-size: 25px;
+}
+.calendar-icon,
+.close-icon {
+  height: 25px;
+  width: 25px;
+}
+.date-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.ionic-datetime-modal {
+  position: fixed;
+  top: 20%;
+  left: 0%;
+  z-index: 100;
+  border-radius: 30px;
+  border: rgba(128, 128, 128, 0.511) 1px solid;
+}
+
+.custom-label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: grey;
+}
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 70px;
+}
+.description {
+  height: 200px;
+  border-bottom: 1px grey solid;
+}
+.date-container {
+  border-bottom: 1px grey solid;
+}
+.task-btn {
+  display: flex;
+  justify-content: center;
+}
+
+.validate-btn {
+  width: 100%;
+}

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+type ServerResponse = any[] | { message: string };
 
 type Item = {
   id: string;
   title: string;
+  taskCount: number;
 };
 
 function useItems(
@@ -13,14 +15,24 @@ function useItems(
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    fetchItems().then((data) => {
-      setItems(
-        data.map((item: any) => ({
-          id: item._id,
-          title: item.title,
-        }))
-      );
-    });
+    fetchItems()
+      .then((data) => {
+        if ("message" in data) {
+          console.error(data.message);
+          // Optionally, handle error state or notify user
+        } else {
+          setItems(
+            data.map((item: any) => ({
+              id: item._id,
+              title: item.title,
+              taskCount: item.taskCount,
+            }))
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+      });
   }, [fetchItems]);
 
   const reorderItems = (from: number, to: number) => {
@@ -31,7 +43,10 @@ function useItems(
   };
   const addItem = (title: string) => {
     postItem(title).then((data) => {
-      setItems((prev) => [...prev, { id: data._id, title: data.title }]);
+      setItems((prev) => [
+        ...prev,
+        { id: data._id, title: data.title, taskCount: data.taskCount },
+      ]);
     });
   };
 

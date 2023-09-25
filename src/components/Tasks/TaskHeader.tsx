@@ -7,23 +7,25 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/react";
-import { closeCircle } from "ionicons/icons";
-
+import { chevronBackOutline } from "ionicons/icons";
+import "./styles/TaskHeader.css";
 interface TaskHeaderProps {
   onClose: () => void;
+  title: string;
 }
 
-const TaskHeader: React.FC<TaskHeaderProps> = ({ onClose }) => (
-  <IonHeader>
-    <IonToolbar>
-      <IonTitle>Tasks</IonTitle>
-      <IonButtons slot="end">
-        <IonButton onClick={onClose}>
-          <IonIcon icon={closeCircle} />
-        </IonButton>
-      </IonButtons>
-    </IonToolbar>
-  </IonHeader>
-);
-
+const TaskHeader: React.FC<TaskHeaderProps> = ({ onClose, title }) => {
+  return (
+    <IonHeader>
+      <IonToolbar>
+        <IonTitle>{title}</IonTitle>
+        <IonButtons slot="start" className="close-button-container">
+          <IonButton onClick={onClose}>
+            <IonIcon icon={chevronBackOutline} />
+          </IonButton>
+        </IonButtons>
+      </IonToolbar>
+    </IonHeader>
+  );
+};
 export default TaskHeader;

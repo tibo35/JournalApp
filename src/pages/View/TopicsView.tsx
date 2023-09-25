@@ -4,10 +4,10 @@ import { add } from "ionicons/icons";
 import TopicCard from "../../components/Topics/TopicCard";
 import AddInput from "../../components/Topics/AddInput";
 import useItem from "../../components/Hooks/UseItem";
-import { fetchTopics, postTopic, deleteTopic } from "../../Api/ApiTab2";
+import { fetchTopics, postTopic, deleteTopic } from "../../Api/TopicsAPI";
 
 interface TopicsViewProps {
-  openModal: (title: string, id: string) => void;
+  openModal: (title: string, id: string, taskCount: number) => void;
 }
 const TopicsView: React.FC<TopicsViewProps> = ({ openModal }) => {
   const {
@@ -32,9 +32,10 @@ const TopicsView: React.FC<TopicsViewProps> = ({ openModal }) => {
           <TopicCard
             key={card.id}
             title={card.title}
+            taskCount={card.taskCount}
             id={card.id}
             onDelete={() => deleteCard(card.id)}
-            onOpen={() => openModal(card.title, card.id)}
+            onOpen={() => openModal(card.title, card.id, card.taskCount)}
           />
         ))}
       </IonReorderGroup>

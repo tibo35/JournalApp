@@ -20,7 +20,7 @@ interface PhotoViewProps {
   openModal: (title: string, id: string) => void;
 }
 
-const PhotoView: React.FC = () => {
+const PhotoView: React.FC<PhotoViewProps> = ({ openModal }) => {
   const { photos, takePhoto } = PhotoGallery();
   const [showActionSheet, setShowActionSheet] = useState(false);
 
