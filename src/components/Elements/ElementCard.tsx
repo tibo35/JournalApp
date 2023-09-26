@@ -12,8 +12,7 @@ import {
 } from "@ionic/react";
 import { trash } from "ionicons/icons";
 import "../Elements/ElementCard.css";
-import Category from "../Category/CategoryButton";
-
+import CategoryBadge from "../Category/CategoryBadge";
 interface ElementCardProps {
   title: string;
   id: string;
@@ -52,7 +51,7 @@ const ElementCard: React.FC<ElementCardProps> = ({
           </IonItemOption>
         </IonItemOptions>
       </IonItemSliding>
-      <Category />
+      <CategoryBadge />
     </div>
   </IonCard>
 );
