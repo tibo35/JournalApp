@@ -13,6 +13,7 @@ ion-badge {
 }
 
 .list-container {
+  border-top: 1px grey solid;
   display: flex;
   justify-content: center;
 }
