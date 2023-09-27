@@ -11,14 +11,13 @@ const getColorForLabel = (
   isActive: boolean
 ): string | undefined => {
   if (!isActive) return "secondary";
-  // Default color when not active
   switch (label) {
     case "URGENT":
-      return "danger"; // Red color for "danger" theme
+      return "danger";
     case "RUNNING":
-      return "primary"; // Default blue for "primary" theme
+      return "primary";
     case "ONGOING":
-      return "success"; // Green color for "success" theme
+      return "success";
     default:
       return undefined;
   }
@@ -41,7 +40,7 @@ const ToggleButton: React.FC<{
   );
 };
 
-const Category: React.FC<CategoryProps> = ({
+const CategoryTask: React.FC<CategoryProps> = ({
   initialCategories,
   updateCategories,
 }) => {
@@ -90,4 +89,4 @@ const Category: React.FC<CategoryProps> = ({
   );
 };
 
-export default Category;
+export default CategoryTask;
