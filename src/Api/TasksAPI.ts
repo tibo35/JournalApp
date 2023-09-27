@@ -1,3 +1,4 @@
+import { Task } from "../components/Tasks/taskTypes";
 const BASE_URL = import.meta.env.VITE_REACT_APP_BASE_URL;
 
 // Tasks ----------
@@ -28,3 +29,12 @@ export const postTask = (
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content, date, cardId, description }),
   }).then((res) => res.json());
+
+// In TasksAPI.ts
+export const updateTask = (updatedTask: Task) => {
+  return fetch(`${BASE_URL}/tasks/${updatedTask.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedTask),
+  }).then((res) => res.json());
+};

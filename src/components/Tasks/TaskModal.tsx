@@ -8,7 +8,12 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 
-import { postTask, fetchTasks, deleteTask } from "../../Api/TasksAPI";
+import {
+  postTask,
+  fetchTasks,
+  deleteTask,
+  updateTask,
+} from "../../Api/TasksAPI";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
@@ -96,30 +101,8 @@ const TaskModal: React.FC<{
       startEditing(task);
     }
   };
-  const updateTask = (updatedTask: Task) => {
-    if (!updatedTask.id) {
-      console.error("updatedTask does not have an 'id' property");
-      return;
-    }
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-
-    fetch(`${BASE_URL}/tasks/${updatedTask.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTask),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(
-            "Failed to update task. Response status:",
-            response.status
-          );
-          return;
-        }
-        return response.json();
-      })
+  const updateTaskHandler = (updatedTask: Task) => {
+    updateTask(updatedTask)
       .then((data) => {
         if (data && data.message === "Task updated successfully") {
           setTasks((prevTasks) =>
@@ -146,7 +129,7 @@ const TaskModal: React.FC<{
         error={error}
         onEdit={onEdit}
         addTask={addTask}
-        updateTask={updateTask}
+        updateTask={updateTaskHandler}
       />
       <div className="task-modal-content">
         <div className="task-footer">
