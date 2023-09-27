@@ -23,6 +23,7 @@ interface Task {
   content: string;
   date: string;
   description: string;
+  categories: string[];
 }
 
 const TaskModal: React.FC<{
@@ -43,9 +44,15 @@ const TaskModal: React.FC<{
   const handleModalDismiss = () => {
     setShowModal(false);
   };
-  const addTask = (title: string, description: string, date: string) => {
-    postTask(title, date, cardId, description)
+  const addTask = (
+    title: string,
+    description: string,
+    date: string,
+    categories: string[]
+  ) => {
+    postTask(title, date, cardId, description, categories)
       .then((data) => {
+        console.log(data);
         setTasks((prevTasks) => [
           ...prevTasks,
           {
@@ -53,6 +60,7 @@ const TaskModal: React.FC<{
             content: data.content,
             date: data.date,
             description: data.description,
+            categories: data.categories,
           },
         ]);
       })

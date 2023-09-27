@@ -3,4 +3,5 @@ export interface Task {
   content: string;
   date: string;
   description: string;
+  categories: string[];
 }

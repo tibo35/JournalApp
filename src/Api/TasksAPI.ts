@@ -22,12 +22,13 @@ export const postTask = (
   content: string,
   date: string,
   cardId: string,
-  description: string
+  description: string,
+  categories: string[] = []
 ) =>
   fetch(`${BASE_URL}/tasks`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content, date, cardId, description }),
+    body: JSON.stringify({ content, date, cardId, description, categories }),
   }).then((res) => res.json());
 
 // In TasksAPI.ts
