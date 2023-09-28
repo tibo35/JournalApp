@@ -31,11 +31,19 @@ export const postTask = (
     body: JSON.stringify({ content, date, cardId, description, categories }),
   }).then((res) => res.json());
 
-// In TasksAPI.ts
 export const updateTask = (updatedTask: Task) => {
   return fetch(`${BASE_URL}/tasks/${updatedTask.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedTask),
   }).then((res) => res.json());
+};
+
+export const fetchCategoryCount = async (cardId: string) => {
+  const response = await fetch(`${BASE_URL}/tasks/categoriesCount/${cardId}`);
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  }
+  throw new Error("Error fetching category count");
 };

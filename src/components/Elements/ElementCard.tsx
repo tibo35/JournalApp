@@ -18,7 +18,7 @@ interface ElementCardProps {
   id: string;
   onDelete: (id: string) => void;
   onOpen: (title: string, id: string) => void;
-  taskCount?: number;
+  taskCount: number;
 }
 
 const ElementCard: React.FC<ElementCardProps> = ({
@@ -51,7 +51,7 @@ const ElementCard: React.FC<ElementCardProps> = ({
           </IonItemOption>
         </IonItemOptions>
       </IonItemSliding>
-      <CategoryBadge />
+      <CategoryBadge cardId={id} />
     </div>
   </IonCard>
 );

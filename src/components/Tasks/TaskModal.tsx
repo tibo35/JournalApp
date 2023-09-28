@@ -79,6 +79,7 @@ const TaskModal: React.FC<{
               content: task.content,
               date: task.date,
               description: task.description,
+              categories: task.categories,
             }))
           );
         })
