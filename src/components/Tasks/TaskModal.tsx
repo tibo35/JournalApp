@@ -8,29 +8,28 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 
-import {
-  postTask,
-  fetchTasks,
-  deleteTask,
-  updateTask,
-} from "../../Api/TasksAPI";
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
 import "./styles/TaskModal.css";
-interface Task {
-  id: string;
-  content: string;
-  date: string;
-  description: string;
-  categories: string[];
-}
+import { Task } from "./taskTypes";
+
+import { useDispatch } from "react-redux";
+import {
+  updateTaskAsync,
+  createTaskAsync,
+  deleteTaskAsync,
+  fetchTasksAsync,
+} from "../../slices/taskSlice";
+import { AppDispatch } from "../../store";
 
 const TaskModal: React.FC<{
   title: string;
   cardId: string;
   onClose: () => void;
 }> = ({ title, cardId, onClose }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,38 +49,54 @@ const TaskModal: React.FC<{
     date: string,
     categories: string[]
   ) => {
-    postTask(title, date, cardId, description, categories)
-      .then((data) => {
-        console.log(data);
+    dispatch(
+      createTaskAsync({
+        content: title,
+        date: date,
+        cardId: cardId,
+        description: description,
+        categories: categories,
+      })
+    ).then((responseAction) => {
+      if (createTaskAsync.fulfilled.match(responseAction)) {
+        const task = responseAction.payload;
         setTasks((prevTasks) => [
           ...prevTasks,
           {
-            id: data._id,
-            content: data.content,
-            date: data.date,
-            description: data.description,
-            categories: data.categories,
+            id: task._id,
+            content: task.content,
+            date: task.date,
+            description: task.description,
+            categories: task.categories,
+            cardId: cardId,
           },
         ]);
-      })
-
-      .catch((error) => console.error("Fetch error:", error));
+      } else {
+        console.error("Failed to create task:", responseAction.error);
+      }
+    });
   };
 
   useEffect(() => {
     setLoading(true);
     if (cardId) {
-      fetchTasks(cardId)
-        .then((data) => {
-          setTasks(
-            data.map((task: any) => ({
-              id: task._id,
-              content: task.content,
-              date: task.date,
-              description: task.description,
-              categories: task.categories,
-            }))
-          );
+      dispatch(fetchTasksAsync(cardId))
+        .then((responseAction) => {
+          if (fetchTasksAsync.fulfilled.match(responseAction)) {
+            const fetchedTasks = responseAction.payload.tasks;
+            setTasks(
+              fetchedTasks.map((task: any) => ({
+                id: task._id,
+                content: task.content,
+                date: task.date,
+                description: task.description,
+                categories: task.categories,
+              }))
+            );
+          } else {
+            console.error("Failed to fetch tasks:", responseAction.error);
+            setError("Failed to fetch tasks!");
+          }
         })
         .catch((error) => {
           console.error("Fetch error:", error);
@@ -89,7 +104,7 @@ const TaskModal: React.FC<{
         })
         .finally(() => setLoading(false));
     }
-  }, [cardId]);
+  }, [cardId, dispatch]);
 
   const startEditing = (task: Task) => {
     setEditingTask(task);
@@ -97,11 +112,17 @@ const TaskModal: React.FC<{
 
   const onDelete = (id: string) => {
     console.log("Deleting task with id: ", id);
-    deleteTask(id)
-      .then(() => {
-        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    dispatch(deleteTaskAsync({ taskId: id, cardId }))
+      .then((responseAction) => {
+        if (deleteTaskAsync.fulfilled.match(responseAction)) {
+          setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+        } else {
+          console.error("Failed to delete task:", responseAction.error);
+        }
       })
-      .catch((error) => console.error("Fetch error:", error));
+      .catch((error) => {
+        console.error("Failed to delete task:", error);
+      });
   };
 
   const onEdit = (id: string) => {
@@ -111,15 +132,18 @@ const TaskModal: React.FC<{
     }
   };
   const updateTaskHandler = (updatedTask: Task) => {
-    updateTask(updatedTask)
-      .then((data) => {
-        if (data && data.message === "Task updated successfully") {
+    dispatch(updateTaskAsync(updatedTask))
+      .then((responseAction) => {
+        if (updateTaskAsync.fulfilled.match(responseAction)) {
+          const task = responseAction.payload;
           setTasks((prevTasks) =>
             prevTasks.map((task) =>
               task.id === updatedTask.id ? updatedTask : task
             )
           );
           setEditingTask(null);
+        } else {
+          console.error("Failed to update task:", responseAction.error);
         }
       })
       .catch((error) => {

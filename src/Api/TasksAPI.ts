@@ -43,6 +43,8 @@ export const fetchCategoryCount = async (cardId: string) => {
   const response = await fetch(`${BASE_URL}/tasks/categoriesCount/${cardId}`);
   if (response.ok) {
     const data = await response.json();
+    console.log(`Fetched category count for cardId ${cardId}:`, data); // <-- Add this line
+
     return data;
   }
   throw new Error("Error fetching category count");

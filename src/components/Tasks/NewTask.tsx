@@ -91,6 +91,7 @@ const NewTask: React.FC<NewTaskProps> = ({
       addTask(currentTitle, currentDescription, selectedDate, activeCategories);
       console.log("Selected Date:", selectedDate);
     }
+
     closeModal();
   };
   const toggleDatePicker = () => {

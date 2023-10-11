@@ -4,4 +4,5 @@ export interface Task {
   date: string;
   description: string;
   categories: string[];
+  cardId: string;
 }

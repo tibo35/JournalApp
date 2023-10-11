@@ -9,20 +9,8 @@ interface CardProps {
   onOpen: (id: string) => void;
 }
 
-const TopicCard: React.FC<CardProps> = ({
-  title,
-  taskCount,
-  id,
-  onDelete,
-  onOpen,
-}) => (
-  <ElementCard
-    title={title}
-    id={id}
-    onDelete={onDelete}
-    onOpen={onOpen}
-    taskCount={taskCount}
-  />
+const TopicCard: React.FC<CardProps> = ({ title, id, onDelete, onOpen }) => (
+  <ElementCard title={title} id={id} onDelete={onDelete} onOpen={onOpen} />
 );
 
 export default TopicCard;
