@@ -1,5 +1,5 @@
 import React from "react";
-import { IonList, IonSpinner } from "@ionic/react";
+import { IonList } from "@ionic/react";
 import TaskItem from "./TaskItem";
 import { Task } from "./taskTypes";
 import "./styles/TaskList.css";
@@ -28,7 +28,6 @@ const TaskList: React.FC<TaskListProps> = ({
   addTask,
 }) => (
   <>
-    {loading && <IonSpinner />}
     {error && <p className="error-notification">{error}</p>}
     <IonList className="task-list">
       {tasks.map((task) => (

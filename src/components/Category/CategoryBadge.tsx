@@ -1,10 +1,10 @@
 import { IonBadge, IonItem, IonLabel, IonList } from "@ionic/react";
 import "./CategoryBadge.css";
 import { useEffect } from "react";
-import { CategoryCounts } from "../../slices/taskSlice";
+import { CategoryCounts } from "../../components/Category/categoryCountsInterface";
 
 import { useDispatch } from "react-redux";
-import { fetchCategoryCountAsync } from "../../slices/taskSlice";
+import { fetchCategoryCountAsync } from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
 interface CategoryBadgeProps {

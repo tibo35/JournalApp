@@ -16,7 +16,7 @@ import CategoryBadge from "../Category/CategoryBadge";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { AppDispatch } from "../../store";
-import { fetchTasksAsync } from "../../slices/taskSlice";
+import { fetchTasksAsync } from "../Redux/thunks/tasksThunk";
 interface ElementCardProps {
   title: string;
   id: string;

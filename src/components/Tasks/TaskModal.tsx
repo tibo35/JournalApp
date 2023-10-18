@@ -21,7 +21,7 @@ import {
   deleteTaskAsync,
   fetchTasksAsync,
   fetchCategoryCountAsync,
-} from "../../slices/taskSlice";
+} from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
 const TaskModal: React.FC<{
