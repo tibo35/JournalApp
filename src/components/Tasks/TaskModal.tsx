@@ -20,6 +20,7 @@ import {
   createTaskAsync,
   deleteTaskAsync,
   fetchTasksAsync,
+  fetchCategoryCountAsync,
 } from "../../slices/taskSlice";
 import { AppDispatch } from "../../store";
 
@@ -71,6 +72,7 @@ const TaskModal: React.FC<{
             cardId: cardId,
           },
         ]);
+        dispatch(fetchCategoryCountAsync(cardId)); // Update category count after adding the task
       } else {
         console.error("Failed to create task:", responseAction.error);
       }
@@ -110,12 +112,12 @@ const TaskModal: React.FC<{
     setEditingTask(task);
   };
 
-  const onDelete = (id: string) => {
-    console.log("Deleting task with id: ", id);
+  const handleDeleteTask = (id: string) => {
     dispatch(deleteTaskAsync({ taskId: id, cardId }))
       .then((responseAction) => {
         if (deleteTaskAsync.fulfilled.match(responseAction)) {
           setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+          updateCategoryCount();
         } else {
           console.error("Failed to delete task:", responseAction.error);
         }
@@ -123,6 +125,15 @@ const TaskModal: React.FC<{
       .catch((error) => {
         console.error("Failed to delete task:", error);
       });
+  };
+
+  const updateCategoryCount = () => {
+    dispatch(fetchCategoryCountAsync(cardId));
+  };
+
+  const onDelete = (id: string) => {
+    console.log("Deleting task with id: ", id);
+    handleDeleteTask(id);
   };
 
   const onEdit = (id: string) => {
@@ -142,6 +153,7 @@ const TaskModal: React.FC<{
             )
           );
           setEditingTask(null);
+          dispatch(fetchCategoryCountAsync(cardId)); // Update category count after updating the task
         } else {
           console.error("Failed to update task:", responseAction.error);
         }

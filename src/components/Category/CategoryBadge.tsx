@@ -1,23 +1,19 @@
 import { IonBadge, IonItem, IonLabel, IonList } from "@ionic/react";
 import "./CategoryBadge.css";
-import { useCategoryCount } from "../Hooks/useCategoryCount";
 import { useEffect } from "react";
+import { CategoryCounts } from "../../slices/taskSlice";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchCategoryCountAsync } from "../../slices/taskSlice";
-import { AppDispatch, AppStore } from "../../store";
+import { AppDispatch } from "../../store";
 
 interface CategoryBadgeProps {
   cardId: string;
+  categoryCounts?: CategoryCounts;
 }
 
-function CategoryBadge({ cardId }: CategoryBadgeProps) {
-  console.log("CategoryBadge rendered", cardId);
-
+function CategoryBadge({ cardId, categoryCounts }: CategoryBadgeProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const categoryCount = useSelector(
-    (state: AppStore) => state.tasks.categoryCount
-  );
 
   useEffect(() => {
     dispatch(fetchCategoryCountAsync(cardId));
@@ -27,15 +23,15 @@ function CategoryBadge({ cardId }: CategoryBadgeProps) {
     <IonList className="list-container">
       <IonItem className="ion-item">
         <IonLabel className="ion-label">Urgent</IonLabel>
-        <IonBadge>{categoryCount?.Urgent}</IonBadge>
+        <IonBadge>{categoryCounts?.Urgent}</IonBadge>
       </IonItem>
       <IonItem className="ion-item">
         <IonLabel className="ion-label">Running</IonLabel>
-        <IonBadge>{categoryCount?.Running}</IonBadge>
+        <IonBadge>{categoryCounts?.Running}</IonBadge>
       </IonItem>
       <IonItem className="ion-item">
         <IonLabel className="ion-label">Ongoing</IonLabel>
-        <IonBadge>{categoryCount?.Ongoing}</IonBadge>
+        <IonBadge>{categoryCounts?.Ongoing}</IonBadge>
       </IonItem>
     </IonList>
   );

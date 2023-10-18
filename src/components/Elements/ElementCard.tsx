@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {
   IonCard,
-  IonCardHeader,
   IonCardTitle,
   IonIcon,
   IonItemSliding,
@@ -15,11 +14,9 @@ import "../Elements/ElementCard.css";
 import CategoryBadge from "../Category/CategoryBadge";
 
 import { useSelector, useDispatch } from "react-redux";
-// Assuming you've defined RootState somewhere:
 import { RootState } from "../../store";
 import { AppDispatch } from "../../store";
-import { fetchTasksAsync } from "../../slices/taskSlice"; // <-- Make sure to correct the path
-
+import { fetchTasksAsync } from "../../slices/taskSlice";
 interface ElementCardProps {
   title: string;
   id: string;
@@ -34,14 +31,17 @@ const ElementCard: React.FC<ElementCardProps> = ({
   onOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const categoryCounts = useSelector(
+    (state: RootState) => state.tasks.categoryCountsByCard[id]
+  );
 
   const taskCount = useSelector(
     (state: RootState) => state.tasks.taskCountsByCard[id]
   );
 
   useEffect(() => {
-    // Dispatch the fetchTasksAsync action when the component is mounted
     dispatch(fetchTasksAsync(id));
+    console.log("taskCount: " + taskCount);
   }, [dispatch, id]);
 
   return (
@@ -68,7 +68,7 @@ const ElementCard: React.FC<ElementCardProps> = ({
             </IonItemOption>
           </IonItemOptions>
         </IonItemSliding>
-        <CategoryBadge cardId={id} />
+        <CategoryBadge cardId={id} categoryCounts={categoryCounts} />
       </div>
     </IonCard>
   );

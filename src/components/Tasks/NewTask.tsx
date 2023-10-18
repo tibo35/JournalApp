@@ -39,9 +39,7 @@ const NewTask: React.FC<NewTaskProps> = ({
     task ? task.categories : []
   );
 
-  useEffect(() => {
-    console.log("Active Categories: ", activeCategories);
-  }, [activeCategories]);
+  useEffect(() => {}, [activeCategories]);
 
   const updateCategories = useCallback((categories: string[]) => {
     setActiveCategories(categories);

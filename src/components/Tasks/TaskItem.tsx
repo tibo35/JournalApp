@@ -30,7 +30,6 @@ interface TaskItemProps {
 const TaskItem: React.FC<TaskItemProps> = ({
   task,
   onDelete,
-  onEdit,
   updateTask,
   addTask,
 }) => {
@@ -56,8 +55,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
     }
   };
   const handleeditButtonClick = () => {
-    console.log("Task:", task);
-
     setShowModal(true);
   };
 

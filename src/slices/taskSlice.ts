@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../components/Tasks/taskTypes";
+
 import {
   fetchTasks,
   postTask as createTaskAPI,
@@ -8,18 +9,23 @@ import {
   fetchCategoryCount,
 } from "../Api/TasksAPI";
 
-interface CategoryCounts {
+export interface CategoryCounts {
   Urgent: number;
   Running: number;
   Ongoing: number;
 }
-
+interface DeleteTaskPayload {
+  taskId: string;
+  cardId: string;
+  category?: keyof CategoryCounts;
+}
 type TaskState = {
   tasks: Task[];
   loading: boolean;
   error: null | string;
   categoryCount?: CategoryCounts;
   taskCountsByCard: { [cardId: string]: number };
+  categoryCountsByCard: { [cardId: string]: CategoryCounts };
 };
 
 const initialState: TaskState = {
@@ -27,6 +33,7 @@ const initialState: TaskState = {
   loading: false,
   error: null,
   taskCountsByCard: {},
+  categoryCountsByCard: {},
 };
 
 const tasksSlice = createSlice({
@@ -79,21 +86,30 @@ const tasksSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    deleteTask: (state, action: PayloadAction<{ id: string }>) => {
+    deleteTask: (state, action: PayloadAction<DeleteTaskPayload>) => {
       state.loading = true;
       state.error = null;
     },
-    deleteTaskSuccess: (
-      state,
-      action: PayloadAction<{ id: string; cardId: string }>
-    ) => {
-      const { id, cardId } = action.payload;
+    deleteTaskSuccess: (state, action: PayloadAction<DeleteTaskPayload>) => {
+      const { taskId: id, cardId, category } = action.payload;
       state.tasks = state.tasks.filter((task) => task.id !== id);
       if (cardId && state.taskCountsByCard[cardId]) {
         state.taskCountsByCard[cardId] -= 1;
       }
+      if (
+        cardId &&
+        category &&
+        state.categoryCountsByCard[cardId] &&
+        state.categoryCountsByCard[cardId][category]
+      ) {
+        state.categoryCountsByCard[cardId][category] = Math.max(
+          0,
+          state.categoryCountsByCard[cardId][category] - 1
+        );
+      }
       state.loading = false;
     },
+
     deleteTaskFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
@@ -133,6 +149,14 @@ const tasksSlice = createSlice({
     ) => {
       if (state.categoryCount) {
         state.categoryCount[action.payload.category] += action.payload.count;
+      }
+    },
+    decrementCategoryCount: (
+      state,
+      action: PayloadAction<{ category: keyof CategoryCounts; count: number }>
+    ) => {
+      if (state.categoryCount) {
+        state.categoryCount[action.payload.category] -= action.payload.count;
       }
     },
   },
@@ -201,14 +225,24 @@ const tasksSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteTaskAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        state.tasks = state.tasks.filter(
-          (task) => task.id !== action.payload.id
-        );
+        const { taskId, cardId, category } = action.payload;
 
-        const cardId = action.payload.cardId;
+        state.tasks = state.tasks.filter((task) => task.id !== taskId);
+
         if (cardId && state.taskCountsByCard[cardId]) {
           state.taskCountsByCard[cardId]--;
+        }
+
+        if (
+          cardId &&
+          category &&
+          state.categoryCountsByCard[cardId] &&
+          state.categoryCountsByCard[cardId][category]
+        ) {
+          state.categoryCountsByCard[cardId][category] = Math.max(
+            0,
+            state.categoryCountsByCard[cardId][category] - 1
+          );
         }
       })
       .addCase(deleteTaskAsync.rejected, (state, action) => {
@@ -222,22 +256,27 @@ const tasksSlice = createSlice({
       .addCase(fetchCategoryCountAsync.fulfilled, (state, action) => {
         state.loading = false;
 
-        const counts: { [key: string]: number } = action.payload;
+        const cardId = action.meta.arg;
 
-        const formattedCounts: CategoryCounts = {
+        // Create a copy of the existing counts for the card or default to initial values
+        const updatedCounts = {
+          ...state.categoryCountsByCard[cardId],
           Urgent: 0,
           Running: 0,
           Ongoing: 0,
         };
 
+        const counts = action.payload;
         for (let key in counts) {
           const formattedKey = (key.charAt(0) +
             key.slice(1).toLowerCase()) as keyof CategoryCounts;
-          formattedCounts[formattedKey] = counts[key];
+          updatedCounts[formattedKey] = counts[key];
         }
 
-        state.categoryCount = formattedCounts;
+        // Assign the modified copy back to the state
+        state.categoryCountsByCard[cardId] = updatedCounts;
       })
+
       .addCase(fetchCategoryCountAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch category count";
@@ -284,10 +323,14 @@ export const updateTaskAsync = createAsyncThunk(
 // Async thunk for deleting a task
 export const deleteTaskAsync = createAsyncThunk(
   "tasks/deleteTask",
-  async (taskData: { taskId: string; cardId: string }) => {
-    const { taskId, cardId } = taskData;
+  async (taskData: DeleteTaskPayload) => {
+    const { taskId, cardId, category } = taskData;
+    console.log("Attempting to delete task with data:", taskData);
+
     await deleteTaskAPI(taskId);
-    return { id: taskId, cardId: cardId };
+    console.log("Task deleted successfully");
+
+    return { taskId, cardId, category };
   }
 );
 
