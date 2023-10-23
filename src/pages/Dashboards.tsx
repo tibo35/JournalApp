@@ -11,15 +11,29 @@ import ExploreContainer from "../components/ExploreContainer";
 import "./Dashboards.css";
 import React, { useState, useEffect } from "react";
 import { fetchTasksDueToday } from "../Api/TasksDueTodayAPI";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../src/store";
+import { AppDispatch } from "../../src/store";
+import { fetchTotalCategoryCountAsync } from "../components/Redux/thunks/tasksThunk";
 
 const Dashboards: React.FC = () => {
   const [tasksDueToday, setTasksDueToday] = useState<any[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     fetchTasksDueToday()
       .then((data) => setTasksDueToday(data))
       .catch((error) => console.error("Failed to fetch tasks:", error));
+
+    dispatch(fetchTotalCategoryCountAsync());
+
+    // This will execute every time totalCategoryCounts changes
+    console.log("Total Category Counts:", totalCategoryCounts);
   }, []);
+
+  const totalCategoryCounts = useSelector(
+    (state: RootState) => state.tasks.totalCategoryCounts
+  );
 
   return (
     <IonPage>
@@ -47,6 +61,14 @@ const Dashboards: React.FC = () => {
                 5<IonRippleEffect type="unbounded"></IonRippleEffect>
               </div>
               <IonText>Open</IonText>
+            </div>
+            <div className="item">
+              <div className="ion-activatable ripple-parent circle">
+                {totalCategoryCounts?.URGENT ?? 0}
+
+                <IonRippleEffect type="unbounded"></IonRippleEffect>
+              </div>
+              <IonText>Urgent</IonText>
             </div>
           </div>
         </div>

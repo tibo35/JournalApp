@@ -38,6 +38,15 @@ export const updateTask = (updatedTask: Task) => {
     body: JSON.stringify(updatedTask),
   }).then((res) => res.json());
 };
+export const fetchTotalCategoryCount = async () => {
+  const response = await fetch(`${BASE_URL}/tasks/categoriesCount`);
+  if (response.ok) {
+    const data = await response.json();
+    console.log(`Fetched total category count from TaskAPI:`, data);
+    return data;
+  }
+  throw new Error("Error fetching total category count");
+};
 
 export const fetchCategoryCount = async (cardId: string) => {
   const response = await fetch(`${BASE_URL}/tasks/categoriesCount/${cardId}`);

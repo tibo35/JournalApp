@@ -7,6 +7,7 @@ import {
   updateTaskAsync,
   deleteTaskAsync,
   fetchCategoryCountAsync,
+  fetchTotalCategoryCountAsync,
 } from "../thunks/tasksThunk";
 
 const initialState: TaskState = {
@@ -15,6 +16,7 @@ const initialState: TaskState = {
   error: null,
   taskCountsByCard: {},
   categoryCountsByCard: {},
+  totalCategoryCounts: {},
 };
 
 const tasksSlice = createSlice({
@@ -136,6 +138,22 @@ const tasksSlice = createSlice({
       .addCase(fetchCategoryCountAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch category count";
+      })
+      .addCase(fetchTotalCategoryCountAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTotalCategoryCountAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalCategoryCounts = action.payload;
+        console.log(
+          `Fetched total category count from TaskAPI:`,
+          action.payload
+        );
+      })
+      .addCase(fetchTotalCategoryCountAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Failed to fetch total category count";
       });
   },
 });

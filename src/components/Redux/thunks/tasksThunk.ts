@@ -4,6 +4,7 @@ import {
   updateTask as updateTaskAPI,
   deleteTask as deleteTaskAPI,
   fetchCategoryCount,
+  fetchTotalCategoryCount,
 } from "../../../Api/TasksAPI";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../../Tasks/taskTypes";
@@ -66,6 +67,15 @@ export const fetchCategoryCountAsync = createAsyncThunk(
   "tasks/fetchCategoryCount",
   async (cardId: string) => {
     const response = await fetchCategoryCount(cardId);
+    return response;
+  }
+);
+
+export const fetchTotalCategoryCountAsync = createAsyncThunk(
+  "tasks/fetchTotalCategoryCount",
+  async () => {
+    const response = await fetchTotalCategoryCount();
+    console.log(`Fetched total category count from TaskAPI:`, response);
     return response;
   }
 );

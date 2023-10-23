@@ -8,4 +8,7 @@ export type TaskState = {
   categoryCount?: CategoryCounts;
   taskCountsByCard: { [cardId: string]: number };
   categoryCountsByCard: { [cardId: string]: CategoryCounts };
+  totalCategoryCounts: {
+    [categoryName: string]: number;
+  };
 };
