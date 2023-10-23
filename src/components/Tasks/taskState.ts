@@ -11,4 +11,5 @@ export type TaskState = {
   totalCategoryCounts: {
     [categoryName: string]: number;
   };
+  totalTasksCount: number;
 };

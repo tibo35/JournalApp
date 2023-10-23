@@ -22,6 +22,7 @@ import {
   fetchTasksAsync,
   fetchCategoryCountAsync,
   fetchTotalCategoryCountAsync,
+  fetchAllTasksCount,
 } from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
@@ -75,6 +76,7 @@ const TaskModal: React.FC<{
         ]);
         dispatch(fetchCategoryCountAsync(cardId));
         dispatch(fetchTotalCategoryCountAsync());
+        dispatch(fetchAllTasksCount());
       } else {
         console.error("Failed to create task:", responseAction.error);
       }
@@ -132,6 +134,7 @@ const TaskModal: React.FC<{
   const updateCategoryCount = () => {
     dispatch(fetchCategoryCountAsync(cardId));
     dispatch(fetchTotalCategoryCountAsync());
+    dispatch(fetchAllTasksCount());
   };
 
   const onDelete = (id: string) => {
@@ -158,6 +161,7 @@ const TaskModal: React.FC<{
           setEditingTask(null);
           dispatch(fetchCategoryCountAsync(cardId));
           dispatch(fetchTotalCategoryCountAsync());
+          dispatch(fetchAllTasksCount());
         } else {
           console.error("Failed to update task:", responseAction.error);
         }

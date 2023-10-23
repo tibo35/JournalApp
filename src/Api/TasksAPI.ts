@@ -58,3 +58,13 @@ export const fetchCategoryCount = async (cardId: string) => {
   }
   throw new Error("Error fetching category count");
 };
+
+export const fetchTotalTasksCount = async () => {
+  const response = await fetch(`${BASE_URL}/tasks/count`);
+  if (response.ok) {
+    const data = await response.json();
+
+    return data;
+  }
+  throw new Error("Error fetching category count");
+};
