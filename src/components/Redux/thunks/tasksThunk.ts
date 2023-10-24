@@ -10,7 +10,7 @@ import {
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../../Tasks/taskTypes";
 import { CategoryCounts } from "../../Category/categoryCountsInterface";
-
+import { TaskState } from "../../Tasks/taskState";
 interface DeleteTaskPayload {
   taskId: string;
   cardId: string;
@@ -32,14 +32,16 @@ export const createTaskAsync = createAsyncThunk(
     cardId: string;
     description: string;
     categories?: string[];
+    status: string;
   }) => {
-    const { content, date, cardId, description, categories } = taskData;
+    const { content, date, cardId, description, categories, status } = taskData;
     const response = await createTaskAPI(
       content,
       date,
       cardId,
       description,
-      categories
+      categories,
+      status
     );
     return response;
   }
@@ -85,5 +87,31 @@ export const fetchAllTasksCount = createAsyncThunk(
   async () => {
     const response = await fetchTotalTasksCount();
     return response;
+  }
+);
+type TaskUpdate = {
+  id: string;
+  status?: string;
+  content?: string;
+  date?: Date;
+  description?: string;
+  categories?: string[];
+  cardId?: string;
+};
+export const markTaskAsDoneAsync = createAsyncThunk(
+  "tasks/markTaskAsDone",
+  async (taskId: string, { getState }) => {
+    const response = await updateTaskAPI({
+      id: taskId,
+      status: "done",
+    } as Task);
+
+    const state = getState() as { tasks: TaskState };
+    const task = state.tasks.tasks.find((task) => task.id === taskId);
+
+    if (task) {
+      return { taskId, categories: task.categories || [] }; // Return all categories or an empty array if none.
+    }
+    return { taskId };
   }
 );

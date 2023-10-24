@@ -31,18 +31,12 @@ const ElementCard: React.FC<ElementCardProps> = ({
   onOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchTasksAsync(id));
+  }, [id, dispatch]);
   const categoryCounts = useSelector(
     (state: RootState) => state.tasks.categoryCountsByCard[id]
   );
-
-  const taskCount = useSelector(
-    (state: RootState) => state.tasks.taskCountsByCard[id]
-  );
-
-  useEffect(() => {
-    dispatch(fetchTasksAsync(id));
-    console.log("taskCount: " + taskCount);
-  }, [dispatch, id]);
 
   return (
     <IonCard className="card-container">
@@ -57,7 +51,10 @@ const ElementCard: React.FC<ElementCardProps> = ({
               <IonReorder />
               <IonCardTitle className="reorder-btn">{title}</IonCardTitle>
             </div>
-            <div className="right-content">{taskCount} Tasks</div>
+            <div className="right-content-container">
+              <div className="right-content">ToDo: </div>
+              <div className="right-content">Done: </div>
+            </div>
           </IonItem>
           <IonItemOptions side="end">
             <IonItemOption

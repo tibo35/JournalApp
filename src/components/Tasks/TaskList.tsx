@@ -6,6 +6,7 @@ import "./styles/TaskList.css";
 interface TaskListProps {
   tasks: Task[];
   onDelete: (id: string) => void;
+  onDone: (id: string) => void;
   onEdit: (id: string) => void;
   loading: boolean;
   error: string | null;
@@ -14,7 +15,8 @@ interface TaskListProps {
     title: string,
     description: string,
     date: string,
-    categories: string[]
+    categories: string[],
+    status: string
   ) => void;
 }
 
@@ -26,6 +28,7 @@ const TaskList: React.FC<TaskListProps> = ({
   loading,
   error,
   addTask,
+  onDone,
 }) => (
   <>
     {error && <p className="error-notification">{error}</p>}
@@ -38,6 +41,7 @@ const TaskList: React.FC<TaskListProps> = ({
           onDelete={onDelete}
           onEdit={onEdit}
           updateTask={updateTask}
+          onDone={onDone}
         />
       ))}
     </IonList>

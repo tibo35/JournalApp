@@ -9,6 +9,7 @@ import {
   fetchCategoryCountAsync,
   fetchTotalCategoryCountAsync,
   fetchAllTasksCount,
+  markTaskAsDoneAsync,
 } from "../thunks/tasksThunk";
 
 const initialState: TaskState = {
@@ -24,7 +25,15 @@ const initialState: TaskState = {
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
-  reducers: {},
+  reducers: {
+    markTaskAsDone: (state, action) => {
+      const taskId = action.payload;
+      const task = state.tasks.find((task) => task.id === taskId);
+      if (task) {
+        task.status = "done";
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTasksAsync.pending, (state) => {
@@ -167,6 +176,39 @@ const tasksSlice = createSlice({
       .addCase(fetchAllTasksCount.rejected, (state, action) => {
         state.loading = false;
         state.error = "failed to fetched total tasks count";
+      })
+      .addCase(markTaskAsDoneAsync.pending, (state, action) => {})
+
+      .addCase(markTaskAsDoneAsync.fulfilled, (state, action) => {
+        const { taskId, categories } = action.payload;
+
+        if (!categories) {
+          // Handle the scenario when categories is undefined, for example:
+          console.error("Categories is missing in payload");
+          return; // Exit the reducer early
+        }
+
+        const task = state.tasks.find((task) => task.id === taskId);
+
+        if (task) {
+          const cardId = task.cardId;
+          task.status = "done";
+
+          // Loop through each category to decrement the count
+          categories.forEach((category) => {
+            if (
+              state.categoryCountsByCard[cardId] &&
+              state.categoryCountsByCard[cardId][category]
+            ) {
+              state.categoryCountsByCard[cardId][category] = Math.max(
+                0,
+                state.categoryCountsByCard[cardId][category] - 1
+              );
+            }
+            fetchCategoryCountAsync(cardId);
+            fetchTasksAsync(cardId);
+          });
+        }
       });
   },
 });

@@ -50,7 +50,8 @@ const TaskModal: React.FC<{
     title: string,
     description: string,
     date: string,
-    categories: string[]
+    categories: string[],
+    status: string
   ) => {
     dispatch(
       createTaskAsync({
@@ -59,6 +60,7 @@ const TaskModal: React.FC<{
         cardId: cardId,
         description: description,
         categories: categories,
+        status: "pending",
       })
     ).then((responseAction) => {
       if (createTaskAsync.fulfilled.match(responseAction)) {
@@ -72,6 +74,7 @@ const TaskModal: React.FC<{
             description: task.description,
             categories: task.categories,
             cardId: cardId,
+            status: task.status,
           },
         ]);
         dispatch(fetchCategoryCountAsync(cardId));
@@ -97,6 +100,7 @@ const TaskModal: React.FC<{
                 date: task.date,
                 description: task.description,
                 categories: task.categories,
+                status: task.status,
               }))
             );
           } else {
@@ -148,6 +152,14 @@ const TaskModal: React.FC<{
       startEditing(task);
     }
   };
+
+  const onDone = (id: string) => {
+    const task = tasks.find((task) => task.id === id);
+    if (task) {
+      updateTaskHandler({ ...task, status: "done" });
+    }
+    setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
+  };
   const updateTaskHandler = (updatedTask: Task) => {
     dispatch(updateTaskAsync(updatedTask))
       .then((responseAction) => {
@@ -183,6 +195,7 @@ const TaskModal: React.FC<{
         onEdit={onEdit}
         addTask={addTask}
         updateTask={updateTaskHandler}
+        onDone={onDone}
       />
       <div className="task-modal-content">
         <div className="task-footer">

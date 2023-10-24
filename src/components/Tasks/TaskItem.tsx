@@ -10,18 +10,21 @@ import {
   IonModal,
 } from "@ionic/react";
 import NewTask from "./NewTask";
-import { trash, create } from "ionicons/icons";
+import { trash, create, heart, checkboxOutline } from "ionicons/icons";
 import { Task } from "../Tasks/taskTypes";
+import "./styles/TaskItem.css";
 
 interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
+  onDone: (id: string) => void;
   onEdit: (id: string) => void;
   addTask: (
     title: string,
     description: string,
     date: string,
-    categories: string[]
+    categories: string[],
+    status: string
   ) => void;
 
   updateTask: (updatedTask: Task) => void;
@@ -32,6 +35,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onDelete,
   updateTask,
   addTask,
+  onDone,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(task.content);
@@ -87,7 +91,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
           />
         </IonModal>
       </IonFooter>
-      <IonItemOptions side="end">
+      <IonItemOptions side="end" onClick={() => onDone(task.id)}>
+        <IonItemOption className="icon-done">
+          <IonIcon slot="start" icon={checkboxOutline}></IonIcon>
+          Done
+        </IonItemOption>
         <IonItemOption color="danger" onClick={() => onDelete(task.id)}>
           <IonIcon slot="icon-only" icon={trash} />
         </IonItemOption>

@@ -18,7 +18,8 @@ interface NewTaskProps {
     title: string,
     description: string,
     date: string,
-    categories: string[]
+    categories: string[],
+    status: string
   ) => void;
   task?: Task;
   updateTask?: (updatedTask: Task) => void;
@@ -76,7 +77,7 @@ const NewTask: React.FC<NewTaskProps> = ({
       typeof descriptionRef.current?.value === "string"
         ? descriptionRef.current.value
         : "";
-
+    const currentStatus = "pending";
     if (task && updateTask) {
       updateTask({
         ...task,
@@ -84,9 +85,16 @@ const NewTask: React.FC<NewTaskProps> = ({
         description: currentDescription,
         date: selectedDate,
         categories: activeCategories,
+        status: currentStatus,
       });
     } else {
-      addTask(currentTitle, currentDescription, selectedDate, activeCategories);
+      addTask(
+        currentTitle,
+        currentDescription,
+        selectedDate,
+        activeCategories,
+        currentStatus
+      );
       console.log("Selected Date:", selectedDate);
     }
 
