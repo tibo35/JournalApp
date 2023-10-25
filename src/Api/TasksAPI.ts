@@ -46,8 +46,10 @@ export const updateTask = (updatedTask: Task) => {
     body: JSON.stringify(updatedTask),
   }).then((res) => res.json());
 };
-export const fetchTotalCategoryCount = async () => {
-  const response = await fetch(`${BASE_URL}/tasks/categoriesCount`);
+export const fetchTotalCategoryCount = async (excludeDone = true) => {
+  const response = await fetch(
+    `${BASE_URL}/tasks/categoriesCount?excludeDone=${excludeDone}`
+  );
   if (response.ok) {
     const data = await response.json();
     console.log(`Fetched total category count from TaskAPI:`, data);
