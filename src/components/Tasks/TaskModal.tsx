@@ -80,6 +80,7 @@ const TaskModal: React.FC<{
         dispatch(fetchCategoryCountAsync(cardId));
         dispatch(fetchTotalCategoryCountAsync());
         dispatch(fetchAllTasksCount());
+        dispatch(fetchTasksAsync(cardId));
       } else {
         console.error("Failed to create task:", responseAction.error);
       }
@@ -139,6 +140,7 @@ const TaskModal: React.FC<{
     dispatch(fetchCategoryCountAsync(cardId));
     dispatch(fetchTotalCategoryCountAsync());
     dispatch(fetchAllTasksCount());
+    dispatch(fetchTasksAsync(cardId));
   };
 
   const onDelete = (id: string) => {
@@ -158,7 +160,7 @@ const TaskModal: React.FC<{
     if (task) {
       updateTaskHandler({ ...task, status: "done" });
     }
-    setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
+    //setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));   => to remove from task list
   };
   const updateTaskHandler = (updatedTask: Task) => {
     dispatch(updateTaskAsync(updatedTask))
@@ -174,6 +176,7 @@ const TaskModal: React.FC<{
           dispatch(fetchCategoryCountAsync(cardId));
           dispatch(fetchTotalCategoryCountAsync());
           dispatch(fetchAllTasksCount());
+          dispatch(fetchTasksAsync(cardId));
         } else {
           console.error("Failed to update task:", responseAction.error);
         }

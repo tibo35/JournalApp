@@ -2,11 +2,9 @@ import { Task } from "../components/Tasks/taskTypes";
 const BASE_URL = import.meta.env.VITE_REACT_APP_BASE_URL;
 
 // Tasks ----------
-export const fetchTasks = async (cardId: string, excludeDone = true) => {
+export const fetchTasks = async (cardId: string) => {
   try {
-    const res = await fetch(
-      `${BASE_URL}/tasks/${cardId}?excludeDone=${excludeDone}`
-    );
+    const res = await fetch(`${BASE_URL}/tasks/${cardId}`);
     const data = await res.json();
     return data;
   } catch (error) {

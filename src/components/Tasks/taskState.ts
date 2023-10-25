@@ -12,4 +12,5 @@ export type TaskState = {
     [categoryName: string]: number;
   };
   totalTasksCount: number;
+  taskStatusCountsByCard: { [cardId: string]: { [status: string]: number } }; // New field
 };

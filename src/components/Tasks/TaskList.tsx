@@ -25,7 +25,6 @@ const TaskList: React.FC<TaskListProps> = ({
   onDelete,
   updateTask,
   onEdit,
-  loading,
   error,
   addTask,
   onDone,

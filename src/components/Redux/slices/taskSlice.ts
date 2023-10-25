@@ -11,6 +11,7 @@ import {
   fetchAllTasksCount,
   markTaskAsDoneAsync,
 } from "../thunks/tasksThunk";
+import { Task } from "../../Tasks/taskTypes"; // Make sure this path is correct
 
 const initialState: TaskState = {
   tasks: [],
@@ -20,6 +21,7 @@ const initialState: TaskState = {
   categoryCountsByCard: {},
   totalCategoryCounts: {},
   totalTasksCount: 0,
+  taskStatusCountsByCard: {}, // add this
 };
 
 const tasksSlice = createSlice({
@@ -43,8 +45,19 @@ const tasksSlice = createSlice({
       .addCase(fetchTasksAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks = action.payload.tasks;
-        state.taskCountsByCard[action.payload.cardId] =
-          action.payload.tasks.length;
+
+        // Specify the type for task
+        const pendingCount = action.payload.tasks.filter(
+          (task: Task) => task.status === "pending"
+        ).length;
+        const doneCount = action.payload.tasks.filter(
+          (task: Task) => task.status === "done"
+        ).length;
+
+        state.taskStatusCountsByCard[action.payload.cardId] = {
+          pending: pendingCount,
+          done: doneCount,
+        };
       })
       .addCase(fetchTasksAsync.rejected, (state, action) => {
         state.loading = false;
@@ -182,33 +195,44 @@ const tasksSlice = createSlice({
       .addCase(markTaskAsDoneAsync.fulfilled, (state, action) => {
         const { taskId, categories } = action.payload;
 
-        if (!categories) {
-          // Handle the scenario when categories is undefined, for example:
-          console.error("Categories is missing in payload");
-          return; // Exit the reducer early
-        }
-
         const task = state.tasks.find((task) => task.id === taskId);
 
         if (task) {
           const cardId = task.cardId;
           task.status = "done";
 
-          // Loop through each category to decrement the count
-          categories.forEach((category) => {
-            if (
-              state.categoryCountsByCard[cardId] &&
-              state.categoryCountsByCard[cardId][category]
-            ) {
-              state.categoryCountsByCard[cardId][category] = Math.max(
-                0,
-                state.categoryCountsByCard[cardId][category] - 1
-              );
-            }
-            fetchCategoryCountAsync(cardId);
-            fetchTasksAsync(cardId);
-          });
+          // Update taskStatusCountsByCard
+          if (!state.taskStatusCountsByCard[cardId]) {
+            state.taskStatusCountsByCard[cardId] = { pending: 0, done: 0 };
+          }
+          state.taskStatusCountsByCard[cardId].done += 1; // Increment done count
+          state.taskStatusCountsByCard[cardId].pending = Math.max(
+            0,
+            state.taskStatusCountsByCard[cardId].pending - 1
+          ); // Decrement pending count
+
+          // Only loop through categories if they're defined
+          if (categories) {
+            categories.forEach((category) => {
+              if (
+                state.categoryCountsByCard[cardId] &&
+                state.categoryCountsByCard[cardId][category]
+              ) {
+                state.categoryCountsByCard[cardId][category] = Math.max(
+                  0,
+                  state.categoryCountsByCard[cardId][category] - 1
+                );
+              }
+              fetchCategoryCountAsync(cardId);
+              fetchTasksAsync(cardId);
+            });
+          }
         }
+      })
+
+      .addCase(markTaskAsDoneAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Failed to mark task as done";
       });
   },
 });
