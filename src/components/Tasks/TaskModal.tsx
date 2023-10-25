@@ -158,9 +158,9 @@ const TaskModal: React.FC<{
   const onDone = (id: string) => {
     const task = tasks.find((task) => task.id === id);
     if (task) {
-      updateTaskHandler({ ...task, status: "done" });
+      const updatedStatus = task.status === "done" ? "pending" : "done";
+      updateTaskHandler({ ...task, status: updatedStatus });
     }
-    //setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));   => to remove from task list
   };
   const updateTaskHandler = (updatedTask: Task) => {
     dispatch(updateTaskAsync(updatedTask))

@@ -8,6 +8,8 @@ import {
   IonInput,
   IonFooter,
   IonModal,
+  IonCheckbox,
+  IonLabel,
 } from "@ionic/react";
 import NewTask from "./NewTask";
 import { trash, create, heart, checkboxOutline } from "ionicons/icons";
@@ -76,8 +78,17 @@ const TaskItem: React.FC<TaskItemProps> = ({
           autofocus
         />
       ) : (
-        <IonItem className="task-content" onClick={handleeditButtonClick}>
-          {task.content}
+        <IonItem
+          className={`task-content ${
+            task.status === "done" ? "done-task" : ""
+          }`}>
+          <IonCheckbox
+            slot="start"
+            checked={task.status === "done"}
+            onIonChange={() => onDone(task.id)}
+            aria-label={task.content}
+          />
+          <IonLabel>{task.content}</IonLabel>
         </IonItem>
       )}
 
@@ -91,13 +102,17 @@ const TaskItem: React.FC<TaskItemProps> = ({
           />
         </IonModal>
       </IonFooter>
-      <IonItemOptions side="end" onClick={() => onDone(task.id)}>
-        <IonItemOption className="icon-done">
-          <IonIcon slot="start" icon={checkboxOutline}></IonIcon>
-          Done
-        </IonItemOption>
+
+      <IonItemOptions side="end">
         <IonItemOption color="danger" onClick={() => onDelete(task.id)}>
           <IonIcon slot="icon-only" icon={trash} />
+        </IonItemOption>
+        <IonItemOption onClick={handleeditButtonClick}>
+          <IonIcon
+            slot="end"
+            icon={create}
+            style={{ marginRight: "10px", cursor: "pointer" }}
+          />
         </IonItemOption>
       </IonItemOptions>
     </IonItemSliding>
