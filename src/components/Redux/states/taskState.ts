@@ -1,5 +1,5 @@
-import { Task } from "./taskTypes";
-import { CategoryCounts } from "../Redux/slices/taskSlice";
+import { Task } from "../../Tasks/taskTypes";
+import { CategoryCounts } from "../slices/taskSlice";
 
 export type TaskState = {
   tasks: Task[];
@@ -12,5 +12,6 @@ export type TaskState = {
     [categoryName: string]: number;
   };
   totalTasksCount: number;
-  taskStatusCountsByCard: { [cardId: string]: { [status: string]: number } }; // New field
+  taskStatusCountsByCard: { [cardId: string]: { [status: string]: number } };
+  tasksForTodayCount: number;
 };

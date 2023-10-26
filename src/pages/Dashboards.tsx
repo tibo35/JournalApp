@@ -5,29 +5,27 @@ import {
   IonTitle,
   IonToolbar,
   IonText,
-  IonRippleEffect,
 } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
 import "./Dashboards.css";
-import React, { useState, useEffect } from "react";
-import { fetchTasksDueToday } from "../Api/TasksDueTodayAPI";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../src/store";
 import { AppDispatch } from "../../src/store";
 import {
   fetchTotalCategoryCountAsync,
   fetchAllTasksCount,
+  fetchTasksForTodayAsync,
 } from "../components/Redux/thunks/tasksThunk";
 import { CircularProgress } from "../components/Dashboard/CircularProgress";
 
 const Dashboards: React.FC = () => {
-  const [tasksDueToday, setTasksDueToday] = useState<any[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     // Dispatch actions to fetch the required data
     dispatch(fetchAllTasksCount());
     dispatch(fetchTotalCategoryCountAsync());
+    dispatch(fetchTasksForTodayAsync());
   }, [dispatch]);
 
   const totalCategoryCounts = useSelector(
@@ -36,12 +34,15 @@ const Dashboards: React.FC = () => {
   const totalTasksCount = useSelector(
     (state: RootState) => state.tasks.totalTasksCount
   );
+  const tasksForTodayCount = useSelector(
+    (state: RootState) => state.tasks.tasksForTodayCount
+  );
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Dashboards</IonTitle>
+          <IonTitle>Dashboard todo:{tasksForTodayCount} </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

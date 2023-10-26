@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TaskState } from "../../Tasks/taskState";
+import { TaskState } from "../states/taskState";
 import { CategoryCounts } from "../../Category/categoryCountsInterface";
 import {
   fetchTasksAsync,
@@ -10,6 +10,7 @@ import {
   fetchTotalCategoryCountAsync,
   fetchAllTasksCount,
   markTaskAsDoneAsync,
+  fetchTasksForTodayAsync,
 } from "../thunks/tasksThunk";
 import { Task } from "../../Tasks/taskTypes"; // Make sure this path is correct
 
@@ -21,7 +22,8 @@ const initialState: TaskState = {
   categoryCountsByCard: {},
   totalCategoryCounts: {},
   totalTasksCount: 0,
-  taskStatusCountsByCard: {}, // add this
+  taskStatusCountsByCard: {},
+  tasksForTodayCount: 0,
 };
 
 const tasksSlice = createSlice({
@@ -229,10 +231,23 @@ const tasksSlice = createSlice({
           }
         }
       })
-
       .addCase(markTaskAsDoneAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to mark task as done";
+      })
+      .addCase(fetchTasksForTodayAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTasksForTodayAsync.fulfilled, (state, action) => {
+        state.loading = false;
+
+        // Here, you're just counting the tasks and not storing them
+        state.tasksForTodayCount = action.payload.length;
+      })
+      .addCase(fetchTasksForTodayAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Failed to get the Task due";
       });
   },
 });

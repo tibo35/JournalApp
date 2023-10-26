@@ -82,3 +82,14 @@ export const fetchTotalTasksCount = async () => {
   }
   throw new Error("Error fetching category count");
 };
+
+export const fetchTasksForToday = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/tasks/due-today`);
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};

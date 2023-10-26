@@ -54,7 +54,9 @@ b {
   border: #f3f4f4 1px solid;
   box-shadow: 0px 14px 8px rgba(0, 0, 0, 0.2);
 }
-
+.statistics .IonTitle {
+  color: red;
+}
 .stat-bars {
   display: flex;
   justify-content: space-between;

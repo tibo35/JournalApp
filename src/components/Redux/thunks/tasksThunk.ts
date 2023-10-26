@@ -6,11 +6,12 @@ import {
   fetchCategoryCount,
   fetchTotalCategoryCount,
   fetchTotalTasksCount,
+  fetchTasksForToday,
 } from "../../../Api/TasksAPI";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../../Tasks/taskTypes";
 import { CategoryCounts } from "../../Category/categoryCountsInterface";
-import { TaskState } from "../../Tasks/taskState";
+import { TaskState } from "../states/taskState";
 interface DeleteTaskPayload {
   taskId: string;
   cardId: string;
@@ -113,5 +114,17 @@ export const markTaskAsDoneAsync = createAsyncThunk(
       return { taskId, categories: task.categories || [] }; // Return all categories or an empty array if none.
     }
     return { taskId };
+  }
+);
+
+export const fetchTasksForTodayAsync = createAsyncThunk(
+  "tasks/fetchTasksForTodayStatus",
+  async (_, { rejectWithValue }) => {
+    try {
+      const tasks = await fetchTasksForToday();
+      return tasks;
+    } catch (err) {
+      return rejectWithValue("failed fetching the Tasks due TODAY");
+    }
   }
 );
