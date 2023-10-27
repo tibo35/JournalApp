@@ -2,7 +2,7 @@ import { Task } from "../components/Tasks/taskTypes";
 const BASE_URL = import.meta.env.VITE_REACT_APP_BASE_URL;
 
 // Tasks ----------
-export const fetchTasks = async (cardId: string) => {
+export const AllTasksByCard = async (cardId: string) => {
   try {
     const res = await fetch(`${BASE_URL}/tasks/${cardId}`);
     const data = await res.json();
@@ -13,12 +13,12 @@ export const fetchTasks = async (cardId: string) => {
   }
 };
 
-export const deleteTask = (id: string) =>
+export const DeleteTask = (id: string) =>
   fetch(`${BASE_URL}/tasks/${id}`, { method: "DELETE" }).then((res) =>
     res.json()
   );
 
-export const postTask = (
+export const CreateTask = (
   content: string,
   date: string,
   cardId: string,
@@ -39,14 +39,14 @@ export const postTask = (
     }),
   }).then((res) => res.json());
 
-export const updateTask = (updatedTask: Task) => {
+export const UpdateTask = (updatedTask: Task) => {
   return fetch(`${BASE_URL}/tasks/${updatedTask.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedTask),
   }).then((res) => res.json());
 };
-export const fetchTotalCategoryCount = async (excludeDone = true) => {
+export const AllCategory = async (excludeDone = true) => {
   const response = await fetch(
     `${BASE_URL}/tasks/categoriesCount?excludeDone=${excludeDone}`
   );
@@ -58,10 +58,7 @@ export const fetchTotalCategoryCount = async (excludeDone = true) => {
   throw new Error("Error fetching total category count");
 };
 
-export const fetchCategoryCount = async (
-  cardId: string,
-  excludeDone = true
-) => {
+export const AllCategoryByCard = async (cardId: string, excludeDone = true) => {
   const response = await fetch(
     `${BASE_URL}/tasks/categoriesCount/${cardId}?excludeDone=${excludeDone}`
   );
@@ -73,7 +70,7 @@ export const fetchCategoryCount = async (
   throw new Error("Error fetching category count");
 };
 
-export const fetchTotalTasksCount = async () => {
+export const AllTasks = async () => {
   const response = await fetch(`${BASE_URL}/tasks/count`);
   if (response.ok) {
     const data = await response.json();
@@ -83,7 +80,7 @@ export const fetchTotalTasksCount = async () => {
   throw new Error("Error fetching category count");
 };
 
-export const fetchTasksForToday = async () => {
+export const TasksDueToday = async () => {
   try {
     const res = await fetch(`${BASE_URL}/tasks/due-today`);
     const data = await res.json();
@@ -93,11 +90,11 @@ export const fetchTasksForToday = async () => {
     throw error;
   }
 };
-export const fetchDoneTasksCount = async () => {
+export const TasksDoneToday = async () => {
   try {
     const res = await fetch(`${BASE_URL}/tasks/done`);
     const doneTasks = await res.json();
-    return doneTasks.length; // return the count of done tasks
+    return doneTasks.length;
   } catch (error) {
     console.error("Fetch error:", error);
     throw error;

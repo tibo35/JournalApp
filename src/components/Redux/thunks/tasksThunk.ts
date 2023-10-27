@@ -1,13 +1,13 @@
 import {
-  fetchTasks,
-  postTask as createTaskAPI,
-  updateTask as updateTaskAPI,
-  deleteTask as deleteTaskAPI,
-  fetchCategoryCount,
-  fetchTotalCategoryCount,
-  fetchTotalTasksCount,
-  fetchTasksForToday,
-  fetchDoneTasksCount,
+  AllTasksByCard,
+  CreateTask as createTaskAPI,
+  UpdateTask as updateTaskAPI,
+  DeleteTask as deleteTaskAPI,
+  AllCategoryByCard,
+  AllCategory,
+  AllTasks,
+  TasksDueToday,
+  TasksDoneToday,
 } from "../../../Api/TasksAPI";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../../Tasks/taskTypes";
@@ -19,14 +19,14 @@ interface DeleteTaskPayload {
   category?: keyof CategoryCounts;
 }
 
-export const fetchTasksAsync = createAsyncThunk(
+export const allTasksByCardThunk = createAsyncThunk(
   "tasks/fetchTasksByCardId",
   async (cardId: string) => {
-    const response = await fetchTasks(cardId);
+    const response = await AllTasksByCard(cardId);
     return { tasks: response, cardId };
   }
 );
-export const createTaskAsync = createAsyncThunk(
+export const createTaskThunk = createAsyncThunk(
   "tasks/createTask",
   async (taskData: {
     content: string;
@@ -50,7 +50,7 @@ export const createTaskAsync = createAsyncThunk(
 );
 
 // Async thunk for updating a task
-export const updateTaskAsync = createAsyncThunk(
+export const updateTaskThunk = createAsyncThunk(
   "tasks/updateTask",
   async (updatedTask: Task) => {
     const response = await updateTaskAPI(updatedTask);
@@ -59,7 +59,7 @@ export const updateTaskAsync = createAsyncThunk(
 );
 
 // Async thunk for deleting a task
-export const deleteTaskAsync = createAsyncThunk(
+export const deleteTaskThunk = createAsyncThunk(
   "tasks/deleteTask",
   async (taskData: DeleteTaskPayload) => {
     const { taskId, cardId, category } = taskData;
@@ -68,39 +68,31 @@ export const deleteTaskAsync = createAsyncThunk(
   }
 );
 
-export const fetchCategoryCountAsync = createAsyncThunk(
+export const allCategoryByCardThunk = createAsyncThunk(
   "tasks/fetchCategoryCount",
   async (cardId: string) => {
-    const response = await fetchCategoryCount(cardId);
+    const response = await AllCategoryByCard(cardId);
     return response;
   }
 );
 
-export const fetchTotalCategoryCountAsync = createAsyncThunk(
+export const allCategorythunk = createAsyncThunk(
   "tasks/fetchTotalCategoryCount",
   async () => {
-    const response = await fetchTotalCategoryCount();
+    const response = await AllCategory();
     console.log(`Fetched total category count from TaskAPI:`, response);
     return response;
   }
 );
-export const fetchAllTasksCount = createAsyncThunk(
+export const allTasksThunk = createAsyncThunk(
   "tasks/fetchTotalTasksCountAsync",
   async () => {
-    const response = await fetchTotalTasksCount();
+    const response = await AllTasks();
     return response;
   }
 );
-type TaskUpdate = {
-  id: string;
-  status?: string;
-  content?: string;
-  date?: Date;
-  description?: string;
-  categories?: string[];
-  cardId?: string;
-};
-export const markTaskAsDoneAsync = createAsyncThunk(
+
+export const markTaskAsDoneThunk = createAsyncThunk(
   "tasks/markTaskAsDone",
   async (taskId: string, { getState }) => {
     const response = await updateTaskAPI({
@@ -118,21 +110,21 @@ export const markTaskAsDoneAsync = createAsyncThunk(
   }
 );
 
-export const fetchTasksForTodayAsync = createAsyncThunk(
+export const tasksDueTodayThunk = createAsyncThunk(
   "tasks/fetchTasksForTodayStatus",
   async (_, { rejectWithValue }) => {
     try {
-      const tasks = await fetchTasksForToday();
+      const tasks = await TasksDueToday();
       return tasks;
     } catch (err) {
       return rejectWithValue("failed fetching the Tasks due TODAY");
     }
   }
 );
-export const fetchDoneTasksCountAsync = createAsyncThunk(
+export const tasksDoneTodayThunk = createAsyncThunk(
   "tasks/fetchDoneTasksCount",
   async () => {
-    const response = await fetchDoneTasksCount();
+    const response = await TasksDoneToday();
     return response;
   }
 );

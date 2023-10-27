@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { TaskState } from "../states/taskState";
 import { CategoryCounts } from "../../Category/categoryCountsInterface";
 import {
-  fetchTasksAsync,
-  createTaskAsync,
-  updateTaskAsync,
-  deleteTaskAsync,
-  fetchCategoryCountAsync,
-  fetchTotalCategoryCountAsync,
-  fetchAllTasksCount,
-  markTaskAsDoneAsync,
-  fetchTasksForTodayAsync,
-  fetchDoneTasksCountAsync,
+  allTasksByCardThunk,
+  createTaskThunk,
+  updateTaskThunk,
+  deleteTaskThunk,
+  allCategoryByCardThunk,
+  allCategorythunk,
+  allTasksThunk,
+  markTaskAsDoneThunk,
+  tasksDueTodayThunk,
+  tasksDoneTodayThunk,
 } from "../thunks/tasksThunk";
 import { Task } from "../../Tasks/taskTypes"; // Make sure this path is correct
 
@@ -42,11 +42,11 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTasksAsync.pending, (state) => {
+      .addCase(allTasksByCardThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTasksAsync.fulfilled, (state, action) => {
+      .addCase(allTasksByCardThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks = action.payload.tasks;
 
@@ -63,17 +63,17 @@ const tasksSlice = createSlice({
           done: doneCount,
         };
       })
-      .addCase(fetchTasksAsync.rejected, (state, action) => {
+      .addCase(allTasksByCardThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch tasks";
       })
 
       // Handle creating tasks
-      .addCase(createTaskAsync.pending, (state) => {
+      .addCase(createTaskThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createTaskAsync.fulfilled, (state, action) => {
+      .addCase(createTaskThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks.push(action.payload);
 
@@ -86,17 +86,17 @@ const tasksSlice = createSlice({
           }
         }
       })
-      .addCase(createTaskAsync.rejected, (state, action) => {
+      .addCase(createTaskThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to create task";
       })
 
       // Handle updating tasks
-      .addCase(updateTaskAsync.pending, (state) => {
+      .addCase(updateTaskThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateTaskAsync.fulfilled, (state, action) => {
+      .addCase(updateTaskThunk.fulfilled, (state, action) => {
         state.loading = false;
         const index = state.tasks.findIndex(
           (task) => task.id === action.payload.id
@@ -105,17 +105,17 @@ const tasksSlice = createSlice({
           state.tasks[index] = action.payload;
         }
       })
-      .addCase(updateTaskAsync.rejected, (state, action) => {
+      .addCase(updateTaskThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to update task";
       })
 
       // Handle deleting tasks
-      .addCase(deleteTaskAsync.pending, (state) => {
+      .addCase(deleteTaskThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteTaskAsync.fulfilled, (state, action) => {
+      .addCase(deleteTaskThunk.fulfilled, (state, action) => {
         const { taskId, cardId, category } = action.payload;
 
         state.tasks = state.tasks.filter((task) => task.id !== taskId);
@@ -135,15 +135,15 @@ const tasksSlice = createSlice({
           );
         }
       })
-      .addCase(deleteTaskAsync.rejected, (state, action) => {
+      .addCase(deleteTaskThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to delete task";
       })
-      .addCase(fetchCategoryCountAsync.pending, (state) => {
+      .addCase(allCategoryByCardThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCategoryCountAsync.fulfilled, (state, action) => {
+      .addCase(allCategoryByCardThunk.fulfilled, (state, action) => {
         state.loading = false;
         const cardId = action.meta.arg;
         // Create a copy of the existing counts for the card or default to initial values
@@ -163,15 +163,15 @@ const tasksSlice = createSlice({
         state.categoryCountsByCard[cardId] = updatedCounts;
       })
 
-      .addCase(fetchCategoryCountAsync.rejected, (state, action) => {
+      .addCase(allCategoryByCardThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch category count";
       })
-      .addCase(fetchTotalCategoryCountAsync.pending, (state) => {
+      .addCase(allCategorythunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTotalCategoryCountAsync.fulfilled, (state, action) => {
+      .addCase(allCategorythunk.fulfilled, (state, action) => {
         state.loading = false;
         state.totalCategoryCounts = action.payload;
         console.log(
@@ -179,24 +179,24 @@ const tasksSlice = createSlice({
           action.payload
         );
       })
-      .addCase(fetchTotalCategoryCountAsync.rejected, (state, action) => {
+      .addCase(allCategorythunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch total category count";
       })
-      .addCase(fetchAllTasksCount.pending, (state) => {
+      .addCase(allTasksThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchAllTasksCount.fulfilled, (state, action) => {
+      .addCase(allTasksThunk.fulfilled, (state, action) => {
         state.totalTasksCount = action.payload.count;
       })
-      .addCase(fetchAllTasksCount.rejected, (state, action) => {
+      .addCase(allTasksThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "failed to fetched total tasks count";
       })
-      .addCase(markTaskAsDoneAsync.pending, (state, action) => {})
+      .addCase(markTaskAsDoneThunk.pending, (state, action) => {})
 
-      .addCase(markTaskAsDoneAsync.fulfilled, (state, action) => {
+      .addCase(markTaskAsDoneThunk.fulfilled, (state, action) => {
         const { taskId, categories } = action.payload;
 
         const task = state.tasks.find((task) => task.id === taskId);
@@ -227,39 +227,39 @@ const tasksSlice = createSlice({
                   state.categoryCountsByCard[cardId][category] - 1
                 );
               }
-              fetchCategoryCountAsync(cardId);
-              fetchTasksAsync(cardId);
+              allCategoryByCardThunk(cardId);
+              allTasksByCardThunk(cardId);
             });
           }
         }
       })
-      .addCase(markTaskAsDoneAsync.rejected, (state, action) => {
+      .addCase(markTaskAsDoneThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to mark task as done";
       })
-      .addCase(fetchTasksForTodayAsync.pending, (state) => {
+      .addCase(tasksDueTodayThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTasksForTodayAsync.fulfilled, (state, action) => {
+      .addCase(tasksDueTodayThunk.fulfilled, (state, action) => {
         state.loading = false;
 
         // Here, you're just counting the tasks and not storing them
         state.tasksForTodayCount = action.payload.length;
       })
-      .addCase(fetchTasksForTodayAsync.rejected, (state, action) => {
+      .addCase(tasksDueTodayThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to get the Task due";
       })
-      .addCase(fetchDoneTasksCountAsync.pending, (state) => {
+      .addCase(tasksDoneTodayThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchDoneTasksCountAsync.fulfilled, (state, action) => {
+      .addCase(tasksDoneTodayThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.doneTasksCount = action.payload;
       })
-      .addCase(fetchDoneTasksCountAsync.rejected, (state, action) => {
+      .addCase(tasksDoneTodayThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch count of done tasks";
       });

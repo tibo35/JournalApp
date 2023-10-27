@@ -16,15 +16,15 @@ import { Task } from "./taskTypes";
 
 import { useDispatch } from "react-redux";
 import {
-  updateTaskAsync,
-  createTaskAsync,
-  deleteTaskAsync,
-  fetchTasksAsync,
-  fetchCategoryCountAsync,
-  fetchTotalCategoryCountAsync,
-  fetchAllTasksCount,
-  fetchTasksForTodayAsync,
-  fetchDoneTasksCountAsync,
+  updateTaskThunk,
+  createTaskThunk,
+  deleteTaskThunk,
+  allTasksByCardThunk,
+  allCategoryByCardThunk,
+  allCategorythunk,
+  allTasksThunk,
+  tasksDueTodayThunk,
+  tasksDoneTodayThunk,
 } from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
@@ -56,7 +56,7 @@ const TaskModal: React.FC<{
     status: string
   ) => {
     dispatch(
-      createTaskAsync({
+      createTaskThunk({
         content: title,
         date: date,
         cardId: cardId,
@@ -65,7 +65,7 @@ const TaskModal: React.FC<{
         status: "pending",
       })
     ).then((responseAction) => {
-      if (createTaskAsync.fulfilled.match(responseAction)) {
+      if (createTaskThunk.fulfilled.match(responseAction)) {
         const task = responseAction.payload;
         setTasks((prevTasks) => [
           ...prevTasks,
@@ -79,12 +79,12 @@ const TaskModal: React.FC<{
             status: task.status,
           },
         ]);
-        dispatch(fetchCategoryCountAsync(cardId));
-        dispatch(fetchTotalCategoryCountAsync());
-        dispatch(fetchAllTasksCount());
-        dispatch(fetchTasksAsync(cardId));
-        dispatch(fetchTasksForTodayAsync());
-        dispatch(fetchDoneTasksCountAsync());
+        dispatch(allCategoryByCardThunk(cardId));
+        dispatch(allCategorythunk());
+        dispatch(allTasksThunk());
+        dispatch(allTasksByCardThunk(cardId));
+        dispatch(tasksDueTodayThunk());
+        dispatch(tasksDoneTodayThunk());
       } else {
         console.error("Failed to create task:", responseAction.error);
       }
@@ -94,9 +94,9 @@ const TaskModal: React.FC<{
   useEffect(() => {
     setLoading(true);
     if (cardId) {
-      dispatch(fetchTasksAsync(cardId))
+      dispatch(allTasksByCardThunk(cardId))
         .then((responseAction) => {
-          if (fetchTasksAsync.fulfilled.match(responseAction)) {
+          if (allTasksByCardThunk.fulfilled.match(responseAction)) {
             const fetchedTasks = responseAction.payload.tasks;
             setTasks(
               fetchedTasks.map((task: any) => ({
@@ -126,9 +126,9 @@ const TaskModal: React.FC<{
   };
 
   const handleDeleteTask = (id: string) => {
-    dispatch(deleteTaskAsync({ taskId: id, cardId }))
+    dispatch(deleteTaskThunk({ taskId: id, cardId }))
       .then((responseAction) => {
-        if (deleteTaskAsync.fulfilled.match(responseAction)) {
+        if (deleteTaskThunk.fulfilled.match(responseAction)) {
           setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
           updateCategoryCount();
         } else {
@@ -141,12 +141,12 @@ const TaskModal: React.FC<{
   };
 
   const updateCategoryCount = () => {
-    dispatch(fetchCategoryCountAsync(cardId));
-    dispatch(fetchTotalCategoryCountAsync());
-    dispatch(fetchAllTasksCount());
-    dispatch(fetchTasksAsync(cardId));
-    dispatch(fetchTasksForTodayAsync());
-    dispatch(fetchDoneTasksCountAsync());
+    dispatch(allCategoryByCardThunk(cardId));
+    dispatch(allCategorythunk());
+    dispatch(allTasksThunk());
+    dispatch(allTasksByCardThunk(cardId));
+    dispatch(tasksDueTodayThunk());
+    dispatch(tasksDoneTodayThunk());
   };
 
   const onDelete = (id: string) => {
@@ -166,13 +166,13 @@ const TaskModal: React.FC<{
     if (task) {
       const updatedStatus = task.status === "done" ? "pending" : "done";
       updateTaskHandler({ ...task, status: updatedStatus });
-      dispatch(fetchDoneTasksCountAsync());
+      dispatch(tasksDoneTodayThunk());
     }
   };
   const updateTaskHandler = (updatedTask: Task) => {
-    dispatch(updateTaskAsync(updatedTask))
+    dispatch(updateTaskThunk(updatedTask))
       .then((responseAction) => {
-        if (updateTaskAsync.fulfilled.match(responseAction)) {
+        if (updateTaskThunk.fulfilled.match(responseAction)) {
           const task = responseAction.payload;
           setTasks((prevTasks) =>
             prevTasks.map((task) =>
@@ -180,12 +180,12 @@ const TaskModal: React.FC<{
             )
           );
           setEditingTask(null);
-          dispatch(fetchCategoryCountAsync(cardId));
-          dispatch(fetchTotalCategoryCountAsync());
-          dispatch(fetchAllTasksCount());
-          dispatch(fetchTasksAsync(cardId));
-          dispatch(fetchTasksForTodayAsync());
-          dispatch(fetchDoneTasksCountAsync());
+          dispatch(allCategoryByCardThunk(cardId));
+          dispatch(allCategorythunk());
+          dispatch(allTasksThunk());
+          dispatch(allTasksByCardThunk(cardId));
+          dispatch(tasksDueTodayThunk());
+          dispatch(tasksDoneTodayThunk());
         } else {
           console.error("Failed to update task:", responseAction.error);
         }

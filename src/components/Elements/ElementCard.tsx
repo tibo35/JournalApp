@@ -16,7 +16,7 @@ import CategoryBadge from "../Category/CategoryBadge";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { AppDispatch } from "../../store";
-import { fetchTasksAsync } from "../Redux/thunks/tasksThunk";
+import { allTasksByCardThunk } from "../Redux/thunks/tasksThunk";
 interface ElementCardProps {
   title: string;
   id: string;
@@ -32,7 +32,7 @@ const ElementCard: React.FC<ElementCardProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(fetchTasksAsync(id));
+    dispatch(allTasksByCardThunk(id));
     console.log("fetching tasks" + taskStatusCounts);
   }, [id, dispatch]);
   const categoryCounts = useSelector(

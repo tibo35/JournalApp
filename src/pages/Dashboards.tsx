@@ -12,10 +12,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../src/store";
 import { AppDispatch } from "../../src/store";
 import {
-  fetchTotalCategoryCountAsync,
-  fetchAllTasksCount,
-  fetchTasksForTodayAsync,
-  fetchDoneTasksCountAsync,
+  allCategorythunk,
+  allTasksThunk,
+  tasksDueTodayThunk,
+  tasksDoneTodayThunk,
 } from "../components/Redux/thunks/tasksThunk";
 import { CircularProgress } from "../components/Dashboard/CircularProgress";
 
@@ -24,10 +24,10 @@ const Dashboards: React.FC = () => {
 
   useEffect(() => {
     // Dispatch actions to fetch the required data
-    dispatch(fetchAllTasksCount());
-    dispatch(fetchTotalCategoryCountAsync());
-    dispatch(fetchTasksForTodayAsync());
-    dispatch(fetchDoneTasksCountAsync());
+    dispatch(allTasksThunk());
+    dispatch(allCategorythunk());
+    dispatch(tasksDueTodayThunk());
+    dispatch(tasksDoneTodayThunk());
   }, [dispatch]);
 
   const totalTasksDoneCount = useSelector(
