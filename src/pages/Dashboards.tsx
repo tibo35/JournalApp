@@ -30,16 +30,16 @@ const Dashboards: React.FC = () => {
     dispatch(tasksDoneTodayThunk());
   }, [dispatch]);
 
-  const totalTasksDoneCount = useSelector(
+  const tasksDoneTodayCount = useSelector(
     (state: RootState) => state.tasks.doneTasksCount
   );
-  const tasksForTodayCount = useSelector(
+  const tasksDueTodayCount = useSelector(
     (state: RootState) => state.tasks.tasksForTodayCount
   );
   const progressValue =
-    tasksForTodayCount === 0
+    tasksDueTodayCount === 0
       ? 0
-      : (totalTasksDoneCount / tasksForTodayCount) * 100;
+      : (tasksDoneTodayCount / tasksDueTodayCount) * 100;
   return (
     <IonPage>
       <IonHeader>
@@ -58,7 +58,7 @@ const Dashboards: React.FC = () => {
             {/* Replace 68 with your dynamic value */}
           </div>
           <IonText>
-            {totalTasksDoneCount} Out of {tasksForTodayCount}
+            {tasksDoneTodayCount} Out of {tasksDueTodayCount}
           </IonText>
           <IonText>Almost there! Keep it going</IonText>
         </div>
