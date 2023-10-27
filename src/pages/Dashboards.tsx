@@ -36,14 +36,15 @@ const Dashboards: React.FC = () => {
   const tasksForTodayCount = useSelector(
     (state: RootState) => state.tasks.tasksForTodayCount
   );
-
+  const progressValue =
+    tasksForTodayCount === 0
+      ? 0
+      : (totalTasksDoneCount / tasksForTodayCount) * 100;
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>
-            Dashboard todo:{tasksForTodayCount} done{totalTasksDoneCount}
-          </IonTitle>
+          <IonTitle>Dashboard</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -53,9 +54,12 @@ const Dashboards: React.FC = () => {
             Daily goal
           </IonTitle>
           <div className="progress-circular">
-            <CircularProgress value={60} />
+            <CircularProgress value={progressValue} />
             {/* Replace 68 with your dynamic value */}
           </div>
+          <IonText>
+            {totalTasksDoneCount} Out of {tasksForTodayCount}
+          </IonText>
           <IonText>Almost there! Keep it going</IonText>
         </div>
 

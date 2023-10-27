@@ -43,7 +43,18 @@ b {
   margin: 20px;
 }
 /*Statistics*/
-
+.daily-goal IonText {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 10px 0;
+}
+.daily-goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .statistics,
 .daily-goal {
   margin: 30px 30px;
