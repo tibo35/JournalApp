@@ -15,6 +15,7 @@ import {
   fetchTotalCategoryCountAsync,
   fetchAllTasksCount,
   fetchTasksForTodayAsync,
+  fetchDoneTasksCountAsync,
 } from "../components/Redux/thunks/tasksThunk";
 import { CircularProgress } from "../components/Dashboard/CircularProgress";
 
@@ -26,13 +27,11 @@ const Dashboards: React.FC = () => {
     dispatch(fetchAllTasksCount());
     dispatch(fetchTotalCategoryCountAsync());
     dispatch(fetchTasksForTodayAsync());
+    dispatch(fetchDoneTasksCountAsync());
   }, [dispatch]);
 
-  const totalCategoryCounts = useSelector(
-    (state: RootState) => state.tasks.totalCategoryCounts
-  );
-  const totalTasksCount = useSelector(
-    (state: RootState) => state.tasks.totalTasksCount
+  const totalTasksDoneCount = useSelector(
+    (state: RootState) => state.tasks.doneTasksCount
   );
   const tasksForTodayCount = useSelector(
     (state: RootState) => state.tasks.tasksForTodayCount
@@ -42,7 +41,9 @@ const Dashboards: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Dashboard todo:{tasksForTodayCount} </IonTitle>
+          <IonTitle>
+            Dashboard todo:{tasksForTodayCount} done{totalTasksDoneCount}
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

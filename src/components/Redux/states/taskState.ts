@@ -14,4 +14,5 @@ export type TaskState = {
   totalTasksCount: number;
   taskStatusCountsByCard: { [cardId: string]: { [status: string]: number } };
   tasksForTodayCount: number;
+  doneTasksCount: number;
 };

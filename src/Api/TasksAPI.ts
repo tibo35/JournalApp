@@ -93,3 +93,13 @@ export const fetchTasksForToday = async () => {
     throw error;
   }
 };
+export const fetchDoneTasksCount = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/tasks/done`);
+    const doneTasks = await res.json();
+    return doneTasks.length; // return the count of done tasks
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};

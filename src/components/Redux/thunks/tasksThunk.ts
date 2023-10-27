@@ -7,6 +7,7 @@ import {
   fetchTotalCategoryCount,
   fetchTotalTasksCount,
   fetchTasksForToday,
+  fetchDoneTasksCount,
 } from "../../../Api/TasksAPI";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../../Tasks/taskTypes";
@@ -126,5 +127,12 @@ export const fetchTasksForTodayAsync = createAsyncThunk(
     } catch (err) {
       return rejectWithValue("failed fetching the Tasks due TODAY");
     }
+  }
+);
+export const fetchDoneTasksCountAsync = createAsyncThunk(
+  "tasks/fetchDoneTasksCount",
+  async () => {
+    const response = await fetchDoneTasksCount();
+    return response;
   }
 );

@@ -11,6 +11,7 @@ import {
   fetchAllTasksCount,
   markTaskAsDoneAsync,
   fetchTasksForTodayAsync,
+  fetchDoneTasksCountAsync,
 } from "../thunks/tasksThunk";
 import { Task } from "../../Tasks/taskTypes"; // Make sure this path is correct
 
@@ -24,6 +25,7 @@ const initialState: TaskState = {
   totalTasksCount: 0,
   taskStatusCountsByCard: {},
   tasksForTodayCount: 0,
+  doneTasksCount: 0,
 };
 
 const tasksSlice = createSlice({
@@ -248,6 +250,18 @@ const tasksSlice = createSlice({
       .addCase(fetchTasksForTodayAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to get the Task due";
+      })
+      .addCase(fetchDoneTasksCountAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDoneTasksCountAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.doneTasksCount = action.payload;
+      })
+      .addCase(fetchDoneTasksCountAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Failed to fetch count of done tasks";
       });
   },
 });
