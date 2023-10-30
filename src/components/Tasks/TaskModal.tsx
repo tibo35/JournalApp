@@ -7,7 +7,6 @@ import {
   IonModal,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
@@ -37,9 +36,7 @@ const TaskContainer: React.FC<{
   const dispatch = useDispatch<AppDispatch>();
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [editingTask, setEditingTask] = useState<null | Task>(null);
   const [showModal, setShowModal] = useState(false);
 
   const handleAddButtonClick = () => {
@@ -94,7 +91,6 @@ const TaskContainer: React.FC<{
   };
 
   useEffect(() => {
-    setLoading(true);
     if (cardId) {
       dispatch(allTasksByCardThunk(cardId))
         .then((responseAction) => {
@@ -118,14 +114,9 @@ const TaskContainer: React.FC<{
         .catch((error) => {
           console.error("Fetch error:", error);
           setError("Failed to fetch tasks!");
-        })
-        .finally(() => setLoading(false));
+        });
     }
   }, [cardId, dispatch]);
-
-  const startEditing = (task: Task) => {
-    setEditingTask(task);
-  };
 
   const handleDeleteTask = (id: string) => {
     dispatch(deleteTaskThunk({ taskId: id, cardId }))
@@ -159,9 +150,6 @@ const TaskContainer: React.FC<{
 
   const onEdit = (id: string) => {
     const task = tasks.find((task) => task.id === id);
-    if (task) {
-      startEditing(task);
-    }
   };
 
   const onDone = (id: string) => {
@@ -183,7 +171,6 @@ const TaskContainer: React.FC<{
               task.id === updatedTask.id ? updatedTask : task
             )
           );
-          setEditingTask(null);
           dispatch(allCategoryByCardThunk(cardId));
           dispatch(allCategorythunk());
           dispatch(allTasksThunk());
@@ -207,7 +194,6 @@ const TaskContainer: React.FC<{
       <TaskList
         tasks={tasks}
         onDelete={onDelete}
-        loading={loading}
         error={error}
         onEdit={onEdit}
         addTask={addTask}
