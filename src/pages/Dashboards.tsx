@@ -5,54 +5,104 @@ import {
   IonTitle,
   IonToolbar,
   IonText,
-  IonRippleEffect,
 } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
 import "./Dashboards.css";
-import React, { useState, useEffect } from "react";
-import { fetchTasksDueToday } from "../Api/TasksDueTodayAPI";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../src/store";
+import { AppDispatch } from "../../src/store";
+import {
+  allCategorythunk,
+  allTasksThunk,
+  tasksDueTodayThunk,
+  tasksDoneTodayThunk,
+} from "../components/Redux/thunks/tasksThunk";
+import { CircularProgress } from "../components/Dashboard/CircularProgress";
 
 const Dashboards: React.FC = () => {
-  const [tasksDueToday, setTasksDueToday] = useState<any[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    fetchTasksDueToday()
-      .then((data) => setTasksDueToday(data))
-      .catch((error) => console.error("Failed to fetch tasks:", error));
-  }, []);
+    // Dispatch actions to fetch the required data
+    dispatch(allTasksThunk());
+    dispatch(allCategorythunk());
+    dispatch(tasksDueTodayThunk());
+    dispatch(tasksDoneTodayThunk());
+  }, [dispatch]);
 
+  const tasksDoneTodayCount = useSelector(
+    (state: RootState) => state.tasks.doneTasksCount
+  );
+  const tasksDueTodayCount = useSelector(
+    (state: RootState) => state.tasks.tasksForTodayCount
+  );
+  const progressValue =
+    tasksDueTodayCount === 0
+      ? 0
+      : (tasksDoneTodayCount / tasksDueTodayCount) * 100;
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Dashboards</IonTitle>
+          <IonTitle>Dashboard</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="content-today">
-          <IonTitle color="primary">Today</IonTitle>
-          <IonText color="secondary">
-            You have {tasksDueToday.length} tasks due today
-          </IonText>
-
-          <div className="wrapper">
-            <div className="container-dashboard">
-              <div className="ion-activatable ripple-parent circle">
-                8<IonRippleEffect type="unbounded"></IonRippleEffect>
-              </div>
-              <IonText>Due Today</IonText>
-            </div>
-            <div className="item">
-              <div className="ion-activatable ripple-parent circle">
-                5<IonRippleEffect type="unbounded"></IonRippleEffect>
-              </div>
-              <IonText>Open</IonText>
-            </div>
+        {/* Daily Goal Progress */}
+        <div className="daily-goal">
+          <IonTitle className="title" size="small">
+            Daily goal
+          </IonTitle>
+          <div className="progress-circular">
+            <CircularProgress value={progressValue} />
+            {/* Replace 68 with your dynamic value */}
           </div>
+          <IonText>
+            {tasksDoneTodayCount} Out of {tasksDueTodayCount}
+          </IonText>
+          <IonText>Almost there! Keep it going</IonText>
         </div>
 
-        <div className="content-overview">
-          <IonTitle color="primary">Overview</IonTitle>
+        {/* Week-wise Statistics */}
+        <div className="statistics">
+          <IonTitle className="title" size="small">
+            Statistics
+          </IonTitle>
+          <div className="stat-bars">
+            {/* Bars */}
+            {[
+              { id: "Mon", label: "M", value: 6 },
+              { id: "Tue", label: "T", value: 4 },
+              { id: "Wed", label: "W", value: 4 },
+              { id: "Thu", label: "T", value: 4 },
+              { id: "Fri", label: "F", value: 4 },
+              { id: "Sat", label: "S", value: 4 },
+              { id: "Sun", label: "S", value: 4 },
+            ].map((stat) => (
+              <div
+                className="bar"
+                style={{ height: `${stat.value * 40}px` }}
+                key={stat.id}>
+                <span className="bar-value">{stat.value}</span>
+              </div>
+            ))}
+          </div>
+          {/* Days */}
+          <div className="days">
+            {[
+              { id: "Mon", label: "M", value: 6 },
+              { id: "Tue", label: "T", value: 4 },
+              { id: "Wed", label: "W", value: 4 },
+              { id: "Thu", label: "T", value: 4 },
+              { id: "Fri", label: "F", value: 4 },
+              { id: "Sat", label: "S", value: 4 },
+              { id: "Sun", label: "S", value: 4 },
+            ].map((stat) => (
+              <div className="day-label" key={stat.id}>
+                <IonText>{stat.label}</IonText>
+              </div>
+            ))}
+          </div>
         </div>
       </IonContent>
     </IonPage>

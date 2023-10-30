@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IonButton, IonRow, IonCol } from "@ionic/react";
+
+interface CategoryProps {
+  initialCategories?: string[];
+  updateCategories?: (categories: string[]) => void;
+}
 
 const getColorForLabel = (
   label: string,
   isActive: boolean
 ): string | undefined => {
   if (!isActive) return "secondary";
-  // Default color when not active
   switch (label) {
     case "URGENT":
-      return "danger"; // Red color for "danger" theme
+      return "danger";
     case "RUNNING":
-      return "primary"; // Default blue for "primary" theme
+      return "primary";
     case "ONGOING":
-      return "success"; // Green color for "success" theme
+      return "success";
     default:
       return undefined;
   }
@@ -36,8 +40,19 @@ const ToggleButton: React.FC<{
   );
 };
 
-const Category: React.FC = () => {
-  const [activeButtons, setActiveButtons] = useState<string[]>([]);
+const CategoryTask: React.FC<CategoryProps> = ({
+  initialCategories,
+  updateCategories,
+}) => {
+  const [activeButtons, setActiveButtons] = useState<string[]>(
+    initialCategories || []
+  );
+
+  useEffect(() => {
+    if (updateCategories) {
+      updateCategories(activeButtons);
+    }
+  }, [activeButtons, updateCategories]);
 
   const toggleButton = (buttonName: string) => {
     if (activeButtons.includes(buttonName)) {
@@ -74,4 +89,4 @@ const Category: React.FC = () => {
   );
 };
 
-export default Category;
+export default CategoryTask;

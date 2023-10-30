@@ -1,16 +1,23 @@
 import React from "react";
-import { IonList, IonSpinner } from "@ionic/react";
+import { IonList } from "@ionic/react";
 import TaskItem from "./TaskItem";
 import { Task } from "./taskTypes";
 import "./styles/TaskList.css";
 interface TaskListProps {
   tasks: Task[];
   onDelete: (id: string) => void;
+  onDone: (id: string) => void;
   onEdit: (id: string) => void;
   loading: boolean;
   error: string | null;
   updateTask: (updatedTask: Task) => void;
-  addTask: (title: string, description: string, date: string) => void;
+  addTask: (
+    title: string,
+    description: string,
+    date: string,
+    categories: string[],
+    status: string
+  ) => void;
 }
 
 const TaskList: React.FC<TaskListProps> = ({
@@ -18,12 +25,11 @@ const TaskList: React.FC<TaskListProps> = ({
   onDelete,
   updateTask,
   onEdit,
-  loading,
   error,
   addTask,
+  onDone,
 }) => (
   <>
-    {loading && <IonSpinner />}
     {error && <p className="error-notification">{error}</p>}
     <IonList className="task-list">
       {tasks.map((task) => (
@@ -34,6 +40,7 @@ const TaskList: React.FC<TaskListProps> = ({
           onDelete={onDelete}
           onEdit={onEdit}
           updateTask={updateTask}
+          onDone={onDone}
         />
       ))}
     </IonList>

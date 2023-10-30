@@ -8,16 +8,26 @@ import {
   IonInput,
   IonFooter,
   IonModal,
+  IonCheckbox,
+  IonLabel,
 } from "@ionic/react";
 import NewTask from "./NewTask";
-import { trash, create } from "ionicons/icons";
+import { trash, create, heart, checkboxOutline } from "ionicons/icons";
 import { Task } from "../Tasks/taskTypes";
+import "./styles/TaskItem.css";
 
 interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
+  onDone: (id: string) => void;
   onEdit: (id: string) => void;
-  addTask: (title: string, description: string, date: string) => void;
+  addTask: (
+    title: string,
+    description: string,
+    date: string,
+    categories: string[],
+    status: string
+  ) => void;
 
   updateTask: (updatedTask: Task) => void;
 }
@@ -25,9 +35,9 @@ interface TaskItemProps {
 const TaskItem: React.FC<TaskItemProps> = ({
   task,
   onDelete,
-  onEdit,
   updateTask,
   addTask,
+  onDone,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(task.content);
@@ -51,8 +61,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
     }
   };
   const handleeditButtonClick = () => {
-    console.log("Task:", task);
-
     setShowModal(true);
   };
 
@@ -70,8 +78,17 @@ const TaskItem: React.FC<TaskItemProps> = ({
           autofocus
         />
       ) : (
-        <IonItem className="task-content" onClick={handleeditButtonClick}>
-          {task.content}
+        <IonItem
+          className={`task-content ${
+            task.status === "done" ? "done-task" : ""
+          }`}>
+          <IonCheckbox
+            slot="start"
+            checked={task.status === "done"}
+            onIonChange={() => onDone(task.id)}
+            aria-label={task.content}
+          />
+          <IonLabel>{task.content}</IonLabel>
         </IonItem>
       )}
 
@@ -85,9 +102,17 @@ const TaskItem: React.FC<TaskItemProps> = ({
           />
         </IonModal>
       </IonFooter>
+
       <IonItemOptions side="end">
         <IonItemOption color="danger" onClick={() => onDelete(task.id)}>
           <IonIcon slot="icon-only" icon={trash} />
+        </IonItemOption>
+        <IonItemOption onClick={handleeditButtonClick}>
+          <IonIcon
+            slot="end"
+            icon={create}
+            style={{ marginRight: "10px", cursor: "pointer" }}
+          />
         </IonItemOption>
       </IonItemOptions>
     </IonItemSliding>

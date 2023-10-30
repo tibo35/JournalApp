@@ -15,7 +15,7 @@ b {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border: 1px solid #1649f1;
+  border: 1px solid #98adf3;
   user-select: none;
 }
 
@@ -35,4 +35,67 @@ b {
 }
 .content-overview {
   height: 75vh;
+}
+.title {
+  font-size: 20px;
+}
+.progress-circular {
+  margin: 20px;
+}
+/*Statistics*/
+.daily-goal IonText {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 10px 0;
+}
+.daily-goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.statistics,
+.daily-goal {
+  margin: 30px 30px;
+  text-align: center;
+  border-radius: 3%;
+  padding: 5%;
+  background-color: #f8f9f9;
+  border: #f3f4f4 1px solid;
+  box-shadow: 0px 14px 8px rgba(0, 0, 0, 0.2);
+}
+.statistics .IonTitle {
+  color: red;
+}
+.stat-bars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.bar {
+  width: 3%;
+  background-color: #98adf3;
+  margin: 0 2%;
+}
+.bar-container {
+  display: inline-block;
+  margin-right: 2px; /* Adjust spacing between bars if necessary */
+  text-align: center;
+}
+
+.days {
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-label {
+  width: 3%;
+  margin: 0 2%;
+}
+
+.bar-value {
+  color: white;
+  font-size: 10px;
 }

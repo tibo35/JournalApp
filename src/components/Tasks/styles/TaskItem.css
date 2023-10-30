@@ -3,3 +3,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.icon-done {
+  --background: #2dd36f;
+  --color: #fff;
+}

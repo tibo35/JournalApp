@@ -3,4 +3,7 @@ export interface Task {
   content: string;
   date: string;
   description: string;
+  categories: string[];
+  cardId: string;
+  status?: string;
 }

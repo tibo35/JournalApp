@@ -1,0 +1,19 @@
+ion-badge {
+  --background: purple;
+  --color: white;
+}
+.ion-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  align-items: center;
+}
+
+.ion-label {
+  margin-right: 10px;
+}
+
+.list-container {
+  border-top: 1px grey solid;
+  display: flex;
+  justify-content: center;
+}

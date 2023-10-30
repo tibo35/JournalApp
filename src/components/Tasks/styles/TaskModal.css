@@ -5,11 +5,13 @@
   padding: 20px;
 }
 ion-modal {
-  --height: 75vh;
+  --height: 100vh;
+  margin-top: 30%;
   --top: 25%;
   --transform: translateY(25%);
   --border-radius: 30px 30px 0 0;
   transition: transform 0.3s ease-in-out;
+  --backdrop-opacity: 0;
 }
 
 .task-footer {
