@@ -8,6 +8,7 @@ import {
   AllTasks,
   TasksDueToday,
   TasksDoneToday,
+  TasksDoneWeekly,
 } from "../../../Api/TasksAPI";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Task } from "../../Tasks/taskTypes";
@@ -126,5 +127,19 @@ export const tasksDoneTodayThunk = createAsyncThunk(
   async () => {
     const response = await TasksDoneToday();
     return response;
+  }
+);
+
+// In tasksThunk.ts
+export const tasksDoneWeeklyThunk = createAsyncThunk(
+  "tasks/fetchTasksDoneWeekly",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await TasksDoneWeekly();
+      return response;
+    } catch (error) {
+      console.error("Error fetching weekly tasks: ", error);
+      return rejectWithValue("Failed fetching tasks done weekly");
+    }
   }
 );

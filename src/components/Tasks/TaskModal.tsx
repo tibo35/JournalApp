@@ -25,6 +25,7 @@ import {
   allTasksThunk,
   tasksDueTodayThunk,
   tasksDoneTodayThunk,
+  tasksDoneWeeklyThunk,
 } from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
@@ -85,6 +86,7 @@ const TaskModal: React.FC<{
         dispatch(allTasksByCardThunk(cardId));
         dispatch(tasksDueTodayThunk());
         dispatch(tasksDoneTodayThunk());
+        dispatch(tasksDoneWeeklyThunk());
       } else {
         console.error("Failed to create task:", responseAction.error);
       }
@@ -147,6 +149,7 @@ const TaskModal: React.FC<{
     dispatch(allTasksByCardThunk(cardId));
     dispatch(tasksDueTodayThunk());
     dispatch(tasksDoneTodayThunk());
+    dispatch(tasksDoneWeeklyThunk());
   };
 
   const onDelete = (id: string) => {
@@ -167,6 +170,7 @@ const TaskModal: React.FC<{
       const updatedStatus = task.status === "done" ? "pending" : "done";
       updateTaskHandler({ ...task, status: updatedStatus });
       dispatch(tasksDoneTodayThunk());
+      dispatch(tasksDoneWeeklyThunk());
     }
   };
   const updateTaskHandler = (updatedTask: Task) => {
@@ -186,6 +190,7 @@ const TaskModal: React.FC<{
           dispatch(allTasksByCardThunk(cardId));
           dispatch(tasksDueTodayThunk());
           dispatch(tasksDoneTodayThunk());
+          dispatch(tasksDoneWeeklyThunk());
         } else {
           console.error("Failed to update task:", responseAction.error);
         }

@@ -9,9 +9,9 @@ import {
   allCategoryByCardThunk,
   allCategorythunk,
   allTasksThunk,
-  markTaskAsDoneThunk,
   tasksDueTodayThunk,
   tasksDoneTodayThunk,
+  tasksDoneWeeklyThunk,
 } from "../thunks/tasksThunk";
 import { Task } from "../../Tasks/taskTypes"; // Make sure this path is correct
 
@@ -26,6 +26,7 @@ const initialState: TaskState = {
   taskStatusCountsByCard: {},
   tasksForTodayCount: 0,
   doneTasksCount: 0,
+  tasksDoneWeekly: { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 },
 };
 
 const tasksSlice = createSlice({
@@ -211,6 +212,19 @@ const tasksSlice = createSlice({
       .addCase(tasksDoneTodayThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch count of done tasks";
+      })
+      .addCase(tasksDoneWeeklyThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(tasksDoneWeeklyThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasksDoneWeekly = action.payload;
+        console.log("taskWeekly " + action.payload);
+      })
+      .addCase(tasksDoneWeeklyThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Failed to fetch tasks done weekly";
       });
   },
 });
