@@ -2,7 +2,7 @@ import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 
 import "./Home.css";
-import TaskModal from "../components/Tasks/TaskModal";
+import TaskContainer from "../components/Tasks/TaskModal";
 import TopicsView from "./View/TopicsView";
 import PhotoView from "./View/PhotoView";
 import ProjectsView from "./View/ProjectsView";
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
       {showModal && (
         <div className="overlay">
           <div className="custom-modal">
-            <TaskModal
+            <TaskContainer
               title={modalContent}
               cardId={currentCardId || ""}
               onClose={closeModal}

@@ -29,7 +29,7 @@ import {
 } from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
-const TaskModal: React.FC<{
+const TaskContainer: React.FC<{
   title: string;
   cardId: string;
   onClose: () => void;
@@ -238,4 +238,4 @@ const TaskModal: React.FC<{
   );
 };
 
-export default TaskModal;
+export default TaskContainer;
