@@ -31,15 +31,7 @@ const initialState: TaskState = {
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
-  reducers: {
-    markTaskAsDone: (state, action) => {
-      const taskId = action.payload;
-      const task = state.tasks.find((task) => task.id === taskId);
-      if (task) {
-        task.status = "done";
-      }
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(allTasksByCardThunk.pending, (state) => {
@@ -193,49 +185,6 @@ const tasksSlice = createSlice({
       .addCase(allTasksThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = "failed to fetched total tasks count";
-      })
-      .addCase(markTaskAsDoneThunk.pending, (state, action) => {})
-
-      .addCase(markTaskAsDoneThunk.fulfilled, (state, action) => {
-        const { taskId, categories } = action.payload;
-
-        const task = state.tasks.find((task) => task.id === taskId);
-
-        if (task) {
-          const cardId = task.cardId;
-          task.status = "done";
-
-          // Update taskStatusCountsByCard
-          if (!state.taskStatusCountsByCard[cardId]) {
-            state.taskStatusCountsByCard[cardId] = { pending: 0, done: 0 };
-          }
-          state.taskStatusCountsByCard[cardId].done += 1; // Increment done count
-          state.taskStatusCountsByCard[cardId].pending = Math.max(
-            0,
-            state.taskStatusCountsByCard[cardId].pending - 1
-          ); // Decrement pending count
-
-          // Only loop through categories if they're defined
-          if (categories) {
-            categories.forEach((category) => {
-              if (
-                state.categoryCountsByCard[cardId] &&
-                state.categoryCountsByCard[cardId][category]
-              ) {
-                state.categoryCountsByCard[cardId][category] = Math.max(
-                  0,
-                  state.categoryCountsByCard[cardId][category] - 1
-                );
-              }
-              allCategoryByCardThunk(cardId);
-              allTasksByCardThunk(cardId);
-            });
-          }
-        }
-      })
-      .addCase(markTaskAsDoneThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = "Failed to mark task as done";
       })
       .addCase(tasksDueTodayThunk.pending, (state) => {
         state.loading = true;
