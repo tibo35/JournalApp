@@ -5,7 +5,6 @@ interface ProjectProps {
   project: {
     id: string;
     title: string;
-    taskCount: number;
   };
   deleteProject: (id: string) => Promise<void>;
   onOpen: (title: string, id: string) => void;
@@ -21,7 +20,6 @@ const ProjectCard: React.FC<ProjectProps> = ({
     id={project.id}
     onDelete={deleteProject}
     onOpen={onOpen}
-    taskCount={project.taskCount}
   />
 );
 
