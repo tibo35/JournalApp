@@ -1,5 +1,5 @@
 import { Task } from "../../Tasks/taskTypes";
-import { CategoryCounts } from "../slices/taskSlice";
+import { CategoryCounts } from "../../Category/categoryCountsInterface";
 
 export type TaskState = {
   tasks: Task[];
