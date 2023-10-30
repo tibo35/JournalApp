@@ -34,3 +34,5 @@ yarn-error.log*
 /db
 #config
 config.js
+test
+toDo
