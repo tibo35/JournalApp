@@ -40,6 +40,9 @@ const Dashboards: React.FC = () => {
   const tasksDueTodayCount = useSelector(
     (state: RootState) => state.tasks.tasksForTodayCount
   );
+  const totalCategoryCounts = useSelector(
+    (state: RootState) => state.tasks.totalCategoryCounts
+  );
   const progressValue =
     tasksDueTodayCount === 0
       ? 0
@@ -109,6 +112,14 @@ const Dashboards: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+        <div className="statistics">
+          <IonTitle className="title" size="small">
+            Category
+          </IonTitle>
+          <div>Urgent {totalCategoryCounts?.Urgent ?? 0}</div>
+          <div>Running {totalCategoryCounts?.Running ?? 0}</div>
+          <div>Ongoing {totalCategoryCounts?.Ongoing ?? 0}</div>
         </div>
       </IonContent>
     </IonPage>

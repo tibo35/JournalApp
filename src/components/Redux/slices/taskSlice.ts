@@ -14,7 +14,6 @@ import {
   tasksDoneWeeklyThunk,
 } from "../thunks/tasksThunk";
 import { Task } from "../../Tasks/taskTypes"; // Make sure this path is correct
-
 const initialState: TaskState = {
   tasks: [],
   loading: false,
@@ -166,10 +165,23 @@ const tasksSlice = createSlice({
       })
       .addCase(allCategorythunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.totalCategoryCounts = action.payload;
+        const updatedCounts = {
+          ...state.totalCategoryCounts,
+          Urgent: 0,
+          Running: 0,
+          Ongoing: 0,
+        };
+        const counts = action.payload;
+        for (let key in counts) {
+          const formattedKey = (key.charAt(0) +
+            key.slice(1).toLowerCase()) as keyof CategoryCounts;
+          updatedCounts[formattedKey] = counts[key];
+        }
+        state.totalCategoryCounts = updatedCounts;
+
         console.log(
           `Fetched total category count from TaskAPI:`,
-          action.payload
+          updatedCounts
         );
       })
       .addCase(allCategorythunk.rejected, (state, action) => {
