@@ -5,7 +5,11 @@ import {
   IonTitle,
   IonToolbar,
   IonText,
+  IonBadge,
+  IonItem,
+  IonLabel,
 } from "@ionic/react";
+
 import "./Dashboards.css";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -56,7 +60,7 @@ const Dashboards: React.FC = () => {
       </IonHeader>
       <IonContent className="dashboard-main">
         {/* Daily Goal Progress */}
-        <div className="daily-goal">
+        <div className="tile-container tile-goals">
           <IonTitle className="title" size="small">
             Daily goal
           </IonTitle>
@@ -71,7 +75,7 @@ const Dashboards: React.FC = () => {
         </div>
 
         {/* Week-wise Statistics */}
-        <div className="statistics">
+        <div className="tile-container">
           <IonTitle className="title" size="small">
             Statistics
           </IonTitle>
@@ -113,13 +117,22 @@ const Dashboards: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="statistics">
+        <div className="tile-container">
           <IonTitle className="title" size="small">
-            Category
+            By Category
           </IonTitle>
-          <div>Urgent {totalCategoryCounts?.Urgent ?? 0}</div>
-          <div>Running {totalCategoryCounts?.Running ?? 0}</div>
-          <div>Ongoing {totalCategoryCounts?.Ongoing ?? 0}</div>
+          <IonItem className="category-badge">
+            <IonBadge slot="end"> {totalCategoryCounts?.Urgent ?? 0}</IonBadge>
+            <IonLabel>Urgent</IonLabel>
+          </IonItem>
+          <IonItem className="category-badge">
+            <IonBadge slot="end"> {totalCategoryCounts?.Running ?? 0}</IonBadge>
+            <IonLabel>Running</IonLabel>
+          </IonItem>
+          <IonItem className="category-badge">
+            <IonBadge slot="end"> {totalCategoryCounts?.Ongoing ?? 0}</IonBadge>
+            <IonLabel>Ongoing</IonLabel>
+          </IonItem>
         </div>
       </IonContent>
     </IonPage>
