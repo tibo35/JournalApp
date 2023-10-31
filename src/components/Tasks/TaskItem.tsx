@@ -83,11 +83,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
             task.status === "done" ? "done-task" : ""
           }`}>
           <IonCheckbox
+            className={task.status === "done" ? "done-checkbox" : ""}
             slot="start"
             checked={task.status === "done"}
             onIonChange={() => onDone(task.id)}
             aria-label={task.content}
           />
+
           <IonLabel>{task.content}</IonLabel>
         </IonItem>
       )}

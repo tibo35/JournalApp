@@ -8,3 +8,9 @@
   --background: #2dd36f;
   --color: #fff;
 }
+.done-checkbox {
+  --checkbox-background-checked: #2dd36f;
+  --checkmark-color: white;
+  --background-checked: white;
+  --border-color-checked: #2dd36f;
+}

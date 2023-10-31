@@ -10,8 +10,7 @@ ion-modal {
 }
 
 .home-page {
-  background: url("../resources/blurry-gradient-haikei.svg") no-repeat center
-    center fixed;
+  background: rgb(199, 199, 224);
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

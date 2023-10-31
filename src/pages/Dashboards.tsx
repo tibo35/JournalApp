@@ -51,7 +51,7 @@ const Dashboards: React.FC = () => {
           <IonTitle>Dashboard</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="dashboard-main">
         {/* Daily Goal Progress */}
         <div className="daily-goal">
           <IonTitle className="title" size="small">
