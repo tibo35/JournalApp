@@ -6,7 +6,7 @@
 }
 ion-modal {
   --height: 100vh;
-  margin-top: 30%;
+  margin-top: 20%;
   --top: 25%;
   --transform: translateY(25%);
   --border-radius: 10px 10px 0 0;
