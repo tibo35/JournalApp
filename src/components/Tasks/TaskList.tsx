@@ -8,7 +8,6 @@ interface TaskListProps {
   onDelete: (id: string) => void;
   onDone: (id: string) => void;
   onEdit: (id: string) => void;
-  loading: boolean;
   error: string | null;
   updateTask: (updatedTask: Task) => void;
   addTask: (

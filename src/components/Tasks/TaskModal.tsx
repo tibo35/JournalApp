@@ -7,7 +7,6 @@ import {
   IonModal,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-
 import TaskHeader from "./TaskHeader";
 import TaskList from "./TaskList";
 import NewTask from "./NewTask";
@@ -25,10 +24,11 @@ import {
   allTasksThunk,
   tasksDueTodayThunk,
   tasksDoneTodayThunk,
+  tasksDoneWeeklyThunk,
 } from "../Redux/thunks/tasksThunk";
 import { AppDispatch } from "../../store";
 
-const TaskModal: React.FC<{
+const TaskContainer: React.FC<{
   title: string;
   cardId: string;
   onClose: () => void;
@@ -36,9 +36,7 @@ const TaskModal: React.FC<{
   const dispatch = useDispatch<AppDispatch>();
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [editingTask, setEditingTask] = useState<null | Task>(null);
   const [showModal, setShowModal] = useState(false);
 
   const handleAddButtonClick = () => {
@@ -85,6 +83,7 @@ const TaskModal: React.FC<{
         dispatch(allTasksByCardThunk(cardId));
         dispatch(tasksDueTodayThunk());
         dispatch(tasksDoneTodayThunk());
+        dispatch(tasksDoneWeeklyThunk());
       } else {
         console.error("Failed to create task:", responseAction.error);
       }
@@ -92,7 +91,6 @@ const TaskModal: React.FC<{
   };
 
   useEffect(() => {
-    setLoading(true);
     if (cardId) {
       dispatch(allTasksByCardThunk(cardId))
         .then((responseAction) => {
@@ -116,14 +114,9 @@ const TaskModal: React.FC<{
         .catch((error) => {
           console.error("Fetch error:", error);
           setError("Failed to fetch tasks!");
-        })
-        .finally(() => setLoading(false));
+        });
     }
   }, [cardId, dispatch]);
-
-  const startEditing = (task: Task) => {
-    setEditingTask(task);
-  };
 
   const handleDeleteTask = (id: string) => {
     dispatch(deleteTaskThunk({ taskId: id, cardId }))
@@ -147,6 +140,7 @@ const TaskModal: React.FC<{
     dispatch(allTasksByCardThunk(cardId));
     dispatch(tasksDueTodayThunk());
     dispatch(tasksDoneTodayThunk());
+    dispatch(tasksDoneWeeklyThunk());
   };
 
   const onDelete = (id: string) => {
@@ -156,9 +150,6 @@ const TaskModal: React.FC<{
 
   const onEdit = (id: string) => {
     const task = tasks.find((task) => task.id === id);
-    if (task) {
-      startEditing(task);
-    }
   };
 
   const onDone = (id: string) => {
@@ -167,6 +158,7 @@ const TaskModal: React.FC<{
       const updatedStatus = task.status === "done" ? "pending" : "done";
       updateTaskHandler({ ...task, status: updatedStatus });
       dispatch(tasksDoneTodayThunk());
+      dispatch(tasksDoneWeeklyThunk());
     }
   };
   const updateTaskHandler = (updatedTask: Task) => {
@@ -179,13 +171,13 @@ const TaskModal: React.FC<{
               task.id === updatedTask.id ? updatedTask : task
             )
           );
-          setEditingTask(null);
           dispatch(allCategoryByCardThunk(cardId));
           dispatch(allCategorythunk());
           dispatch(allTasksThunk());
           dispatch(allTasksByCardThunk(cardId));
           dispatch(tasksDueTodayThunk());
           dispatch(tasksDoneTodayThunk());
+          dispatch(tasksDoneWeeklyThunk());
         } else {
           console.error("Failed to update task:", responseAction.error);
         }
@@ -202,7 +194,6 @@ const TaskModal: React.FC<{
       <TaskList
         tasks={tasks}
         onDelete={onDelete}
-        loading={loading}
         error={error}
         onEdit={onEdit}
         addTask={addTask}
@@ -233,4 +224,4 @@ const TaskModal: React.FC<{
   );
 };
 
-export default TaskModal;
+export default TaskContainer;

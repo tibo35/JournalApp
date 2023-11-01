@@ -100,3 +100,12 @@ export const TasksDoneToday = async () => {
     throw error;
   }
 };
+export const TasksDoneWeekly = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/tasks/done-weekly`);
+    return await res.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};

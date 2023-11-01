@@ -5,9 +5,13 @@ import {
   IonTitle,
   IonToolbar,
   IonText,
+  IonBadge,
+  IonItem,
+  IonLabel,
 } from "@ionic/react";
+
 import "./Dashboards.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../src/store";
 import { AppDispatch } from "../../src/store";
@@ -16,6 +20,7 @@ import {
   allTasksThunk,
   tasksDueTodayThunk,
   tasksDoneTodayThunk,
+  tasksDoneWeeklyThunk,
 } from "../components/Redux/thunks/tasksThunk";
 import { CircularProgress } from "../components/Dashboard/CircularProgress";
 
@@ -28,13 +33,19 @@ const Dashboards: React.FC = () => {
     dispatch(allCategorythunk());
     dispatch(tasksDueTodayThunk());
     dispatch(tasksDoneTodayThunk());
+    dispatch(tasksDoneWeeklyThunk());
   }, [dispatch]);
-
+  const tasksDoneWeekly = useSelector(
+    (state: RootState) => state.tasks.tasksDoneWeekly
+  );
   const tasksDoneTodayCount = useSelector(
     (state: RootState) => state.tasks.doneTasksCount
   );
   const tasksDueTodayCount = useSelector(
     (state: RootState) => state.tasks.tasksForTodayCount
+  );
+  const totalCategoryCounts = useSelector(
+    (state: RootState) => state.tasks.totalCategoryCounts
   );
   const progressValue =
     tasksDueTodayCount === 0
@@ -47,9 +58,9 @@ const Dashboards: React.FC = () => {
           <IonTitle>Dashboard</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="dashboard-main">
         {/* Daily Goal Progress */}
-        <div className="daily-goal">
+        <div className="tile-container tile-goals">
           <IonTitle className="title" size="small">
             Daily goal
           </IonTitle>
@@ -64,45 +75,64 @@ const Dashboards: React.FC = () => {
         </div>
 
         {/* Week-wise Statistics */}
-        <div className="statistics">
+        <div className="tile-container">
           <IonTitle className="title" size="small">
             Statistics
           </IonTitle>
           <div className="stat-bars">
-            {/* Bars */}
             {[
-              { id: "Mon", label: "M", value: 6 },
-              { id: "Tue", label: "T", value: 4 },
-              { id: "Wed", label: "W", value: 4 },
-              { id: "Thu", label: "T", value: 4 },
-              { id: "Fri", label: "F", value: 4 },
-              { id: "Sat", label: "S", value: 4 },
-              { id: "Sun", label: "S", value: 4 },
-            ].map((stat) => (
-              <div
-                className="bar"
-                style={{ height: `${stat.value * 40}px` }}
-                key={stat.id}>
-                <span className="bar-value">{stat.value}</span>
-              </div>
-            ))}
+              { id: "Mon", label: "M", value: tasksDoneWeekly.Mon },
+              { id: "Tue", label: "T", value: tasksDoneWeekly.Tue },
+              { id: "Wed", label: "W", value: tasksDoneWeekly.Wed },
+              { id: "Thu", label: "T", value: tasksDoneWeekly.Thu },
+              { id: "Fri", label: "F", value: tasksDoneWeekly.Fri },
+              { id: "Sat", label: "S", value: tasksDoneWeekly.Sat },
+              { id: "Sun", label: "S", value: tasksDoneWeekly.Sun },
+            ].map(
+              (stat) =>
+                stat.value > 0 && (
+                  <div
+                    className="bar"
+                    style={{ height: `${stat.value * 40}px` }}
+                    key={stat.id}>
+                    <span className="bar-value">{stat.value}</span>
+                  </div>
+                )
+            )}
           </div>
           {/* Days */}
           <div className="days">
             {[
-              { id: "Mon", label: "M", value: 6 },
-              { id: "Tue", label: "T", value: 4 },
-              { id: "Wed", label: "W", value: 4 },
-              { id: "Thu", label: "T", value: 4 },
-              { id: "Fri", label: "F", value: 4 },
-              { id: "Sat", label: "S", value: 4 },
-              { id: "Sun", label: "S", value: 4 },
+              { id: "Mon", label: "M", value: tasksDoneWeekly.Mon },
+              { id: "Tue", label: "T", value: tasksDoneWeekly.Tue },
+              { id: "Wed", label: "W", value: tasksDoneWeekly.Wed },
+              { id: "Thu", label: "T", value: tasksDoneWeekly.Thu },
+              { id: "Fri", label: "F", value: tasksDoneWeekly.Fri },
+              { id: "Sat", label: "S", value: tasksDoneWeekly.Sat },
+              { id: "Sun", label: "S", value: tasksDoneWeekly.Sun },
             ].map((stat) => (
               <div className="day-label" key={stat.id}>
                 <IonText>{stat.label}</IonText>
               </div>
             ))}
           </div>
+        </div>
+        <div className="tile-container">
+          <IonTitle className="title" size="small">
+            By Category
+          </IonTitle>
+          <IonItem className="category-badge">
+            <IonBadge slot="end"> {totalCategoryCounts?.Urgent ?? 0}</IonBadge>
+            <IonLabel>Urgent</IonLabel>
+          </IonItem>
+          <IonItem className="category-badge">
+            <IonBadge slot="end"> {totalCategoryCounts?.Running ?? 0}</IonBadge>
+            <IonLabel>Running</IonLabel>
+          </IonItem>
+          <IonItem className="category-badge">
+            <IonBadge slot="end"> {totalCategoryCounts?.Ongoing ?? 0}</IonBadge>
+            <IonLabel>Ongoing</IonLabel>
+          </IonItem>
         </div>
       </IonContent>
     </IonPage>
