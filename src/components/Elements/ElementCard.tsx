@@ -72,8 +72,8 @@ const ElementCard: React.FC<ElementCardProps> = ({
               <IonIcon slot="icon-only" icon={trash} />
             </IonItemOption>
           </IonItemOptions>
-          <CategoryBadge cardId={id} categoryCounts={categoryCounts} />
         </IonItemSliding>
+        <CategoryBadge cardId={id} categoryCounts={categoryCounts} />
       </div>
     </IonCard>
   );
