@@ -8,6 +8,7 @@ import {
   IonItemOption,
   IonItem,
   IonReorder,
+  IonText,
 } from "@ionic/react";
 import { trash } from "ionicons/icons";
 import "../Elements/ElementCard.css";
@@ -56,12 +57,12 @@ const ElementCard: React.FC<ElementCardProps> = ({
               <IonCardTitle className="reorder-btn">{title}</IonCardTitle>
             </div>
             <div className="right-content-container">
-              <div className="right-content">
+              <IonText className="right-content">
                 ToDo: {taskStatusCounts?.pending || 0}
-              </div>
-              <div className="right-content">
+              </IonText>
+              <IonText className="right-content">
                 Done: {taskStatusCounts?.done || 0}
-              </div>
+              </IonText>
             </div>
           </IonItem>
           <IonItemOptions side="end">
